@@ -1,0 +1,565 @@
+<!doctype html>
+<html lang="es-MX">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Lapzo RRSS · Oct–Nov 2026</title>
+<meta name="description" content="Resultados orgánicos de Lapzo en Facebook, Instagram, LinkedIn y TikTok del 10 de octubre al 9 de noviembre de 2026.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;600&family=Source+Serif+4:opsz,wght@8..60,400&display=swap">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+<style>
+  :root {
+    --color-fg: #16202e; --color-fg-muted: #5d6878; --color-bg: #f5f7fa; --color-panel: #ffffff; --color-border-line: #dfe4ec;
+    --color-ok: #1f8a5b; --color-warn: #b7791f; --color-bad: #c2413b;
+    --c0: #0a66c2; --c1: #d6336c; --c2: #3b5bdb; --c3: #0f9d8f;
+    --cds-chart-grid: #e8ecf2; --cds-chart-axis: #c5ccd8; --cds-text-secondary: #5d6878;
+    --cds-surface-popover: #ffffff; --cds-border: #dfe4ec; --cds-shadow-popover: 0 8px 24px rgba(22,32,46,.12);
+    --font-anthropic-sans: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+    --font-anthropic-serif: "Source Serif 4", Georgia, "Times New Roman", serif;
+    --cds-font-size-caption: 12px; --cds-font-size-body: 14px; --cds-font-size-heading: 17px; --cds-font-size-title: 22px;
+    --cds-font-weight-medium: 600;
+    --cds-gap-xs: 4px; --cds-gap-sm: 8px; --cds-gap-md: 16px; --cds-gap-lg: 24px; --cds-gap-xl: 40px;
+    --cds-pad-lg: 20px; --cds-radius: 12px; --cds-dur-slow: .6s; --cds-ease-out: cubic-bezier(.2,.7,.2,1);
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --color-fg: #e8edf4; --color-fg-muted: #9aa5b5; --color-bg: #0f141b; --color-panel: #171e28; --color-border-line: #2a3442;
+      --color-ok: #4cc38a; --color-warn: #e0a84a; --color-bad: #f07a72;
+      --c0: #4c9be8; --c1: #f06595; --c2: #748ffc; --c3: #38d9c4;
+      --cds-chart-grid: #232c39; --cds-chart-axis: #3a4555; --cds-text-secondary: #9aa5b5;
+      --cds-surface-popover: #1d2531; --cds-border: #2f3a4a; --cds-shadow-popover: 0 8px 24px rgba(0,0,0,.45);
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --color-fg: #e8edf4; --color-fg-muted: #9aa5b5; --color-bg: #0f141b; --color-panel: #171e28; --color-border-line: #2a3442;
+    --color-ok: #4cc38a; --color-warn: #e0a84a; --color-bad: #f07a72;
+    --c0: #4c9be8; --c1: #f06595; --c2: #748ffc; --c3: #38d9c4;
+    --cds-chart-grid: #232c39; --cds-chart-axis: #3a4555; --cds-text-secondary: #9aa5b5;
+    --cds-surface-popover: #1d2531; --cds-border: #2f3a4a; --cds-shadow-popover: 0 8px 24px rgba(0,0,0,.45);
+    color-scheme: dark;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--color-bg); color: var(--color-fg); font-family: var(--font-anthropic-sans); font-size: 14px; }
+  .lz-page { max-width: 1180px; margin: 0 auto; padding-block: 40px 56px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+  .lz-foot { margin-top: 32px; font-size: 12px; color: var(--color-fg-muted); }
+  .lz a:focus-visible, .lz summary:focus-visible { outline: 2px solid var(--c0); outline-offset: 2px; }
+
+  .lz { display: grid; gap: var(--cds-gap-xl); font-family: var(--font-anthropic-sans); color: var(--color-fg); }
+  .lz-head { display: grid; gap: var(--cds-gap-sm); }
+  .lz-eyebrow { font-size: var(--cds-font-size-caption); letter-spacing: .09em; text-transform: uppercase; color: var(--color-fg-muted); display: flex; flex-wrap: wrap; gap: 6px 14px; align-items: center; }
+  .lz-chip { border: 1px solid var(--color-border-line); border-radius: 999px; padding: 2px 10px; letter-spacing: .02em; text-transform: none; }
+  .lz-title { font-family: var(--font-anthropic-serif); font-weight: 400; font-size: clamp(30px, 4.4vw, 44px); line-height: 1.08; margin: 0; text-wrap: balance; }
+  .lz-lede { font-size: var(--cds-font-size-heading); line-height: 1.45; max-width: 64ch; margin: 0; color: var(--color-fg); }
+  .lz-lede b { font-weight: var(--cds-font-weight-medium); font-variant-numeric: tabular-nums; }
+  .lz-sec { display: grid; gap: var(--cds-gap-md); min-width: 0; }
+  .lz-h2 { font-size: var(--cds-font-size-title); font-weight: var(--cds-font-weight-medium); margin: 0; text-wrap: balance; }
+  .lz-sub { color: var(--color-fg-muted); font-size: var(--cds-font-size-body); margin: 0; max-width: 70ch; }
+  .lz-card { background: var(--color-panel); border: 1px solid var(--color-border-line); border-radius: var(--cds-radius); padding: var(--cds-pad-lg); min-width: 0; }
+  .lz-kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: var(--cds-gap-md); }
+  .lz-kpi { display: grid; gap: 4px; align-content: start; }
+  .lz-label { font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); letter-spacing: .04em; text-transform: uppercase; }
+  .lz-big { font-family: var(--font-anthropic-serif); font-weight: 400; font-size: clamp(30px, 3.6vw, 40px); line-height: 1.05; font-variant-numeric: tabular-nums; }
+  .lz-note { font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); font-variant-numeric: tabular-nums; }
+  .lz-nets { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: var(--cds-gap-md); }
+  .lz-net { display: grid; gap: var(--cds-gap-md); align-content: start; }
+  .lz-net-top { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+  .lz-net-name { display: flex; align-items: center; gap: 8px; font-weight: var(--cds-font-weight-medium); font-size: var(--cds-font-size-heading); }
+  .lz-dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; flex: none; }
+  .lz-role { font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); border: 1px solid var(--color-border-line); border-radius: 999px; padding: 1px 8px; }
+  .lz-pair { display: grid; grid-template-columns: 1fr 1fr; gap: var(--cds-gap-md); }
+  .lz-dl { display: grid; grid-template-columns: 1fr auto; gap: 6px 12px; margin: 0; font-size: var(--cds-font-size-body); }
+  .lz-dl dt { color: var(--color-fg-muted); }
+  .lz-dl dd { margin: 0; text-align: right; font-variant-numeric: tabular-nums; }
+  .lz-share { display: grid; gap: 6px; }
+  .lz-bar { height: 6px; border-radius: 3px; background: var(--cds-chart-grid); overflow: hidden; }
+  .lz-bar > i { display: block; height: 100%; border-radius: 3px; width: 0; }
+  .lz-caveat { font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); border-top: 1px dashed var(--color-border-line); padding-top: 8px; margin: 0; }
+  .lz-caveat b { color: var(--color-fg); font-weight: var(--cds-font-weight-medium); }
+  .lz-grid2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: var(--cds-gap-md); }
+  .lz-chartcard { display: grid; gap: var(--cds-gap-sm); }
+  .lz-h3 { font-size: var(--cds-font-size-heading); font-weight: var(--cds-font-weight-medium); margin: 0; }
+  .lz-legend { display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); }
+  .lz-legend span { display: inline-flex; align-items: center; gap: 6px; }
+  .lz-chart { position: relative; min-height: 300px; }
+  .lz-chart.lz-short { min-height: 260px; }
+  .lz-chart svg { display: block; overflow: visible; }
+  .lz-axis text { fill: var(--cds-text-secondary); font-size: var(--cds-font-size-caption); font-family: var(--font-anthropic-sans); }
+  .lz-axis path, .lz-axis line { stroke: var(--cds-chart-axis); }
+  .lz-val { fill: var(--color-fg); font-size: var(--cds-font-size-caption); font-family: var(--font-anthropic-sans); font-variant-numeric: tabular-nums; }
+  .lz-tip { position: absolute; z-index: 2; pointer-events: none; background: var(--cds-surface-popover); border: 1px solid var(--cds-border); box-shadow: var(--cds-shadow-popover); border-radius: 8px; padding: 8px 10px; font-size: var(--cds-font-size-caption); line-height: 1.45; white-space: nowrap; opacity: 0; font-variant-numeric: tabular-nums; }
+  .lz-tip strong { font-weight: var(--cds-font-weight-medium); display: block; }
+  .lz-tip span { color: var(--cds-text-secondary); }
+  .lz-fail { color: var(--color-fg-muted); font-size: var(--cds-font-size-caption); margin: 0; padding-top: 40px; text-align: center; }
+  .lz-tablewrap { overflow-x: auto; }
+  .lz-table { width: 100%; border-collapse: collapse; font-size: var(--cds-font-size-body); font-variant-numeric: tabular-nums; min-width: 640px; }
+  .lz-table th { text-align: left; font-weight: var(--cds-font-weight-medium); font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); text-transform: uppercase; letter-spacing: .04em; padding: 8px 10px; border-bottom: 1px solid var(--color-border-line); white-space: nowrap; }
+  .lz-table td { padding: 10px; border-bottom: 1px solid var(--color-border-line); white-space: nowrap; }
+  .lz-table .num { text-align: right; }
+  .lz-table tbody tr:last-child td { border-bottom: 0; }
+  .lz-table a { color: var(--color-fg); text-underline-offset: 3px; }
+  .lz-pill { display: inline-flex; align-items: center; gap: 6px; }
+  .lz-er-hi { color: var(--color-ok); font-weight: var(--cds-font-weight-medium); }
+  .lz-er-lo { color: var(--color-bad); }
+  .lz-recs { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: var(--cds-gap-md); }
+  .lz-rec { display: grid; gap: 6px; align-content: start; }
+  .lz-rec p { margin: 0; font-size: var(--cds-font-size-body); line-height: 1.5; }
+  .lz-rec-tag { font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); text-transform: uppercase; letter-spacing: .05em; display: flex; align-items: center; gap: 6px; }
+  .lz details { font-size: var(--cds-font-size-body); color: var(--color-fg-muted); }
+  .lz details summary { cursor: pointer; color: var(--color-fg); }
+  .lz details p { max-width: 70ch; line-height: 1.5; }
+  [data-dash-source-state=refreshing] { opacity: .5; }
+  @media (prefers-reduced-motion: no-preference) {
+    .lz-bar > i { transition: width var(--cds-dur-slow) var(--cds-ease-out); }
+    .lz-tip { transition: opacity .12s; }
+  }
+</style>
+</head>
+<body>
+<main class="lz-page">
+<div class="lz">
+  <header class="lz-head" id="resumen">
+    <div class="lz-eyebrow"><span>Lapzo · Redes sociales orgánicas</span><span class="lz-chip">10 oct – 9 nov 2026</span><span class="lz-chip">Facebook · Instagram · LinkedIn · TikTok</span><span class="lz-chip">Datos de HubSpot al 9 nov 2026</span></div>
+    <h1 class="lz-title">Cómo le fue a Lapzo en redes este mes</h1>
+    <p class="lz-lede">La publicación típica de <b data-draw="v" data-source="leaders" data-field="reach_network" data-row="0" data-fmt="text">—</b> es la que más gente alcanza (<b data-draw="v" data-source="leaders" data-field="reach_median" data-row="0">—</b> impresiones). La mayor tasa de interacción es de <b data-draw="v" data-source="leaders" data-field="er_network" data-row="0" data-fmt="text">—</b>, con <b data-draw="v" data-source="leaders" data-field="er" data-row="0" data-fmt="pct">—</b>.</p>
+  </header>
+
+  <section class="lz-kpis" id="totales" aria-label="Totales del periodo">
+    <div class="lz-card lz-kpi">
+      <span class="lz-label">Impresiones</span>
+      <span class="lz-big dash-skeleton" data-draw="v" data-source="totals" data-field="impressions" data-row="0">—</span>
+      <span class="lz-note">10 oct – 9 nov, las cuatro redes</span>
+    </div>
+    <div class="lz-card lz-kpi">
+      <span class="lz-label">Interacciones</span>
+      <span class="lz-big dash-skeleton" data-draw="v" data-source="totals" data-field="engagements" data-row="0">—</span>
+      <span class="lz-note"><span data-draw="v" data-source="totals" data-field="likes" data-row="0">—</span> likes · <span data-draw="v" data-source="totals" data-field="comments" data-row="0">—</span> comentarios · <span data-draw="v" data-source="totals" data-field="shares" data-row="0">—</span> compartidos</span>
+    </div>
+    <div class="lz-card lz-kpi">
+      <span class="lz-label">Tasa de interacción</span>
+      <span class="lz-big dash-skeleton" data-draw="v" data-source="totals" data-field="er" data-row="0" data-fmt="pct">—</span>
+      <span class="lz-note">Interacciones ÷ impresiones</span>
+    </div>
+    <div class="lz-card lz-kpi">
+      <span class="lz-label">Publicaciones</span>
+      <span class="lz-big dash-skeleton" data-draw="v" data-source="totals" data-field="posts" data-row="0">—</span>
+      <span class="lz-note">Posts, reels, historias y videos</span>
+    </div>
+  </section>
+
+  <section class="lz-sec" id="por-red">
+    <h2 class="lz-h2">Cada red cumple un papel distinto</h2>
+    <p class="lz-sub">La mediana muestra cuánto alcanza una publicación típica, sin que un solo éxito infle el promedio.</p>
+    <div class="lz-nets">
+      <article class="lz-card lz-net" id="red-linkedin">
+        <div class="lz-net-top"><span class="lz-net-name"><i class="lz-dot" data-net="LinkedIn"></i>LinkedIn</span><span class="lz-role">Alcance</span></div>
+        <div class="lz-pair">
+          <div class="lz-kpi"><span class="lz-label">Mediana / pub.</span><span class="lz-big" data-draw="v" data-source="by_network" data-where="network=LinkedIn" data-field="median_impr">—</span></div>
+          <div class="lz-kpi"><span class="lz-label">Interacción</span><span class="lz-big" data-draw="v" data-source="by_network" data-where="network=LinkedIn" data-field="er" data-fmt="pct">—</span></div>
+        </div>
+        <dl class="lz-dl">
+          <dt>Publicaciones</dt><dd data-draw="v" data-source="by_network" data-where="network=LinkedIn" data-field="posts">—</dd>
+          <dt>Impresiones</dt><dd data-draw="v" data-source="by_network" data-where="network=LinkedIn" data-field="impressions">—</dd>
+          <dt>Likes</dt><dd data-draw="v" data-source="by_network" data-where="network=LinkedIn" data-field="likes">—</dd>
+          <dt>Comentarios</dt><dd data-draw="v" data-source="by_network" data-where="network=LinkedIn" data-field="comments">—</dd>
+          <dt>Compartidos</dt><dd data-draw="v" data-source="by_network" data-where="network=LinkedIn" data-field="shares">—</dd>
+        </dl>
+        <div class="lz-share"><span class="lz-note"><span data-draw="v" data-source="by_network" data-where="network=LinkedIn" data-field="impr_share" data-fmt="pct0">—</span> de todas las impresiones</span><div class="lz-bar"><i data-draw="share" data-source="by_network" data-where="network=LinkedIn" data-field="impr_share"></i></div></div>
+      </article>
+      <article class="lz-card lz-net" id="red-instagram">
+        <div class="lz-net-top"><span class="lz-net-name"><i class="lz-dot" data-net="Instagram"></i>Instagram</span><span class="lz-role">Interacción</span></div>
+        <div class="lz-pair">
+          <div class="lz-kpi"><span class="lz-label">Mediana / pub.</span><span class="lz-big" data-draw="v" data-source="by_network" data-where="network=Instagram" data-field="median_impr">—</span></div>
+          <div class="lz-kpi"><span class="lz-label">Interacción</span><span class="lz-big" data-draw="v" data-source="by_network" data-where="network=Instagram" data-field="er" data-fmt="pct">—</span></div>
+        </div>
+        <dl class="lz-dl">
+          <dt>Publicaciones</dt><dd data-draw="v" data-source="by_network" data-where="network=Instagram" data-field="posts">—</dd>
+          <dt>Impresiones</dt><dd data-draw="v" data-source="by_network" data-where="network=Instagram" data-field="impressions">—</dd>
+          <dt>Likes</dt><dd data-draw="v" data-source="by_network" data-where="network=Instagram" data-field="likes">—</dd>
+          <dt>Comentarios</dt><dd data-draw="v" data-source="by_network" data-where="network=Instagram" data-field="comments">—</dd>
+          <dt>Compartidos</dt><dd data-draw="v" data-source="by_network" data-where="network=Instagram" data-field="shares">—</dd>
+        </dl>
+        <div class="lz-share"><span class="lz-note"><span data-draw="v" data-source="by_network" data-where="network=Instagram" data-field="impr_share" data-fmt="pct0">—</span> de todas las impresiones</span><div class="lz-bar"><i data-draw="share" data-source="by_network" data-where="network=Instagram" data-field="impr_share"></i></div></div>
+      </article>
+      <article class="lz-card lz-net" id="red-facebook">
+        <div class="lz-net-top"><span class="lz-net-name"><i class="lz-dot" data-net="Facebook"></i>Facebook</span><span class="lz-role">Reels</span></div>
+        <div class="lz-pair">
+          <div class="lz-kpi"><span class="lz-label">Mediana / pub.</span><span class="lz-big" data-draw="v" data-source="by_network" data-where="network=Facebook" data-field="median_impr">—</span></div>
+          <div class="lz-kpi"><span class="lz-label">Interacción</span><span class="lz-big" data-draw="v" data-source="by_network" data-where="network=Facebook" data-field="er" data-fmt="pct">—</span></div>
+        </div>
+        <dl class="lz-dl">
+          <dt>Publicaciones</dt><dd data-draw="v" data-source="by_network" data-where="network=Facebook" data-field="posts">—</dd>
+          <dt>Impresiones</dt><dd data-draw="v" data-source="by_network" data-where="network=Facebook" data-field="impressions">—</dd>
+          <dt>Likes</dt><dd data-draw="v" data-source="by_network" data-where="network=Facebook" data-field="likes">—</dd>
+          <dt>Comentarios</dt><dd data-draw="v" data-source="by_network" data-where="network=Facebook" data-field="comments">—</dd>
+          <dt>Compartidos</dt><dd data-draw="v" data-source="by_network" data-where="network=Facebook" data-field="shares">—</dd>
+        </dl>
+        <div class="lz-share"><span class="lz-note"><span data-draw="v" data-source="by_network" data-where="network=Facebook" data-field="impr_share" data-fmt="pct0">—</span> de todas las impresiones</span><div class="lz-bar"><i data-draw="share" data-source="by_network" data-where="network=Facebook" data-field="impr_share"></i></div></div>
+        <p class="lz-caveat">Su publicación más vista concentra <b data-draw="v" data-source="by_network" data-where="network=Facebook" data-field="top_share" data-fmt="pct0">—</b> de las impresiones de Facebook. Si fue promocionada, ese alcance no es orgánico.</p>
+      </article>
+      <article class="lz-card lz-net" id="red-tiktok">
+        <div class="lz-net-top"><span class="lz-net-name"><i class="lz-dot" data-net="TikTok"></i>TikTok</span><span class="lz-role">Video</span></div>
+        <div class="lz-pair">
+          <div class="lz-kpi"><span class="lz-label">Mediana / pub.</span><span class="lz-big" data-draw="v" data-source="by_network" data-where="network=TikTok" data-field="median_impr">—</span></div>
+          <div class="lz-kpi"><span class="lz-label">Interacción</span><span class="lz-big" data-draw="v" data-source="by_network" data-where="network=TikTok" data-field="er" data-fmt="pct">—</span></div>
+        </div>
+        <dl class="lz-dl">
+          <dt>Publicaciones</dt><dd data-draw="v" data-source="by_network" data-where="network=TikTok" data-field="posts">—</dd>
+          <dt>Impresiones</dt><dd data-draw="v" data-source="by_network" data-where="network=TikTok" data-field="impressions">—</dd>
+          <dt>Likes</dt><dd data-draw="v" data-source="by_network" data-where="network=TikTok" data-field="likes">—</dd>
+          <dt>Comentarios</dt><dd data-draw="v" data-source="by_network" data-where="network=TikTok" data-field="comments">—</dd>
+          <dt>Compartidos</dt><dd data-draw="v" data-source="by_network" data-where="network=TikTok" data-field="shares">—</dd>
+        </dl>
+        <div class="lz-share"><span class="lz-note"><span data-draw="v" data-source="by_network" data-where="network=TikTok" data-field="impr_share" data-fmt="pct0">—</span> de todas las impresiones</span><div class="lz-bar"><i data-draw="share" data-source="by_network" data-where="network=TikTok" data-field="impr_share"></i></div></div>
+      </article>
+    </div>
+  </section>
+
+  <section class="lz-grid2" id="graficas">
+    <div class="lz-card lz-chartcard" id="semanal">
+      <h3 class="lz-h3">Impresiones por semana</h3>
+      <div class="lz-legend"><span><i class="lz-dot" data-net="LinkedIn"></i>LinkedIn</span><span><i class="lz-dot" data-net="Instagram"></i>Instagram</span><span><i class="lz-dot" data-net="Facebook"></i>Facebook</span><span><i class="lz-dot" data-net="TikTok"></i>TikTok</span></div>
+      <div class="lz-chart" data-draw="weekly" data-source="weekly"></div>
+      <span class="lz-note">Cada grupo es una semana de lunes a domingo, con la fecha del lunes. La primera y la última semana están incompletas.</span>
+    </div>
+    <div class="lz-card lz-chartcard" id="formatos">
+      <h3 class="lz-h3">Tasa de interacción por formato</h3>
+      <div class="lz-legend"><span><i class="lz-dot" data-net="LinkedIn"></i>LinkedIn</span><span><i class="lz-dot" data-net="Instagram"></i>Instagram</span><span><i class="lz-dot" data-net="Facebook"></i>Facebook</span><span><i class="lz-dot" data-net="TikTok"></i>TikTok</span></div>
+      <div class="lz-chart lz-short" data-draw="formats" data-source="by_format"></div>
+      <span class="lz-note">Formatos con impresiones registradas. Entre paréntesis, cuántas publicaciones hubo.</span>
+    </div>
+  </section>
+
+  <section class="lz-sec" id="top">
+    <h2 class="lz-h2">Las 10 publicaciones más vistas</h2>
+    <div class="lz-card lz-tablewrap">
+      <table class="lz-table" data-source="top_posts" data-row-key="postKey">
+        <thead>
+          <tr>
+            <th data-field="date">Fecha</th>
+            <th data-field="network">Red</th>
+            <th data-field="format">Formato</th>
+            <th class="num" data-field="impressions">Impresiones</th>
+            <th class="num" data-field="likes">Likes</th>
+            <th class="num" data-field="comments">Coment.</th>
+            <th class="num" data-field="shares">Compart.</th>
+            <th class="num" data-field="er">Interacción</th>
+            <th>Enlace</th>
+          </tr>
+        </thead>
+        <tbody data-draw="top"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="lz-sec" id="recomendaciones">
+    <h2 class="lz-h2">Qué hacer con esto</h2>
+    <p class="lz-sub">Lectura del equipo de marketing al 9 de noviembre de 2026.</p>
+    <div class="lz-recs">
+      <div class="lz-card lz-rec"><span class="lz-rec-tag"><i class="lz-dot" data-net="Instagram"></i>Instagram</span><p>Publicar más reels. Es el formato con más interacción y el que más se comparte. Las historias casi no generan respuesta.</p></div>
+      <div class="lz-card lz-rec"><span class="lz-rec-tag"><i class="lz-dot" data-net="LinkedIn"></i>LinkedIn</span><p>Ya tiene el mejor alcance. Falta conversación: cerrar los posts con una pregunta o un tema debatible para sumar comentarios.</p></div>
+      <div class="lz-card lz-rec"><span class="lz-rec-tag"><i class="lz-dot" data-net="Facebook"></i>Facebook</span><p>Dejar de copiar ahí las publicaciones de Instagram. Usar Facebook para reels, que es lo único que mueve alcance.</p></div>
+      <div class="lz-card lz-rec"><span class="lz-rec-tag"><i class="lz-dot" data-net="TikTok"></i>TikTok</span><p>Publicar con más constancia. Con pocos videos ya logra un alcance por pieza cercano al de LinkedIn; hubo semanas sin ninguno.</p></div>
+    </div>
+  </section>
+
+  <details id="notas">
+    <summary>Cómo se calculan estas cifras</summary>
+    <p>Los datos vienen de HubSpot, que registra las publicaciones hechas directamente en Facebook, Instagram, LinkedIn y TikTok entre el 10 de octubre y el 9 de noviembre de 2026. Interacciones es la suma de likes, comentarios y compartidos; la tasa de interacción divide esa suma entre las impresiones. HubSpot no reporta clics ni seguidores para estas publicaciones. En TikTok, cada video cuenta como formato «Video». Las publicaciones más recientes siguen acumulando impresiones.</p>
+  </details>
+</div>
+
+<script>
+  window.LZ_ROWS = [{"postKey": "p0", "date": "2026-11-09", "network": "Instagram", "format": "Historia", "impressions": null, "likes": null, "comments": null, "shares": null, "url": "https://www.instagram.com/stories/go_lapzo/4026734250887733017"}, {"postKey": "p1", "date": "2026-11-09", "network": "Instagram", "format": "Post", "impressions": 7, "likes": 2, "comments": 0, "shares": null, "url": "https://www.instagram.com/p/Dfh1UskoDfT/"}, {"postKey": "p2", "date": "2026-11-09", "network": "LinkedIn", "format": "Post", "impressions": 38, "likes": 1, "comments": 0, "shares": 0, "url": "https://www.linkedin.com/feed/update/urn:li:ugcPost:7525587134225780736"}, {"postKey": "p3", "date": "2026-11-07", "network": "Facebook", "format": "Reel", "impressions": 6248, "likes": 19, "comments": 0, "shares": 1, "url": "https://www.facebook.com/reel/990593957434490/"}, {"postKey": "p4", "date": "2026-11-07", "network": "Facebook", "format": "Historia", "impressions": 0, "likes": null, "comments": 0, "shares": 0, "url": "https://facebook.com/stories/100537761776921/UzpfSVNDOjE0MjQ0MjAzODk4NjEyNjY=/?view_single=1"}, {"postKey": "p5", "date": "2026-11-07", "network": "Instagram", "format": "Reel", "impressions": 60, "likes": 3, "comments": 0, "shares": 0, "url": "https://www.instagram.com/reel/Dfcj3vzjTeV/"}, {"postKey": "p6", "date": "2026-11-05", "network": "Facebook", "format": "Historia", "impressions": 0, "likes": null, "comments": 0, "shares": 0, "url": "https://facebook.com/stories/100537761776921/UzpfSVNDOjE4NjM0OTU0OTc5ODU4MDM=/?view_single=1"}, {"postKey": "p7", "date": "2026-11-05", "network": "Instagram", "format": "Post", "impressions": 54, "likes": 4, "comments": 0, "shares": null, "url": "https://www.instagram.com/p/DfYL81JFEeK/"}, {"postKey": "p8", "date": "2026-11-05", "network": "Facebook", "format": "Post", "impressions": 19, "likes": 0, "comments": 0, "shares": 0, "url": "https://www.facebook.com/613311597166199/posts/1662444362252912"}, {"postKey": "p9", "date": "2026-11-05", "network": "LinkedIn", "format": "Post", "impressions": 112, "likes": 2, "comments": 0, "shares": 2, "url": "https://www.linkedin.com/feed/update/urn:li:ugcPost:7524216742357663745"}, {"postKey": "p10", "date": "2026-11-05", "network": "Facebook", "format": "Historia", "impressions": 0, "likes": null, "comments": 0, "shares": 0, "url": "https://facebook.com/stories/100537761776921/UzpfSVNDOjE0NjYxMzU4OTg4MTM0NjQ=/?view_single=1"}, {"postKey": "p11", "date": "2026-11-05", "network": "Instagram", "format": "Post", "impressions": 48, "likes": 2, "comments": 0, "shares": null, "url": "https://www.instagram.com/p/DfX82R8IBWR/"}, {"postKey": "p12", "date": "2026-11-05", "network": "Facebook", "format": "Post", "impressions": 33, "likes": 1, "comments": 0, "shares": 0, "url": "https://www.facebook.com/613311597166199/posts/1662366418927373"}, {"postKey": "p13", "date": "2026-11-05", "network": "LinkedIn", "format": "Post", "impressions": 202, "likes": 6, "comments": 0, "shares": 0, "url": "https://www.linkedin.com/feed/update/urn:li:ugcPost:7524214147534868480"}, {"postKey": "p14", "date": "2026-11-05", "network": "Facebook", "format": "Post", "impressions": 0, "likes": 0, "comments": 0, "shares": 0, "url": "https://www.facebook.com/1146024434586491"}, {"postKey": "p15", "date": "2026-11-04", "network": "Instagram", "format": "Post", "impressions": 40, "likes": 3, "comments": 0, "shares": null, "url": "https://www.instagram.com/p/DfTVYbdmwpY/"}, {"postKey": "p16", "date": "2026-11-04", "network": "Facebook", "format": "Post", "impressions": 81, "likes": 1, "comments": 0, "shares": 1, "url": "https://www.facebook.com/613311597166199/posts/1660338059130209"}, {"postKey": "p17", "date": "2026-11-03", "network": "Instagram", "format": "Historia", "impressions": 86, "likes": null, "comments": 0, "shares": null, "url": "https://www.instagram.com/stories/go_lapzo/4022479480853733607"}, {"postKey": "p18", "date": "2026-11-03", "network": "Instagram", "format": "Historia", "impressions": 13, "likes": null, "comments": 0, "shares": null, "url": "https://www.instagram.com/stories/go_lapzo/4022407933645097120"}, {"postKey": "p19", "date": "2026-11-03", "network": "LinkedIn", "format": "Post", "impressions": 279, "likes": 6, "comments": 0, "shares": 1, "url": "https://www.linkedin.com/feed/update/urn:li:share:7523416823611158528"}, {"postKey": "p20", "date": "2026-11-02", "network": "LinkedIn", "format": "Post", "impressions": 222, "likes": 8, "comments": 0, "shares": 0, "url": "https://www.linkedin.com/feed/update/urn:li:share:7523065861415350273"}, {"postKey": "p21", "date": "2026-10-31", "network": "Instagram", "format": "Post", "impressions": 61, "likes": 3, "comments": 0, "shares": null, "url": "https://www.instagram.com/p/DfKsnm5inps/"}, {"postKey": "p22", "date": "2026-10-31", "network": "Facebook", "format": "Post", "impressions": 80, "likes": 1, "comments": 0, "shares": 0, "url": "https://www.facebook.com/613311597166199/posts/1656986249465390"}, {"postKey": "p23", "date": "2026-10-29", "network": "Instagram", "format": "Historia", "impressions": 15, "likes": null, "comments": 0, "shares": null, "url": "https://www.instagram.com/stories/go_lapzo/4018941631341013105"}, {"postKey": "p24", "date": "2026-10-28", "network": "Instagram", "format": "Post", "impressions": 86, "likes": 3, "comments": 0, "shares": null, "url": "https://www.instagram.com/p/DfC9VtWAhJR/"}, {"postKey": "p25", "date": "2026-10-28", "network": "Facebook", "format": "Post", "impressions": 68, "likes": 1, "comments": 0, "shares": 0, "url": "https://www.facebook.com/613311597166199/posts/1653953933101955"}, {"postKey": "p26", "date": "2026-10-28", "network": "LinkedIn", "format": "Post", "impressions": 428, "likes": 10, "comments": 0, "shares": 2, "url": "https://www.linkedin.com/feed/update/urn:li:share:7521238796965707776"}, {"postKey": "p27", "date": "2026-10-28", "network": "Instagram", "format": "Post", "impressions": 42, "likes": 5, "comments": 0, "shares": null, "url": "https://www.instagram.com/p/DfCu7xMGwos/"}, {"postKey": "p28", "date": "2026-10-28", "network": "Facebook", "format": "Post", "impressions": 68, "likes": 1, "comments": 0, "shares": 0, "url": "https://www.facebook.com/613311597166199/posts/1653852399778775"}, {"postKey": "p29", "date": "2026-10-28", "network": "LinkedIn", "format": "Post", "impressions": 354, "likes": 11, "comments": 0, "shares": 3, "url": "https://www.linkedin.com/feed/update/urn:li:share:7521220528045711360"}, {"postKey": "p30", "date": "2026-10-28", "network": "Instagram", "format": "Post", "impressions": 40, "likes": 4, "comments": 0, "shares": null, "url": "https://www.instagram.com/p/DfBGDxRDjBf/"}, {"postKey": "p31", "date": "2026-10-28", "network": "Facebook", "format": "Post", "impressions": 21, "likes": 1, "comments": 0, "shares": 0, "url": "https://www.facebook.com/613311597166199/posts/1653199913177357"}, {"postKey": "p32", "date": "2026-10-27", "network": "Instagram", "format": "Historia", "impressions": 11, "likes": null, "comments": 0, "shares": null, "url": "https://www.instagram.com/stories/go_lapzo/4017475420924489222"}, {"postKey": "p33", "date": "2026-10-27", "network": "Facebook", "format": "Reel", "impressions": 321, "likes": 1, "comments": 0, "shares": 0, "url": "https://www.facebook.com/reel/1742927086807213/"}, {"postKey": "p34", "date": "2026-10-27", "network": "Instagram", "format": "Historia", "impressions": 15, "likes": null, "comments": 0, "shares": null, "url": "https://www.instagram.com/stories/go_lapzo/4017459014316889886"}, {"postKey": "p35", "date": "2026-10-27", "network": "Instagram", "format": "Reel", "impressions": 104, "likes": 5, "comments": 0, "shares": 0, "url": "https://www.instagram.com/reel/DfA4KbwP94t/"}, {"postKey": "p36", "date": "2026-10-27", "network": "Instagram", "format": "Reel", "impressions": 2, "likes": 0, "comments": 0, "shares": 0, "url": "https://www.instagram.com/reel/DfAzXiOAJB6/"}, {"postKey": "p37", "date": "2026-10-27", "network": "LinkedIn", "format": "Post", "impressions": 270, "likes": 4, "comments": 0, "shares": 1, "url": "https://www.linkedin.com/feed/update/urn:li:ugcPost:7520880599151194112"}, {"postKey": "p38", "date": "2026-10-27", "network": "Instagram", "format": "Reel", "impressions": 102, "likes": 7, "comments": 0, "shares": 1, "url": "https://www.instagram.com/reel/DfAQdroFf8f/"}, {"postKey": "p39", "date": "2026-10-27", "network": "Facebook", "format": "Reel", "impressions": 85, "likes": 0, "comments": 0, "shares": 0, "url": "https://www.facebook.com/reel/1649745909896037/"}, {"postKey": "p40", "date": "2026-10-27", "network": "LinkedIn", "format": "Post", "impressions": 311, "likes": 11, "comments": 0, "shares": 0, "url": "https://www.linkedin.com/feed/update/urn:li:ugcPost:7520875103484628993"}, {"postKey": "p41", "date": "2026-10-27", "network": "Instagram", "format": "Historia", "impressions": 10, "likes": null, "comments": 1, "shares": null, "url": "https://www.instagram.com/stories/go_lapzo/4016845524962413857"}, {"postKey": "p42", "date": "2026-10-26", "network": "LinkedIn", "format": "Post", "impressions": 283, "likes": 9, "comments": 0, "shares": 1, "url": "https://www.linkedin.com/feed/update/urn:li:ugcPost:7520620606992723968"}, {"postKey": "p43", "date": "2026-10-26", "network": "Instagram", "format": "Historia", "impressions": 15, "likes": null, "comments": 0, "shares": null, "url": "https://www.instagram.com/stories/go_lapzo/4016598725405124741"}, {"postKey": "p44", "date": "2026-10-26", "network": "Instagram", "format": "Post", "impressions": 106, "likes": 6, "comments": 0, "shares": null, "url": "https://www.instagram.com/p/De9xKiZI906/"}, {"postKey": "p45", "date": "2026-10-26", "network": "Facebook", "format": "Post", "impressions": 57, "likes": 0, "comments": 0, "shares": 0, "url": "https://www.facebook.com/613311597166199/posts/1651956736635008"}, {"postKey": "p46", "date": "2026-10-26", "network": "LinkedIn", "format": "Post", "impressions": 199, "likes": 4, "comments": 0, "shares": 0, "url": "https://www.linkedin.com/feed/update/urn:li:share:7520508174320300032"}, {"postKey": "p47", "date": "2026-10-26", "network": "Instagram", "format": "Post", "impressions": 23, "likes": 3, "comments": 0, "shares": null, "url": "https://www.instagram.com/p/De8IvGFlG9H/"}, {"postKey": "p48", "date": "2026-10-26", "network": "Facebook", "format": "Post", "impressions": 4, "likes": 0, "comments": 0, "shares": 0, "url": "https://www.facebook.com/613311597166199/posts/1651319543365394"}, {"postKey": "p49", "date": "2026-10-24", "network": "Instagram", "format": "Historia", "impressions": 19, "likes": null, "comments": 0, "shares": null, "url": "https://www.instagram.com/stories/go_lapzo/4014689840611201752"}, {"postKey": "p50", "date": "2026-10-24", "network": "Facebook", "format": "Reel", "impressions": 252, "likes": 2, "comments": 0, "shares": 0, "url": "https://www.facebook.com/reel/1799093927847494/"}, {"postKey": "p51", "date": "2026-10-24", "network": "Instagram", "format": "Reel", "impressions": 199, "likes": 11, "comments": 0, "shares": 8, "url": "https://www.instagram.com/reel/De3Cay1AbCM/"}, {"postKey": "p52", "date": "2026-10-22", "network": "Instagram", "format": "Historia", "impressions": 11, "likes": null, "comments": 0, "shares": null, "url": "https://www.instagram.com/stories/go_lapzo/4013230358387512898"}, {"postKey": "p53", "date": "2026-10-21", "network": "Facebook", "format": "Reel", "impressions": 280, "likes": 1, "comments": 0, "shares": 0, "url": "https://www.facebook.com/reel/1134557822371263/"}, {"postKey": "p54", "date": "2026-10-21", "network": "Instagram", "format": "Historia", "impressions": 19, "likes": null, "comments": 0, "shares": null, "url": "https://www.instagram.com/stories/go_lapzo/4012487949232687562"}, {"postKey": "p55", "date": "2026-10-21", "network": "Instagram", "format": "Reel", "impressions": 189, "likes": 10, "comments": 0, "shares": 5, "url": "https://www.instagram.com/reel/DevNwUTMv6I/"}, {"postKey": "p56", "date": "2026-10-19", "network": "LinkedIn", "format": "Post", "impressions": 595, "likes": 8, "comments": 2, "shares": 0, "url": "https://www.linkedin.com/feed/update/urn:li:ugcPost:7518021934752792576"}, {"postKey": "p57", "date": "2026-10-19", "network": "Facebook", "format": "Post", "impressions": 96, "likes": 2, "comments": 0, "shares": 0, "url": "https://www.facebook.com/613311597166199/posts/1645325167298165"}, {"postKey": "p58", "date": "2026-10-16", "network": "Facebook", "format": "Reel", "impressions": 342, "likes": 2, "comments": 0, "shares": 0, "url": "https://www.facebook.com/reel/2529511920904184/"}, {"postKey": "p59", "date": "2026-10-16", "network": "Instagram", "format": "Historia", "impressions": 17, "likes": null, "comments": 0, "shares": null, "url": "https://www.instagram.com/stories/go_lapzo/4008919856657033582"}, {"postKey": "p60", "date": "2026-10-16", "network": "Instagram", "format": "Reel", "impressions": 226, "likes": 14, "comments": 0, "shares": 4, "url": "https://www.instagram.com/reel/DeiixqTPvXo/"}, {"postKey": "p61", "date": "2026-10-16", "network": "Instagram", "format": "Historia", "impressions": 22, "likes": null, "comments": 1, "shares": null, "url": "https://www.instagram.com/stories/go_lapzo/4008892912556332635"}, {"postKey": "p62", "date": "2026-10-15", "network": "Facebook", "format": "Post", "impressions": 80, "likes": 0, "comments": 0, "shares": 0, "url": "https://www.facebook.com/613311597166199/posts/1641576804339668"}, {"postKey": "p63", "date": "2026-10-15", "network": "Facebook", "format": "Post", "impressions": 84, "likes": 1, "comments": 0, "shares": 0, "url": "https://www.facebook.com/613311597166199/posts/1641576361006379"}, {"postKey": "p64", "date": "2026-10-15", "network": "Instagram", "format": "Post", "impressions": 81, "likes": 4, "comments": 0, "shares": null, "url": "https://www.instagram.com/p/Dehhvo-Ah_-/"}, {"postKey": "p65", "date": "2026-10-15", "network": "Facebook", "format": "Post", "impressions": 5, "likes": 0, "comments": 0, "shares": 0, "url": "https://www.facebook.com/613311597166199/posts/1641453464352002"}, {"postKey": "p66", "date": "2026-10-14", "network": "LinkedIn", "format": "Post", "impressions": 580, "likes": 9, "comments": 0, "shares": 0, "url": "https://www.linkedin.com/feed/update/urn:li:ugcPost:7516164252156657664"}, {"postKey": "p67", "date": "2026-10-13", "network": "LinkedIn", "format": "Post", "impressions": 542, "likes": 11, "comments": 0, "shares": 1, "url": "https://www.linkedin.com/feed/update/urn:li:ugcPost:7515825487068225536"}, {"postKey": "p68", "date": "2026-10-12", "network": "Instagram", "format": "Historia", "impressions": 17, "likes": null, "comments": 0, "shares": null, "url": "https://www.instagram.com/stories/go_lapzo/4006611554266005613"}, {"postKey": "p69", "date": "2026-10-12", "network": "Facebook", "format": "Post", "impressions": 111, "likes": 1, "comments": 0, "shares": 0, "url": "https://www.facebook.com/613311597166199/posts/1638714897959192"}, {"postKey": "p70", "date": "2026-10-12", "network": "Instagram", "format": "Post", "impressions": 125, "likes": 6, "comments": 0, "shares": null, "url": "https://www.instagram.com/p/DeaV9ppgKr0/"}, {"postKey": "p71", "date": "2026-11-09", "network": "TikTok", "format": "Video", "impressions": 3, "likes": 2, "comments": 0, "shares": 0, "url": "https://www.tiktok.com/@go_lapzo/video/7706225961062157588"}, {"postKey": "p72", "date": "2026-10-28", "network": "TikTok", "format": "Video", "impressions": 595, "likes": 13, "comments": 0, "shares": 0, "url": "https://www.tiktok.com/@go_lapzo/video/7701743114481929493"}, {"postKey": "p73", "date": "2026-10-28", "network": "TikTok", "format": "Video", "impressions": 165, "likes": 7, "comments": 0, "shares": 0, "url": "https://www.tiktok.com/@go_lapzo/video/7701741158275353876"}, {"postKey": "p74", "date": "2026-10-27", "network": "TikTok", "format": "Video", "impressions": 211, "likes": 7, "comments": 0, "shares": 10, "url": "https://www.tiktok.com/@go_lapzo/video/7701466327608823060"}, {"postKey": "p75", "date": "2026-10-27", "network": "TikTok", "format": "Video", "impressions": 96, "likes": 2, "comments": 0, "shares": 0, "url": "https://www.tiktok.com/@go_lapzo/video/7701460908668669205"}, {"postKey": "p76", "date": "2026-10-19", "network": "TikTok", "format": "Video", "impressions": 668, "likes": 20, "comments": 0, "shares": 2, "url": "https://www.tiktok.com/@go_lapzo/video/7698450686626794772"}];
+  window.dash = (function () {
+    const store = {posts: LZ_ROWS}, draws = [];
+    return {
+      colors: ['var(--c0)', 'var(--c1)', 'var(--c2)', 'var(--c3)'],
+      data: (id) => (id in store ? {status: 'ok', data: store[id]} : {status: 'missing', data: []}),
+      calc: (id, o) => { store[id] = o.fn(...o.inputs.map((i) => store[i])); },
+      draw: (name, fn) => draws.push([name, fn]),
+      run: () => draws.forEach(([name, fn]) => document.querySelectorAll('[data-draw="' + name + '"]').forEach((el) => fn(el))),
+    };
+  })();
+</script>
+<script>
+  window.LZ = (function () {
+    const loc = d3.formatLocale({decimal: '.', thousands: ',', grouping: [3], currency: ['$', '']});
+    const MES = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'];
+    const NETS = ['LinkedIn', 'Instagram', 'Facebook', 'TikTok'];
+    const int = loc.format(',.0f');
+    const one = loc.format('.1f');
+    const day = (s) => { const d = new Date(String(s).slice(0, 10) + 'T00:00:00Z'); return d.getUTCDate() + ' ' + MES[d.getUTCMonth()]; };
+    return {
+      NETS,
+      color: (n) => dash.colors[Math.max(0, NETS.indexOf(n))],
+      day,
+      fmt: {
+        int: (v) => int(+v),
+        pct: (v) => one(+v) + '%',
+        pct0: (v) => int(+v) + '%',
+        text: (v) => String(v),
+      },
+      tip: (host) => { const t = document.createElement('div'); t.className = 'lz-tip'; host.append(t); return t; },
+      place: (host, tip, x, y) => {
+        const w = tip.offsetWidth, hw = host.clientWidth;
+        tip.style.left = Math.max(0, Math.min(hw - w, x - w / 2)) + 'px';
+        tip.style.top = Math.max(0, y - tip.offsetHeight - 10) + 'px';
+        tip.style.opacity = 1;
+      },
+      fail: (el, d) => {
+        el.replaceChildren();
+        if (d.status === 'error') { const p = document.createElement('p'); p.className = 'lz-fail'; p.textContent = 'No se pudo cargar'; el.append(p); }
+      },
+    };
+  })();
+
+  document.querySelectorAll('.lz-dot[data-net]').forEach((el) => { el.style.background = LZ.color(el.dataset.net); });
+</script>
+
+<script>
+  dash.calc('totals', {
+    inputs: ['posts'],
+    title: 'Totales del periodo',
+    description: 'Publicaciones, impresiones e interacciones sumadas en las cuatro redes.',
+    fn: (posts) => {
+      const n = (v) => (v == null || v === '' ? 0 : +v);
+      const t = {posts: posts.length, impressions: 0, likes: 0, comments: 0, shares: 0};
+      for (const p of posts) { t.impressions += n(p.impressions); t.likes += n(p.likes); t.comments += n(p.comments); t.shares += n(p.shares); }
+      t.engagements = t.likes + t.comments + t.shares;
+      t.er = t.impressions ? Math.round(1000 * t.engagements / t.impressions) / 10 : null;
+      return [t];
+    },
+  });
+
+  dash.calc('by_network', {
+    inputs: ['posts'],
+    title: 'Resultados por red',
+    description: 'Totales, mediana de impresiones por publicación y tasa de interacción de cada red.',
+    fn: (posts) => {
+      const n = (v) => (v == null || v === '' ? 0 : +v);
+      const all = posts.reduce((s, p) => s + n(p.impressions), 0);
+      return ['LinkedIn', 'Instagram', 'Facebook', 'TikTok'].map((network) => {
+        const ps = posts.filter((p) => p.network === network);
+        const imps = ps.map((p) => n(p.impressions)).sort((a, b) => a - b);
+        const k = imps.length;
+        const r = {network, posts: k, impressions: 0, likes: 0, comments: 0, shares: 0};
+        for (const p of ps) { r.impressions += n(p.impressions); r.likes += n(p.likes); r.comments += n(p.comments); r.shares += n(p.shares); }
+        r.engagements = r.likes + r.comments + r.shares;
+        r.er = r.impressions ? Math.round(1000 * r.engagements / r.impressions) / 10 : null;
+        r.median_impr = k ? Math.round(k % 2 ? imps[(k - 1) / 2] : (imps[k / 2 - 1] + imps[k / 2]) / 2) : null;
+        r.top_share = r.impressions ? Math.round(100 * imps[k - 1] / r.impressions) : null;
+        r.impr_share = all ? Math.round(100 * r.impressions / all) : null;
+        return r;
+      });
+    },
+  });
+
+  dash.calc('leaders', {
+    inputs: ['by_network'],
+    title: 'Red líder en alcance e interacción',
+    description: 'La red con la mayor mediana de impresiones por publicación y la red con la mayor tasa de interacción.',
+    fn: (byNetwork) => {
+      const rows = (byNetwork || []).filter((r) => r.posts > 0);
+      if (!rows.length) return [];
+      const reach = rows.reduce((a, b) => (b.median_impr > a.median_impr ? b : a));
+      const eng = rows.reduce((a, b) => (b.er > a.er ? b : a));
+      return [{reach_network: reach.network, reach_median: reach.median_impr, er_network: eng.network, er: eng.er}];
+    },
+  });
+
+  dash.calc('by_format', {
+    inputs: ['posts'],
+    title: 'Interacción por formato',
+    description: 'Tasa de interacción de cada formato (post, reel, historia, video) en cada red.',
+    fn: (posts) => {
+      const n = (v) => (v == null || v === '' ? 0 : +v);
+      const g = new Map();
+      for (const p of posts) {
+        const label = p.network + ' · ' + p.format;
+        const r = g.get(label) || {label, network: p.network, format: p.format, posts: 0, impressions: 0, engagements: 0};
+        r.posts += 1; r.impressions += n(p.impressions); r.engagements += n(p.likes) + n(p.comments) + n(p.shares);
+        g.set(label, r);
+      }
+      return [...g.values()].filter((r) => r.impressions > 0)
+        .map((r) => ({...r, er: Math.round(1000 * r.engagements / r.impressions) / 10}))
+        .sort((a, b) => b.er - a.er);
+    },
+  });
+
+  dash.calc('weekly', {
+    inputs: ['posts'],
+    title: 'Impresiones por semana',
+    description: 'Impresiones de cada red agrupadas por la semana (lunes a domingo) en que se publicó cada pieza.',
+    fn: (posts) => {
+      const n = (v) => (v == null || v === '' ? 0 : +v);
+      const monday = (s) => { const d = new Date(String(s).slice(0, 10) + 'T00:00:00Z'); d.setUTCDate(d.getUTCDate() - (d.getUTCDay() + 6) % 7); return d.toISOString().slice(0, 10); };
+      const weeks = [...new Set(posts.map((p) => monday(p.date)))].sort();
+      const rows = [];
+      for (const week of weeks) {
+        for (const network of ['LinkedIn', 'Instagram', 'Facebook', 'TikTok']) {
+          const ps = posts.filter((p) => p.network === network && monday(p.date) === week);
+          rows.push({week, network, posts: ps.length, impressions: ps.reduce((s, p) => s + n(p.impressions), 0), engagements: ps.reduce((s, p) => s + n(p.likes) + n(p.comments) + n(p.shares), 0)});
+        }
+      }
+      return rows;
+    },
+  });
+
+  dash.calc('top_posts', {
+    inputs: ['posts'],
+    title: 'Las 10 publicaciones más vistas',
+    description: 'Publicaciones con más impresiones en el periodo y su tasa de interacción.',
+    fn: (posts) => {
+      const n = (v) => (v == null || v === '' ? 0 : +v);
+      return [...posts].sort((a, b) => n(b.impressions) - n(a.impressions)).slice(0, 10).map((p) => {
+        const e = n(p.likes) + n(p.comments) + n(p.shares);
+        return {postKey: p.postKey, date: p.date, network: p.network, format: p.format, url: p.url, impressions: n(p.impressions), likes: p.likes, comments: p.comments, shares: p.shares, er: n(p.impressions) ? Math.round(1000 * e / n(p.impressions)) / 10 : null};
+      });
+    },
+  });
+</script>
+
+<script>
+  dash.draw('v', (el) => {
+    const d = dash.data(el.dataset.source);
+    if (d.status !== 'ok' || !Array.isArray(d.data)) {
+      el.textContent = '—';
+      if (d.status !== 'loading') el.classList.remove('dash-skeleton');
+      return;
+    }
+    let row;
+    if (el.dataset.where) {
+      const i = el.dataset.where.indexOf('=');
+      const k = el.dataset.where.slice(0, i), v = decodeURIComponent(el.dataset.where.slice(i + 1));
+      row = d.data.find((r) => String(r[k]) === v);
+    } else row = d.data[+(el.dataset.row || 0)];
+    const v = row ? row[el.dataset.field] : null;
+    el.textContent = v == null || v === '' ? '—' : LZ.fmt[el.dataset.fmt || 'int'](v);
+    el.classList.remove('dash-skeleton');
+  });
+
+  dash.draw('share', (el) => {
+    const d = dash.data('by_network');
+    const net = el.dataset.where.split('=')[1];
+    const row = d.status === 'ok' ? d.data.find((r) => r.network === net) : null;
+    el.style.background = LZ.color(net);
+    el.style.width = (row && row.impr_share != null ? row.impr_share : 0) + '%';
+  });
+
+  dash.draw('weekly', (el) => {
+    const d = dash.data('weekly');
+    if (d.status !== 'ok') { LZ.fail(el, d); return; }
+    const rows = d.data;
+    const weeks = [...new Set(rows.map((r) => r.week))].sort();
+    const W = Math.max(280, el.clientWidth || 600), H = 300, m = {t: 18, r: 4, b: 28, l: 0};
+    el.replaceChildren();
+    const svg = d3.select(el).append('svg').attr('width', '100%').attr('height', H).attr('viewBox', `0 0 ${W} ${H}`)
+      .attr('role', 'img').attr('aria-label', 'Impresiones por semana de LinkedIn, Instagram, Facebook y TikTok');
+    const y = d3.scaleLinear().domain([0, d3.max(rows, (r) => r.impressions) || 1]).nice().range([H - m.b, m.t]);
+    const ga = svg.append('g').attr('class', 'lz-axis').call(d3.axisLeft(y).ticks(5).tickFormat(LZ.fmt.int).tickSize(0));
+    let wmax = 0; ga.selectAll('text').each(function () { wmax = Math.max(wmax, this.getComputedTextLength()); });
+    m.l = (wmax || 36) + 8;
+    ga.attr('transform', `translate(${m.l},0)`).select('.domain').remove();
+    ga.selectAll('text').attr('x', -6);
+    svg.insert('g', ':first-child').selectAll('line').data(y.ticks(5)).join('line')
+      .attr('x1', m.l).attr('x2', W - m.r).attr('y1', (v) => y(v)).attr('y2', (v) => y(v)).style('stroke', 'var(--cds-chart-grid)');
+    const x = d3.scaleBand().domain(weeks).range([m.l, W - m.r]).paddingInner(0.22).paddingOuter(0.08);
+    const xi = d3.scaleBand().domain(LZ.NETS).range([0, x.bandwidth()]).padding(0.08);
+    const gx = svg.append('g').attr('class', 'lz-axis').attr('transform', `translate(0,${H - m.b})`)
+      .call(d3.axisBottom(x).tickFormat(LZ.day).tickSize(0).tickPadding(8));
+    gx.select('.domain').style('stroke', 'var(--cds-chart-axis)');
+    const tip = LZ.tip(el);
+    svg.append('g').selectAll('rect').data(rows).join('rect')
+      .attr('x', (r) => x(r.week) + xi(r.network)).attr('width', xi.bandwidth())
+      .attr('y', (r) => y(r.impressions)).attr('height', (r) => Math.max(0, y(0) - y(r.impressions)))
+      .attr('rx', 2).style('fill', (r) => LZ.color(r.network))
+      .on('pointerenter pointermove', function (ev, r) {
+        tip.replaceChildren();
+        const s = document.createElement('strong'); s.textContent = r.network + ' · semana del ' + LZ.day(r.week);
+        const a = document.createElement('span'); a.textContent = LZ.fmt.int(r.impressions) + ' impresiones · ' + r.posts + ' publicaciones · ' + LZ.fmt.int(r.engagements) + ' interacciones';
+        tip.append(s, a);
+        const [px, py] = d3.pointer(ev, el);
+        LZ.place(el, tip, px, py);
+      })
+      .on('pointerleave', () => { tip.style.opacity = 0; });
+    const peak = rows.reduce((a, b) => (b.impressions > a.impressions ? b : a), rows[0]);
+    if (peak) {
+      svg.append('text').attr('class', 'lz-val').attr('text-anchor', 'middle')
+        .attr('x', x(peak.week) + xi(peak.network) + xi.bandwidth() / 2).attr('y', y(peak.impressions) - 6)
+        .text(LZ.fmt.int(peak.impressions));
+    }
+  });
+
+  dash.draw('formats', (el) => {
+    const d = dash.data('by_format');
+    if (d.status !== 'ok') { LZ.fail(el, d); return; }
+    const rows = d.data;
+    const W = Math.max(280, el.clientWidth || 500), rowH = 30, H = rows.length * rowH + 8;
+    el.replaceChildren();
+    const svg = d3.select(el).append('svg').attr('width', '100%').attr('height', H).attr('viewBox', `0 0 ${W} ${H}`)
+      .attr('role', 'img').attr('aria-label', 'Tasa de interacción por formato y red');
+    const labels = svg.append('g').attr('class', 'lz-axis').selectAll('text').data(rows).join('text')
+      .attr('y', (r, i) => i * rowH + rowH / 2 + 4).attr('x', 0)
+      .text((r) => r.label + ' (' + r.posts + ')');
+    let lw = 0; labels.each(function () { lw = Math.max(lw, this.getComputedTextLength()); });
+    const left = (lw || 130) + 12, valW = 48;
+    const x = d3.scaleLinear().domain([0, d3.max(rows, (r) => r.er) || 1]).range([left, W - valW]);
+    const tip = LZ.tip(el);
+    svg.append('g').selectAll('rect').data(rows).join('rect')
+      .attr('x', left).attr('y', (r, i) => i * rowH + 6).attr('height', rowH - 12)
+      .attr('width', (r) => Math.max(1, x(r.er) - left)).attr('rx', 3)
+      .style('fill', (r) => LZ.color(r.network))
+      .on('pointerenter pointermove', function (ev, r) {
+        tip.replaceChildren();
+        const s = document.createElement('strong'); s.textContent = r.label;
+        const a = document.createElement('span'); a.textContent = LZ.fmt.pct(r.er) + ' de interacción · ' + LZ.fmt.int(r.impressions) + ' impresiones · ' + r.posts + ' publicaciones';
+        tip.append(s, a);
+        const [px, py] = d3.pointer(ev, el);
+        LZ.place(el, tip, px, py);
+      })
+      .on('pointerleave', () => { tip.style.opacity = 0; });
+    svg.append('g').selectAll('text').data(rows).join('text').attr('class', 'lz-val')
+      .attr('x', (r) => x(r.er) + 6).attr('y', (r, i) => i * rowH + rowH / 2 + 4)
+      .text((r) => LZ.fmt.pct(r.er));
+  });
+
+  dash.draw('top', (tb) => {
+    const d = dash.data('top_posts');
+    tb.replaceChildren();
+    if (d.status !== 'ok') return;
+    const cell = (tr, text, cls) => { const td = document.createElement('td'); if (cls) td.className = cls; td.textContent = text; tr.append(td); return td; };
+    const n = (v) => (v == null || v === '' ? '—' : LZ.fmt.int(v));
+    for (const r of d.data) {
+      const tr = document.createElement('tr');
+      tr.dataset.key = r.postKey;
+      cell(tr, LZ.day(r.date));
+      const tdn = cell(tr, '');
+      const pill = document.createElement('span'); pill.className = 'lz-pill';
+      const dot = document.createElement('i'); dot.className = 'lz-dot'; dot.style.background = LZ.color(r.network);
+      pill.append(dot, document.createTextNode(r.network)); tdn.append(pill);
+      cell(tr, r.format);
+      cell(tr, n(r.impressions), 'num');
+      cell(tr, n(r.likes), 'num');
+      cell(tr, n(r.comments), 'num');
+      cell(tr, n(r.shares), 'num');
+      cell(tr, r.er == null ? '—' : LZ.fmt.pct(r.er), 'num ' + (r.er >= 5 ? 'lz-er-hi' : r.er < 1 ? 'lz-er-lo' : ''));
+      const tdl = cell(tr, '');
+      if (/^https:\/\//.test(r.url || '')) { const a = document.createElement('a'); a.href = r.url; a.target = '_blank'; a.rel = 'noopener'; a.textContent = 'Ver'; tdl.append(a); }
+      tb.append(tr);
+    }
+  });
+</script>
+
+<p class="lz-foot">Instantánea estática generada el 9 de noviembre de 2026 a partir de HubSpot Social. Para cifras en vivo, usa el dashboard en Claude.</p>
+</main>
+<script>
+  dash.run();
+  let lzW = window.innerWidth, lzT;
+  window.addEventListener('resize', () => { clearTimeout(lzT); lzT = setTimeout(() => { if (window.innerWidth !== lzW) { lzW = window.innerWidth; dash.run(); } }, 150); });
+</script>
+</body>
+</html>
