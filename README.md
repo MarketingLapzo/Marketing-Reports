@@ -5,6 +5,7 @@ Reportes de marketing de Lapzo publicados como páginas estáticas (GitHub Pages
 | Reporte | Ruta | Periodo |
 |---|---|---|
 | Redes sociales orgánicas (Facebook, Instagram, LinkedIn, TikTok) | [`rrss/2026-11/`](rrss/2026-11/) | 10 oct – 9 nov 2026 |
+| Meta Ads (campañas, conjuntos y anuncios) · PDF y Excel | [`meta-ads/2026-11/`](meta-ads/2026-11/) — versión principal: `Reporte_MetaAds_Lapzo_Final_30dias.pdf` | Últimos 30 días (generado el 10 nov 2026) |
 
 ## Cómo verlos
 
