@@ -532,7 +532,7 @@ table{{border-collapse:collapse;width:100%;font-size:14px}} th,td{{padding:8px 1
 th:first-child,td:first-child,tbody th,th.l,td.l{{text-align:left}} thead th{{color:var(--muted);font-weight:600;font-size:12px}} tbody tr:last-child>*{{border-bottom:0}}
 .evo .grp{{text-align:center;border-left:1px solid var(--line)}} td.t{{white-space:normal;min-width:180px;text-align:left}} tbody th{{white-space:normal;min-width:180px;font-weight:500}}
 .learn{{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px}} .learn ul{{margin:0;padding-left:18px}} .learn li{{margin-bottom:8px}}
-.note{{border-left:4px solid var(--accent)}}
+.note{{border-left:4px solid var(--accent)}} .rs{{margin:0;padding-left:18px}} .rs li{{margin-bottom:8px}} .rs a{{color:inherit;text-decoration:underline;text-decoration-color:var(--accent);text-underline-offset:2px}}
 .hips{{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(460px,100%),1fr));gap:12px}} .hip p{{margin:8px 0 0;font-size:14.5px}} .hip a{{color:inherit;text-decoration:underline;text-decoration-color:var(--accent);text-underline-offset:2px}}
 .hl{{display:block;font-size:11.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;margin-bottom:2px}} .hl.v{{color:var(--muted)}} .hl.h{{color:var(--tv)}} .hl.c{{color:var(--ti)}}
 .ctrl{{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;margin-bottom:8px}}
@@ -659,6 +659,164 @@ pick('{dia_inicial}');document.addEventListener('pointerleave',function(){{t.sty
 </script>
 </body></html>'''
 
+# ---------------------------------------------------------------- Reporte semanal
+SEMANAS = [("2026-11-10", "2026-11-16", "2026-11-03", "2026-11-09")]
+
+def _dias_rango(a, b):
+    import datetime as dt
+    d0 = dt.date.fromisoformat(a); d1 = dt.date.fromisoformat(b)
+    return [(d0 + dt.timedelta(i)).isoformat() for i in range((d1 - d0).days + 1)]
+
+def seg_rango(a, b):
+    """Seguidores netos en el rango: Facebook por total diario, Instagram por ganados - perdidos."""
+    ks = sorted(d.FB_TOTAL)
+    fb = {k: d.FB_TOTAL[k] - d.FB_TOTAL[prev] for prev, k in zip(ks[:-1], ks[1:]) if a <= k <= b}
+    ig = {k: v[0] - v[1] for k, v in d.IG_DIA.items() if a <= k <= b}
+    return fb, ig
+
+def pagina_semana(a, b, pa, pb):
+    import re, json
+    ps = [p for p in d.P if a <= p["fecha"] <= b]
+    prev = [p for p in d.P if pa <= p["fecha"] <= pb]
+    calcular_destacados(ps)
+    R, RP = resumen(ps), resumen(prev)
+    fb, ig = seg_rango(a, b)
+    fbp, igp = seg_rango(pa, pb)
+    dias = _dias_rango(a, b)
+
+    def delta(x, y, pct=False):
+        dv = x - y
+        cls = "up" if dv > 0 else "down" if dv < 0 else "neu"
+        fl = "▲" if dv > 0 else "▼" if dv < 0 else "="
+        txt = f"{dv:+.1f} puntos" if pct else f"{dv:+,.0f}"
+        return f'<div class="dl {cls}">{fl} {txt} vs semana anterior</div>'
+
+    l_, c_, s_ = desglose(ps)
+    piezas, piezas_p = len({p["tema"] for p in ps}), len({p["tema"] for p in prev})
+    ig_fin = max(ig) if ig else b
+    kpis = (
+        '<div class="kpis">'
+        f'<div class="card kpi"><div class="v">{piezas}</div><div class="l">piezas únicas ({R["n"]} publicaciones contando cada red)</div>{delta(piezas, piezas_p)}</div>'
+        f'<div class="card kpi"><div class="v">{f_int(R["imp"])}</div><div class="l">veces que se vieron nuestras publicaciones (impresiones)</div>{delta(R["imp"], RP["imp"])}</div>'
+        f'<div class="card kpi wide2"><div class="v">{f_int(R["int"])}</div><div class="l">reacciones (interacciones)</div>'
+        f'<div class="brk"><span><b>♥ {f_int(l_)}</b> likes</span><span><b>💬 {f_int(c_)}</b> comentarios</span><span><b>↗ {f_int(s_)}</b> compartidos</span></div>{delta(R["int"], RP["int"])}</div>'
+        f'<div class="card kpi half"><div class="v">{(R["er"] or 0):.1f} <span class="u">de cada 100</span></div><div class="l">personas que vieron una publicación reaccionaron (tasa de interacción)</div>{delta(R["er"] or 0, RP["er"] or 0, True)}</div>'
+        f'<div class="card kpi half"><div class="v2"><div>Facebook <b>{sum(fb.values()):+d}</b> <span class="small">· semana anterior {sum(fbp.values()):+d}</span></div>'
+        f'<div>Instagram <b>{sum(ig.values()):+d}</b> <span class="small">· semana anterior {sum(igp.values()):+d} (Instagram llega al {fecha(ig_fin)})</span></div></div>'
+        '<div class="l">seguidores nuevos (LinkedIn y TikTok: no disponible)</div></div>'
+        '</div>'
+    )
+
+    # Seguidores por día (7 días)
+    W, ml, mr, rh = 680, 82, 12, 84
+    H = rh * 2 + 46
+    mx = max([abs(v) for v in list(fb.values()) + list(ig.values())] + [1])
+    X = lambda i: ml + i / len(dias) * (W - ml - mr)
+    bw = (W - ml - mr) / len(dias) - 10
+    o = [f'<svg viewBox="0 0 {W} {H}" class="chart wide" role="img" aria-label="Seguidores netos por día">']
+    for j, (red, serie) in enumerate([("Facebook", fb), ("Instagram", ig)]):
+        base = 8 + rh * j + rh - 14
+        o.append(f'<text x="0" y="{base-rh/2+10}" class="lab">{red}</text><line x1="{ml}" x2="{W-mr}" y1="{base}" y2="{base}" class="axis"/>')
+        for i, k in enumerate(dias):
+            cx = X(i) + 5 + bw / 2
+            if k not in serie:
+                o.append(f'<text x="{cx:.1f}" y="{base-4}" text-anchor="middle" class="val">sin dato</text>')
+                continue
+            v = serie[k]
+            h = (rh - 26) * abs(v) / mx
+            y = base - h if v >= 0 else base
+            if v > 0:
+                lab = f'<text x="{cx:.1f}" y="{y-3:.1f}" text-anchor="middle" class="val dval">+{v}</text>'
+            elif v < 0:
+                lab = f'<text x="{cx:.1f}" y="{base+max(h,1)+11:.1f}" text-anchor="middle" class="val dval neg">{v}</text>'
+            else:
+                lab = ""
+            o.append(f'<g class="pick" data-day="{k}" data-tip="{tip(red + " · " + fecha(k), f"{v:+d} seguidores netos", "Haz clic para ver qué se publicó")}">'
+                     f'<rect x="{X(i)+5:.1f}" y="{y:.1f}" width="{bw:.1f}" height="{max(h,1):.1f}" rx="3" style="fill:{COLOR[red]}"/>{lab}'
+                     f'<rect x="{X(i):.1f}" y="{base-rh+16}" width="{bw+10:.1f}" height="{rh-10}" class="hit"/></g>')
+    dsem = ["lun", "mar", "mié", "jue", "vie", "sáb", "dom"]
+    for i, k in enumerate(dias):
+        o.append(f'<text x="{X(i)+5+bw/2:.1f}" y="{H-6}" text-anchor="middle" class="tick">{dsem[i % 7]} {int(k[8:])}</text>')
+    o.append("</svg>")
+    seg_svg = "".join(o)
+
+    dd = {}
+    for k in dias:
+        dd[k] = {"t": fecha(k), "fb": fb.get(k), "ig": ig.get(k), "p": [
+            {"r": p["red"], "f": p["formato"], "n": d.TEMAS[p["tema"]][0], "i": f_int(p["imp"]), "x": f_pct(tasa([p])),
+             "u": p["url"], "a": [t for t, _ in DEST_ACTUAL.get(p["url"], [])]}
+            for p in sorted([p for p in ps if p["fecha"] == k], key=lambda p: REDES.index(p["red"]))]}
+    mejor = max(dd, key=lambda k: (dd[k]["fb"] or 0) + (dd[k]["ig"] or 0))
+
+    # Tarjetas por red
+    tarjetas = []
+    for r in REDES:
+        q = [p for p in ps if p["red"] == r]
+        qp = [p for p in prev if p["red"] == r]
+        s1, s0 = resumen(q), resumen(qp)
+        tarjetas.append(
+            f'<div class="card net" style="border-top-color:{COLOR[r]}"><h3>{r}</h3><dl>'
+            f'<div><dt>Publicaciones</dt><dd>{s1["n"]} <span class="small">(antes {s0["n"]})</span></dd></div>'
+            f'<div><dt>Impresiones</dt><dd>{f_int(s1["imp"])} <span class="small">(antes {f_int(s0["imp"])})</span></dd></div>'
+            f'<div><dt>Interacciones</dt><dd>{f_int(s1["int"])} <span class="small">(antes {f_int(s0["int"])})</span></dd></div>'
+            f'<div><dt>Tasa</dt><dd>{f_pct(s1["er"])} <span class="small">(antes {f_pct(s0["er"])})</span></dd></div>'
+            f'<div style="grid-column:span 2"><dt>Desglose</dt><dd class="dd">{desg_html(q, True)}</dd></div></dl></div>')
+
+    # Resumen automático
+    top_i = max(ps, key=lambda p: n(p["imp"]))
+    med = statistics.median([n(x["imp"]) for x in ps])
+    top_t = max([p for p in ps if n(p["imp"]) >= med], key=lambda p: tasa([p]) or 0)
+    lnk = lambda p: f'<a href="{e(p["url"])}" target="_blank" rel="noopener">«{e(d.TEMAS[p["tema"]][0])}»</a>'
+    primeras = {}
+    for p in ps:
+        if p["tema"] not in {x["tema"] for x in prev}:
+            primeras[p["tema"]] = min(primeras.get(p["tema"], "9"), p["fecha"])
+    nuevas = list(primeras.values())
+    mejor_fb = max(fb, key=fb.get)
+    resumen_b = [
+        f'<b>Más vista:</b> {lnk(top_i)} en {top_i["red"]} · {top_i["formato"].lower()}, con {f_int(top_i["imp"])} impresiones ({f_pct(tasa([top_i]))} de interacción).',
+        f'<b>Mejor tasa de interacción</b> (entre las que tuvieron al menos las vistas típicas de la semana): {lnk(top_t)} en {top_t["red"]} · {top_t["formato"].lower()}, con {f_pct(tasa([top_t]))} ({f_int(top_t["imp"])} impresiones).',
+        f'<b>Seguidores:</b> Facebook {sum(fb.values()):+d} (semana anterior {sum(fbp.values()):+d}); el mejor día fue el {fecha(mejor_fb)} con {fb[mejor_fb]:+d}. Instagram {sum(ig.values()):+d} (semana anterior {sum(igp.values()):+d}).',
+        f'<b>Conversación:</b> {f_int(c_)} comentarios en {R["n"]} publicaciones.',
+        f'<b>Ritmo:</b> {piezas} piezas esta semana contra {piezas_p} la semana anterior' + (f'; la última pieza nueva salió el {fecha(max(nuevas))}.' if nuevas else '.'),
+    ]
+    if any(p["red"] == "TikTok" and n(p["imp"]) <= 5 for p in ps):
+        resumen_b.append("<b>Ojo con TikTok:</b> Metricool registra 1 reproducción para el video de AI Course Builder, pero HubSpot registra 532. Parece que Metricool todavía no actualiza ese video; no saques conclusiones de esa cifra.")
+
+    # Plantilla: reutiliza los estilos y scripts de la página mensual
+    base_html = pagina(len(MESES) - 1)
+    estilo = re.search(r"<style>.*?</style>", base_html, re.S).group(0)
+    scripts = base_html[base_html.index('<div id="tip"'):]
+    datos = json.dumps(dd, ensure_ascii=False).replace("</", "<\\/")
+    scripts = re.sub(r'<script type="application/json" id="dias">.*?</script>',
+                     lambda m: '<script type="application/json" id="dias">' + datos + '</script>', scripts, flags=re.S)
+    scripts = re.sub(r"pick\('[0-9-]*'\);", lambda m: f"pick('{mejor}');", scripts)
+    titulo = f"Semana del {int(a[8:])} al {fecha(b)} {b[:4]}"
+    return (
+        '<!doctype html>\n<html lang="es-MX"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">\n'
+        f'<title>Redes Lapzo · {titulo}</title>\n{estilo}</head><body><main>\n'
+        '<div class="eyebrow">Lapzo · Redes sociales orgánicas · reporte semanal</div>\n'
+        f'<h1>{titulo}</h1>\n'
+        f'<p class="lead">Lunes {fecha(a)} a domingo {fecha(b)} · comparado con la semana del {fecha(pa)} al {fecha(pb)} · datos extraídos el {EXTRAIDO}</p>\n'
+        f'<nav>Ver también: <a href="../../{a[:7]}/">reporte de {MES[int(a[5:7])-1]}</a> · <a href="../../../">Inicio</a></nav>\n'
+        f'{kpis}\n'
+        '<h2>Resumen de la semana</h2>\n'
+        f'<div class="card"><ul class="rs">{"".join(f"<li>{x}</li>" for x in resumen_b)}</ul></div>\n'
+        '<h2>Seguidores día por día</h2>\n'
+        '<p class="lead">Seguidores ganados menos perdidos. <b>Haz clic en cualquier día</b> para ver qué se publicó.</p>\n'
+        f'<div class="card">{seg_svg}<div id="dia" class="dia" aria-live="polite"></div></div>\n'
+        '<h2>Cómo le fue a cada publicación</h2>\n'
+        '<p class="lead">Cada bloque es una pieza: arriba su total y debajo cómo le fue en cada red. Haz clic en el nombre o en la red para abrir la publicación.</p>\n'
+        f'{tabla_publicaciones(ps)}\n'
+        '<p class="small">Etiquetas: <span class="tag t-v">★ Top vistas</span> <span class="tag t-i">★ Top interacciones</span> <span class="tag t-r">★ Top tasa</span> marcan las 3 publicaciones de la semana que más destacaron en cada medida.</p>\n'
+        '<h2>Cada red esta semana</h2>\n'
+        f'<div class="nets">{"".join(tarjetas)}</div>\n'
+        '<h2>Cómo se calculan estas cifras</h2>\n'
+        '<div class="card small">\n'
+        '<p>Mismas fuentes y definiciones que el reporte mensual: LinkedIn de HubSpot; Instagram, Facebook y TikTok de Metricool, completando con HubSpot lo que falta. Interacciones = likes + comentarios + compartidos; tasa = interacciones ÷ impresiones. No incluye historias.</p>\n'
+        f'<p><b>Ojo:</b> las cifras de cada publicación son acumuladas al {EXTRAIDO}. Las publicaciones de esta semana llevan pocos días y todavía siguen sumando, así que la comparación favorece a la semana anterior.</p>\n'
+        '</div>\n</main>\n' + scripts)
+
 def csv_mes(clave):
     ruta = os.path.join(RAIZ, "rrss", clave, "publicaciones.csv")
     with open(ruta, "w", newline="", encoding="utf-8-sig") as f:
@@ -677,3 +835,9 @@ if __name__ == "__main__":
             f.write(pagina(i))
         csv_mes(M["clave"])
         print("ok", M["clave"])
+    for a, b, pa, pb in SEMANAS:
+        carpeta = os.path.join(RAIZ, "rrss", "semanal", a)
+        os.makedirs(carpeta, exist_ok=True)
+        with open(os.path.join(carpeta, "index.html"), "w", encoding="utf-8") as f:
+            f.write(pagina_semana(a, b, pa, pb))
+        print("ok semana", a)
