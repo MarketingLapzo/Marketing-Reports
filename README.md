@@ -19,6 +19,8 @@ Lo que aprendemos de cada reporte se registra en [`APRENDIZAJES.md`](APRENDIZAJE
 
 ## Cómo verlos
 
+El sitio tiene una **portada** (`index.html`) con las cifras del mes en curso y tarjetas para cada reporte, un **menú fijo** en todas las páginas, una página de **aprendizajes e hipótesis** (`aprendizajes/`) y un botón **Descargar PDF** en cada reporte. Todo se genera con `python3 herramientas/generar_rrss.py`.
+
 - **GitHub Pages:** en *Settings → Pages*, elige *Deploy from a branch*, la rama `main` y la carpeta `/ (root)`. El índice queda en `https://marketinglapzo.github.io/Marketing-Reports/`.
 - **En local:** abre `index.html` en el navegador. Las páginas no necesitan internet.
 

@@ -557,13 +557,19 @@ th:first-child,td:first-child,tbody th,th.l,td.l{{text-align:left}} thead th{{co
 .ftab th,.ftab td{{padding:7px 6px}} .ftab tbody th{{min-width:0}} .ftab .tags{{margin-top:3px;margin-left:-4px}} .ftab .bar{{min-width:150px;white-space:nowrap;text-align:left}} .ftab td.l{{text-align:left}} .track.sm{{width:110px}} .ftab tbody th{{width:200px}} .ftab tr.vacio td{{white-space:normal}} .ftab{{table-layout:auto}} .ftab tr.vacio th,.ftab tr.vacio td{{color:var(--muted)}}
 .t-down{{color:var(--td);border-color:var(--td)}} .src{{display:inline-block;margin-left:4px;font-size:11px;color:var(--muted);border:1px dashed var(--line);border-radius:999px;padding:0 7px;white-space:nowrap}}
 @media (max-width:640px){{.card{{overflow-x:auto}} .chart.wide{{min-width:600px}}}}
+.top{{position:sticky;top:0;z-index:5;background:var(--panel);border-bottom:1px solid var(--line)}} .top-in{{max-width:1040px;margin:0 auto;padding:10px 16px;display:flex;gap:14px;align-items:center;flex-wrap:wrap}}
+.brand{{font-weight:700;color:var(--fg);text-decoration:none;margin-right:auto}} .menu{{display:flex;flex-wrap:wrap;gap:4px}} .menu a{{font-size:13.5px;color:var(--muted);text-decoration:none;padding:5px 10px;border-radius:999px}} .menu a:hover{{background:var(--grid);color:var(--fg)}} .menu a[aria-current]{{background:var(--fg);color:var(--bg)}}
+.pdf{{font:inherit;font-size:13px;border:1px solid var(--line);background:var(--panel);color:var(--fg);border-radius:999px;padding:5px 12px;cursor:pointer}} .pdf:hover{{border-color:var(--accent)}}
+.reps{{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(300px,100%),1fr));gap:12px}} a.card.rep{{color:inherit;text-decoration:none;display:flex;flex-direction:column;gap:6px}} a.card.rep:hover{{border-color:var(--accent)}} a.card.rep h3{{margin:4px 0 0}} .rep .tag{{margin-left:0;align-self:flex-start}}
+.mini{{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin:4px 0}} .mini b{{display:block;font-size:20px}} .mini span{{font-size:12px;color:var(--muted)}} .hl-txt{{font-size:13.5px;margin:2px 0}} .go{{margin-top:auto;color:var(--accent);font-size:13.5px;font-weight:600}}
+section.mes{{margin-bottom:28px}} h3.sub{{margin:18px 0 8px}} h2 .small{{font-weight:400;margin-left:8px}}
+@media print{{.top,.pdf,details summary,.ctrl{{display:none!important}} details>*{{display:block}} body{{background:#fff}} .kpi,.net,.hip,.learn .card,tbody.grp,.rep{{break-inside:avoid}} .scroll{{overflow:visible}} main{{padding-top:0}} #tip{{display:none}}}}
 #tip{{position:fixed;pointer-events:none;background:var(--fg);color:var(--bg);font-size:13px;line-height:1.4;padding:8px 10px;border-radius:8px;max-width:300px;white-space:pre-line;opacity:0;transition:opacity .1s;z-index:9}}
-</style></head><body><main>
+</style></head><body>{barra_nav('../../', clave)}<main>
 <div class="eyebrow">Lapzo · Redes sociales orgánicas</div>
 <h1>{e(M["titulo"])}</h1>
 <p class="lead">{e(M["periodo"])} · LinkedIn, Instagram, Facebook y TikTok · datos extraídos el {EXTRAIDO}</p>
 {f'<p class="small">{e(M["nota_periodo"])}</p>' if M["nota_periodo"] else ""}
-<nav>Reportes: {nav} · <a href="../../">Inicio</a></nav>
 
 {kpis_html}
 {atip_kpi}
@@ -794,11 +800,10 @@ def pagina_semana(a, b, pa, pb):
     titulo = f"Semana del {int(a[8:])} al {fecha(b)} {b[:4]}"
     return (
         '<!doctype html>\n<html lang="es-MX"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">\n'
-        f'<title>Redes Lapzo · {titulo}</title>\n{estilo}</head><body><main>\n'
+        f'<title>Redes Lapzo · {titulo}</title>\n{estilo}</head><body>{barra_nav("../../../", "sem-" + a)}<main>\n'
         '<div class="eyebrow">Lapzo · Redes sociales orgánicas · reporte semanal</div>\n'
         f'<h1>{titulo}</h1>\n'
         f'<p class="lead">Lunes {fecha(a)} a domingo {fecha(b)} · comparado con la semana del {fecha(pa)} al {fecha(pb)} · datos extraídos el {EXTRAIDO}</p>\n'
-        f'<nav>Ver también: <a href="../../{a[:7]}/">reporte de {MES[int(a[5:7])-1]}</a> · <a href="../../../">Inicio</a></nav>\n'
         f'{kpis}\n'
         '<h2>Resumen de la semana</h2>\n'
         f'<div class="card"><ul class="rs">{"".join(f"<li>{x}</li>" for x in resumen_b)}</ul></div>\n'
@@ -816,6 +821,121 @@ def pagina_semana(a, b, pa, pb):
         '<p>Mismas fuentes y definiciones que el reporte mensual: LinkedIn de HubSpot; Instagram, Facebook y TikTok de Metricool, completando con HubSpot lo que falta. Interacciones = likes + comentarios + compartidos; tasa = interacciones ÷ impresiones. No incluye historias.</p>\n'
         f'<p><b>Ojo:</b> las cifras de cada publicación son acumuladas al {EXTRAIDO}. Las publicaciones de esta semana llevan pocos días y todavía siguen sumando, así que la comparación favorece a la semana anterior.</p>\n'
         '</div>\n</main>\n' + scripts)
+
+# ---------------------------------------------------------------- Mini sitio: menú, portada y aprendizajes
+def barra_nav(raiz, activo):
+    """Menú fijo arriba, igual en todas las páginas. raiz = ruta relativa a la carpeta principal."""
+    links = [("inicio", "Inicio", "")]
+    links += [(m["clave"], m["titulo"].replace(" 2026", "").replace(" (parcial)", " (parcial)"), f'rrss/{m["clave"]}/') for m in MESES]
+    links += [(f"sem-{a}", f"Semana {int(a[8:])}–{int(b[8:])} {MES[int(b[5:7])-1][:3]}", f"rrss/semanal/{a}/") for a, b, _, _ in SEMANAS]
+    links += [("aprendizajes", "Aprendizajes", "aprendizajes/")]
+    items = "".join(f'<a href="{raiz}{u}"{" aria-current=page" if k == activo else ""}>{e(t)}</a>' for k, t, u in links)
+    return (f'<header class="top"><div class="top-in"><a class="brand" href="{raiz}">Lapzo · Reportes de redes</a>'
+            f'<nav class="menu">{items}</nav>'
+            '<button class="pdf" onclick="window.print()" title="Guardar esta página como PDF">Descargar PDF</button></div></header>')
+
+def _estilo_y_scripts():
+    import re
+    base_html = pagina(len(MESES) - 1)
+    estilo = re.search(r"<style>.*?</style>", base_html, re.S).group(0)
+    return estilo
+
+def _texto_plano(html_txt):
+    import re
+    return re.sub(r"<[^>]+>", "", re.sub(r"\[\[[A-Z0-9]+\|[A-Za-z]*\|(.+?)\]\]", r"\1", html_txt))
+
+def stats_mes(clave):
+    ps = [p for p in d.P if p["fecha"][:7] == clave]
+    R = resumen(ps)
+    R["piezas"] = len({p["tema"] for p in ps})
+    R["seg"] = SEGUIDORES[clave]
+    R["desg"] = desglose(ps)
+    return R
+
+def pagina_inicio():
+    estilo = _estilo_y_scripts()
+    ult = MESES[-1]; ant = MESES[-2]
+    S, SA = stats_mes(ult["clave"]), stats_mes(ant["clave"])
+    na = ant["titulo"].split(" ")[0]
+    l_, c_, s_ = S["desg"]
+    ref = lambda txt: f'<div class="dl neu">{txt}</div>'
+    seg_lines = "".join(f'<div>{r} <b>+{v[0]}</b> <span class="small">· {ant["titulo"].split(" ")[0].lower()} completo: +{SA["seg"][r][0]}</span></div>' for r, v in S["seg"].items())
+    kpis = (
+        '<div class="kpis">'
+        f'<div class="card kpi"><div class="v">{S["piezas"]}</div><div class="l">piezas únicas ({S["n"]} publicaciones contando cada red)</div>{ref(f"{na} completo: {SA['piezas']} piezas")}</div>'
+        f'<div class="card kpi"><div class="v">{f_int(S["imp"])}</div><div class="l">veces que se vieron nuestras publicaciones</div>{ref(f"{na} completo: {f_int(SA['imp'])}")}</div>'
+        f'<div class="card kpi wide2"><div class="v">{f_int(S["int"])}</div><div class="l">reacciones</div>'
+        f'<div class="brk"><span><b>♥ {f_int(l_)}</b> likes</span><span><b>💬 {f_int(c_)}</b> comentarios</span><span><b>↗ {f_int(s_)}</b> compartidos</span></div>{ref(f"{na} completo: {f_int(SA['int'])}")}</div>'
+        f'<div class="card kpi half"><div class="v">{(S["er"] or 0):.1f} <span class="u">de cada 100</span></div><div class="l">personas que vieron una publicación reaccionaron</div>{ref(f"{na}: {(SA['er'] or 0):.1f} de cada 100")}</div>'
+        f'<div class="card kpi half"><div class="v2">{seg_lines}</div><div class="l">seguidores nuevos (LinkedIn y TikTok: no disponible)</div></div>'
+        '</div>')
+
+    tarjetas = []
+    for m in reversed(MESES):
+        st = stats_mes(m["clave"])
+        dest = _texto_plano(APRENDIZAJES[m["clave"]]["funciono"][0])
+        seg = " · ".join(f'{r} +{v[0]}' for r, v in st["seg"].items())
+        tarjetas.append(
+            f'<a class="card rep" href="rrss/{m["clave"]}/"><span class="tag t-v">Mensual</span><h3>{e(m["titulo"])}</h3>'
+            f'<p class="small">{e(m["periodo"])}</p>'
+            f'<div class="mini"><div><b>{st["piezas"]}</b><span>piezas</span></div><div><b>{f_int(st["imp"])}</b><span>impresiones</span></div><div><b>{f_pct(st["er"])}</b><span>tasa</span></div></div>'
+            f'<p class="small">Seguidores: {seg}</p><p class="hl-txt">{e(dest)}</p><span class="go">Ver reporte →</span></a>')
+    for a, b, pa, pb in reversed(SEMANAS):
+        ps = [p for p in d.P if a <= p["fecha"] <= b]
+        R = resumen(ps); fb, ig = seg_rango(a, b)
+        tarjetas.insert(0,
+            f'<a class="card rep" href="rrss/semanal/{a}/"><span class="tag t-i">Semanal</span><h3>Semana del {int(a[8:])} al {fecha(b)}</h3>'
+            f'<p class="small">Comparada con la semana del {fecha(pa)} al {fecha(pb)}</p>'
+            f'<div class="mini"><div><b>{len({p["tema"] for p in ps})}</b><span>piezas</span></div><div><b>{f_int(R["imp"])}</b><span>impresiones</span></div><div><b>{f_pct(R["er"])}</b><span>tasa</span></div></div>'
+            f'<p class="small">Seguidores: Facebook {sum(fb.values()):+d} · Instagram {sum(ig.values()):+d}</p><span class="go">Ver reporte →</span></a>')
+    tarjetas.append('<a class="card rep" href="aprendizajes/"><span class="tag t-r">Para la parrilla</span><h3>Aprendizajes e hipótesis</h3>'
+                    '<p class="small">Qué repetir, qué ajustar y qué dejar de hacer, mes por mes, y las hipótesis por comprobar.</p><span class="go">Ver aprendizajes →</span></a>')
+
+    imp_mes = lambda m, r: sum(n(p["imp"]) for p in d.P if p["fecha"][:7] == m["clave"] and p["red"] == r)
+    seg_mes = lambda m, r: (SEGUIDORES[m["clave"]].get(r) or (None,))[0]
+    return (
+        '<!doctype html>\n<html lang="es-MX"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">\n'
+        f'<title>Lapzo · Reportes de redes</title>\n{estilo}</head><body>{barra_nav("", "inicio")}<main>\n'
+        '<div class="eyebrow">Lapzo · Marketing</div>\n<h1>Reportes de redes sociales</h1>\n'
+        f'<p class="lead">LinkedIn, Instagram, Facebook y TikTok · datos al {EXTRAIDO}</p>\n'
+        f'<h2>Así vamos en {ult["titulo"].split(" ")[0].lower()} <span class="small">(al día {int(CORTE[8:])})</span></h2>\n{kpis}\n'
+        '<h2>Reportes</h2>\n'
+        f'<div class="reps">{"".join(tarjetas)}</div>\n'
+        '<h2>Evolución</h2>\n<div class="charts">'
+        f'<div class="card"><h3>Impresiones por mes</h3>{leyenda()}{barras_mes(MESES, imp_mes, "Impresiones por mes y red")}</div>'
+        f'<div class="card"><h3>Seguidores nuevos por mes</h3>{leyenda()}{barras_mes(MESES, seg_mes, "Seguidores nuevos por mes y red")}<p class="small">n/d: LinkedIn y TikTok no tienen el dato.</p></div>'
+        '</div>\n</main>\n'
+        '<div id="tip" role="tooltip"></div>\n<script>\n(function(){var t=document.getElementById("tip");\n'
+        'document.addEventListener("pointermove",function(ev){var el=ev.target.closest("[data-tip]");if(!el){t.style.opacity=0;return}'
+        't.textContent=el.getAttribute("data-tip");t.style.opacity=1;var x=ev.clientX+14,y=ev.clientY+14;'
+        'if(x+t.offsetWidth>innerWidth-8)x=ev.clientX-t.offsetWidth-14;if(y+t.offsetHeight>innerHeight-8)y=ev.clientY-t.offsetHeight-14;'
+        't.style.left=x+"px";t.style.top=y+"px"});})();\n</script>\n</body></html>')
+
+def pagina_aprendizajes():
+    estilo = _estilo_y_scripts()
+    li = lambda xs, clave: "".join(f"<li>{enlazar(x, clave)}</li>" for x in xs)
+    bloques = []
+    for m in reversed(MESES):
+        c = m["clave"]; st = stats_mes(c); A = APRENDIZAJES[c]
+        seg = " · ".join(f'{r} +{v[0]}' for r, v in st["seg"].items())
+        hip = HIPOTESIS.get(c, [])
+        hip_html = ("<h3 class=\"sub\">Hipótesis por comprobar</h3><div class=\"hips\">"
+                    + "".join(f'<div class="card hip"><h3>{i}. {e(h["titulo"])}</h3><p><span class="hl v">Lo que vemos</span>{enlazar(h["vemos"], c)}</p><p><span class="hl h">Posible explicación</span>{enlazar(h["hipotesis"], c)}</p><p><span class="hl c">Cómo comprobarlo</span>{enlazar(h["comprobar"], c)}</p></div>' for i, h in enumerate(hip, 1))
+                    + "</div>") if hip else ""
+        bloques.append(
+            f'<section class="mes"><h2>{e(m["titulo"])} <a class="small" href="../rrss/{c}/">ver reporte →</a></h2>'
+            f'<p class="lead">{st["piezas"]} piezas · {st["n"]} publicaciones · {f_int(st["imp"])} impresiones · {f_pct(st["er"])} de tasa · seguidores: {seg}</p>'
+            '<div class="learn">'
+            f'<div class="card"><h3>Qué funcionó</h3><ul>{li(A["funciono"], c)}</ul></div>'
+            f'<div class="card"><h3>Qué no funcionó</h3><ul>{li(A["no_funciono"], c)}</ul></div>'
+            f'<div class="card note"><h3>Para la parrilla del siguiente mes</h3><ul>{li(A["parrilla"], c)}</ul></div>'
+            f'</div>{hip_html}</section>')
+    return (
+        '<!doctype html>\n<html lang="es-MX"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">\n'
+        f'<title>Lapzo · Aprendizajes de redes</title>\n{estilo}</head><body>{barra_nav("../", "aprendizajes")}<main>\n'
+        '<div class="eyebrow">Lapzo · Redes sociales</div>\n<h1>Aprendizajes e hipótesis</h1>\n'
+        '<p class="lead">Lo que nos enseñó cada mes, para armar la parrilla del siguiente. Lo más reciente va arriba. La clasificación por pilar y modo es una propuesta: valídala con la hoja de planeación.</p>\n'
+        + "".join(bloques) + '\n</main></body></html>')
 
 def csv_mes(clave):
     ruta = os.path.join(RAIZ, "rrss", clave, "publicaciones.csv")
@@ -835,6 +955,12 @@ if __name__ == "__main__":
             f.write(pagina(i))
         csv_mes(M["clave"])
         print("ok", M["clave"])
+    with open(os.path.join(RAIZ, "index.html"), "w", encoding="utf-8") as f:
+        f.write(pagina_inicio())
+    os.makedirs(os.path.join(RAIZ, "aprendizajes"), exist_ok=True)
+    with open(os.path.join(RAIZ, "aprendizajes", "index.html"), "w", encoding="utf-8") as f:
+        f.write(pagina_aprendizajes())
+    print("ok portada y aprendizajes")
     for a, b, pa, pb in SEMANAS:
         carpeta = os.path.join(RAIZ, "rrss", "semanal", a)
         os.makedirs(carpeta, exist_ok=True)
