@@ -41,3 +41,14 @@ Cuando termines un reporte o un análisis, **pregunta cada vez**:
 Al analizar, clasifica cada publicación por **pilar y formato** según el repo/plugin
 `Lapzo-contenido-RRSS`. Los aprendizajes deben decir qué tipo de contenido repetir,
 ajustar o dejar de hacer, para usarlos al armar la parrilla del mes siguiente.
+
+## Skills y reglas de contenido
+
+Para pilares, tipos de contenido, formatos y cómo leer la hoja
+"Planeación y Seguimiento de Contenidos", usa **solo** el plugin `lapzo-contenido-rrss`.
+
+- Si hay duda o el plugin parece desactualizado, manda lo que diga el repo
+  `MarketingLapzo/Lapzo-contenido-RRSS` (rama `main`).
+- No uses otras skills de Lapzo: `lapzo-context`, `manual-rrss-lapzo`, `lapzo-design`,
+  `lapzo-rrss-referencia`, `lapzo-ads-copy`, `lapzo-icps`, `calendario-industrias-lapzo`,
+  `lapzo-outbound-*`, `lapzo-mkt-brief-daily`.
