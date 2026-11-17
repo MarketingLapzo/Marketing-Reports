@@ -1,0 +1,679 @@
+# Genera los reportes mensuales de redes orgánicas (rrss/AAAA-MM/index.html y publicaciones.csv)
+# a partir de herramientas/datos_rrss.py. Uso: python3 herramientas/generar_rrss.py
+import csv, html, os, statistics, sys
+sys.path.insert(0, os.path.dirname(__file__))
+import datos_rrss as d
+# Las historias quedan fuera de estos reportes por ahora (próximamente).
+d.P = [p for p in d.P if p["formato"] != "Historia" and p["url"] not in d.BORRADAS]
+
+RAIZ = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+REDES = ["LinkedIn", "Instagram", "Facebook", "TikTok"]
+COLOR = {"LinkedIn": "var(--c-li)", "Instagram": "var(--c-ig)", "Facebook": "var(--c-fb)", "TikTok": "var(--c-tt)"}
+FORMA = {"LinkedIn": "cuadro", "Instagram": "circulo", "Facebook": "rombo", "TikTok": "triangulo"}
+MES = ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"]
+EXTRAIDO = "17 de noviembre de 2026"
+CORTE = "2026-11-16"  # último día con datos
+
+ATIPICOS = set()  # ya no se separa ninguna publicación
+
+MESES = [
+    {"clave": "2026-09", "titulo": "Septiembre 2026", "periodo": "1 – 30 sep 2026",
+     "nota_periodo": "La primera publicación que registran Metricool y HubSpot es del 19 de septiembre, así que el mes tiene 12 días de actividad."},
+    {"clave": "2026-10", "titulo": "Octubre 2026", "periodo": "1 – 31 oct 2026", "nota_periodo": ""},
+    {"clave": "2026-11", "titulo": "Noviembre 2026 (parcial)", "periodo": "1 – 16 nov 2026",
+     "nota_periodo": "Mes en curso: este reporte se reemplaza con el de noviembre completo a partir del 1 de diciembre."},
+]
+
+SEGUIDORES = {  # neto del mes; None = no disponible
+    "2026-09": {"Facebook": (26, "2,409 → 2,435"), "Instagram": (26, "29 ganados, 3 perdidos")},
+    "2026-10": {"Facebook": (12, "2,435 → 2,447"), "Instagram": (21, "28 ganados, 7 perdidos")},
+    "2026-11": {"Facebook": (47, "2,447 → 2,494 al 16 nov"), "Instagram": (20, "23 ganados, 3 perdidos, al 14 nov · 653 seguidores")},
+}
+
+APRENDIZAJES = {
+ "2026-09": {
+  "funciono": [
+   "<b>Instagram · carrusel reflexivo (Experta en talento):</b> [[S2|Instagram|«No todos necesitan aprender lo mismo»]] tuvo 16.1 % de interacción y 9 compartidos.",
+   "<b>LinkedIn · post reflexivo (Experta en talento):</b> [[S1|LinkedIn|«Lo que no se ve del trabajo de RH»]] llegó a 746 impresiones, la publicación de LinkedIn más vista de septiembre a noviembre.",
+   "<b>Instagram · reel de Lapzi (humor):</b> [[S3|Instagram|«Lapzi: ya es viernes»]] tuvo 515 reproducciones, la pieza de Instagram más vista de los tres periodos. Ese día (25 sep) Instagram ganó 10 seguidores, el mejor día del mes.",
+  ],
+  "no_funciono": [
+   "<b>Facebook:</b> 2.2 % de interacción contra 6.2 % de Instagram con las mismas piezas; el álbum se quedó en 1.0 %.",
+   "<b>Comentarios:</b> solo 2 en todo el mes, ambos en [[S3|Instagram|el reel de Lapzi]].",
+  ],
+  "parrilla": [
+   "<b>Repetir:</b> carruseles reflexivos del pilar Experta en talento en Instagram y su versión en LinkedIn.",
+   "<b>Ajustar:</b> darle a Lapzi un espacio fijo en reels para atraer seguidores.",
+   "<b>Ajustar (Facebook):</b> lo de Instagram se comparte también en Facebook; ahí el reel llegó a más gente (311) que la imagen (147) y el álbum (100), así que conviene compartir reels.",
+   "<b>Dejar de hacer:</b> nada todavía; con 12 días de datos es pronto para descartar algo.",
+  ],
+ },
+ "2026-10": {
+  "funciono": [
+   "<b>Modo reflexivo:</b> 3.5 % de interacción contra 2.4 % del educativo, en las cuatro redes juntas.",
+   "<b>Un tema en todas las redes:</b> [[O4||«Una misma marca, cientos de experiencias»]] se adaptó en 7 piezas (carrusel, reel, video y post) y sumó 4.6 % de interacción y 26 compartidos; [[O4|TikTok|uno de los videos de TikTok]] tuvo 11 compartidos.",
+   "<b>Instagram · reel:</b> 7.5 % de interacción contra 5.3 % de los carruseles.",
+   "<b>TikTok:</b> [[O9|TikTok|«La rotación también es una señal»]] tuvo 671 reproducciones, el video más visto de TikTok.",
+   "<b>LinkedIn:</b> [[O3|LinkedIn|«Líderes que su equipo seguiría (NOM-035)»]] llegó a 720 impresiones, con 16 likes y 5 compartidos.",
+  ],
+  "no_funciono": [
+   "<b>Facebook:</b> 1.0 % de interacción (álbumes 1.4 %, reels 0.5 %).",
+   "<b>Serie DNC 01</b> ([[O8||«¿necesidad o catálogo?»]]): 1.7 % de interacción, la más baja de los temas educativos.",
+   "<b>Comentarios:</b> 4 en 53 publicaciones.",
+   "<b>Alcance por publicación:</b> se publicó casi 6 veces más que en septiembre y la publicación típica alcanzó menos (mediana en LinkedIn de 646 a 474 impresiones; en Instagram de 282 a 140).",
+  ],
+  "parrilla": [
+   "<b>Repetir:</b> temas reflexivos de Experta en talento y adaptar cada tema fuerte a reel de Instagram, video de TikTok y post de LinkedIn.",
+   "<b>Ajustar:</b> cuidar que cada pieza tenga su versión para la red.",
+   "<b>Ajustar (Facebook):</b> seguir compartiendo lo de Instagram, pero que cada semana haya al menos un reel: los reels llegaron a 247 personas en promedio contra 115 de los álbumes.",
+   "<b>Dejar de hacer:</b> nada claro todavía; ningún formato estuvo tan abajo como para descartarlo.",
+  ],
+ },
+ "2026-11": {
+  "funciono": [
+   "<b>LinkedIn · documento:</b> [[N9|LinkedIn|la guía de incorporación (onboarding)]] tuvo 3.8 % de interacción, la mejor de LinkedIn en noviembre.",
+   "<b>Instagram:</b> reels con 7.0 % y carruseles con 6.4 % de interacción.",
+   "<b>Seguidores en Facebook:</b> +47 en 16 días, contra +12 en todo octubre. Los días con más seguidores nuevos (+13 el 7 nov y +10 el 10 nov) son los mismos días de los dos reels de Facebook con más reproducciones.",
+  ],
+  "no_funciono": [
+   "<b>Facebook · reels con alcance alto, poca interacción:</b> [[N7|Facebook|«¿Cuántas plataformas abres?»]] (10,365) y [[N6|Facebook|«El talento también merece números»]] (5,744) fueron las publicaciones más vistas de los tres periodos y suman el 80 % de las impresiones del mes, pero tuvieron 0.3 % de interacción.",
+   "<b>Comentarios:</b> 0 en publicaciones, aunque varias cerraban con «Te leemos en comentarios».",
+  ],
+  "parrilla": [
+   "<b>Repetir:</b> documentos en LinkedIn y reels en Instagram.",
+   "<b>Ajustar:</b> repetir en Facebook la fórmula de los reels [[N6|Facebook|del 7]] y [[N7|Facebook|del 10 de noviembre]] (alcance) y cerrarlos con una pregunta para que la gente reaccione. Cambiar el cierre que pide comentarios por una pregunta más concreta.",
+   "<b>Dejar de hacer:</b> cerrar con «Te leemos en comentarios» sin una pregunta concreta: hubo 0 comentarios.",
+  ],
+ },
+}
+
+HIPOTESIS = {
+ "2026-11": [
+  {"titulo": "Facebook empezó a mostrar los reels a gente que no nos sigue",
+   "vemos": "Los reels de Facebook pasaron de 81 a 311 reproducciones en septiembre y octubre a [[N7|Facebook|10,365]] y [[N6|Facebook|5,744]]. Son de 2 a 4 veces más que los 2,447 seguidores de la página. El mismo reel en Instagram tuvo [[N7|Instagram|121]] y en TikTok [[N7|TikTok|157]]. Los días de esos reels (7 y 10 nov) fueron los de más seguidores nuevos en Facebook (+13 y +10).",
+   "hipotesis": "El salto no viene solo del contenido, porque la misma pieza no despegó en otras redes. Lo más probable es que Facebook la recomendó a personas fuera de la página: eso explica que la vieran miles, que sumara seguidores y que casi nadie reaccionara (0.3 %), porque es gente que todavía no conoce a Lapzo.",
+   "comprobar": "Publicar al menos un reel por semana en Facebook en diciembre y ver si alguno vuelve a pasar de 1,000 reproducciones. En Meta Business Suite, revisar qué parte del alcance de esos reels fue de personas que no siguen la página (Metricool no da ese dato)."},
+  {"titulo": "Los reels que despegaron abren con un problema del día a día",
+   "vemos": "Los dos que despegaron empiezan con una situación que vive cualquier persona de RH: [[N7|Facebook|«¿Cuántas plataformas necesitas abrir para completar un solo proceso de RH?»]] y [[N6|Facebook|«Las empresas miden sus ventas… ¿qué tan claro tienen cómo está creciendo su gente?»]]. Los otros dos reels del mes se quedaron en [[N8|Facebook|549]] y [[N10|Facebook|266]]: uno abre con una afirmación sobre el sueldo y el otro presenta un producto (AI Course Builder).",
+   "hipotesis": "Un inicio con una pregunta o una situación reconocible hace que la gente se quede los primeros segundos, y eso le da a Facebook la señal para mostrarlo a más personas. Ojo: son solo 4 reels, así que puede ser casualidad.",
+   "comprobar": "En diciembre, hacer reels con el mismo tipo de inicio (pregunta sobre un problema cotidiano) y otros que abran con una afirmación o con el producto, y comparar sus reproducciones."},
+  {"titulo": "Mucho alcance, pero nadie conversa",
+   "vemos": "Noviembre lleva 0 comentarios en 27 publicaciones, aunque varias cerraban con «Te leemos en comentarios». Los dos reels más vistos sumaron más de 16,000 reproducciones y 53 reacciones.",
+   "hipotesis": "Una invitación general a comentar no da una razón concreta para responder. Y la gente nueva que llega por los reels todavía no tiene confianza para comentar.",
+   "comprobar": "Cerrar con preguntas concretas y fáciles de contestar (por ejemplo, de opción A o B) y contar los comentarios por publicación en diciembre."},
+  {"titulo": "Instagram conecta, pero no está llegando a gente nueva",
+   "vemos": "Instagram tiene la mejor tasa de interacción (6.7 %), pero la publicación típica llega cada vez a menos personas: 282 en septiembre, 140 en octubre y 74 en lo que va de noviembre. La cuenta suma 20 seguidores en el mes (653 en total).",
+   "hipotesis": "Quien ve el contenido es sobre todo gente que ya sigue la cuenta y reacciona bien, pero Instagram no lo está mostrando fuera de ella. Parte de la baja de noviembre puede ser que las publicaciones recientes todavía están sumando vistas.",
+   "comprobar": "Cerrar noviembre completo antes de concluir. En diciembre, probar en Instagram el tipo de inicio que funcionó en los reels de Facebook y comparar el alcance."},
+  {"titulo": "En LinkedIn, el documento rindió más que los posts",
+   "vemos": "La [[N9|LinkedIn|guía de incorporación]] en formato documento tuvo 3.8 % de interacción, contra 2.4 % de los posts. La publicación típica de LinkedIn bajó de 646 impresiones en septiembre a 474 en octubre y 271 en noviembre.",
+   "hipotesis": "Los documentos invitan a deslizar y guardar, y eso puede darles más interacción. Pero es un solo documento, así que todavía no es una regla.",
+   "comprobar": "Publicar al menos 2 documentos en LinkedIn en diciembre y comparar su tasa con la de los posts."},
+ ],
+}
+
+n = lambda v: v or 0
+def inter(p): return n(p["likes"]) + n(p["com"]) + n(p["sh"])
+def tasa(ps):
+    i = sum(n(p["imp"]) for p in ps)
+    return (100 * sum(inter(p) for p in ps) / i) if i else None
+def f_int(v): return "—" if v is None else f"{v:,.0f}"
+def f_pct(v): return "—" if v is None else f"{v:.1f} %"
+def fecha(s): y, m, dd = s.split("-"); return f"{int(dd)} {MES[int(m)-1][:3]}"
+e = html.escape
+def tip(*lineas): return e("\n".join(lineas), quote=True)
+
+def desglose(ps):
+    """Likes, comentarios y compartidos; None si la fuente no da el dato para ninguna."""
+    def suma(k):
+        vals = [p[k] for p in ps if p[k] is not None]
+        return sum(vals) if vals else None
+    return suma("likes"), suma("com"), suma("sh")
+
+def desg_html(ps, compacto=False):
+    l, c, sh = desglose(ps)
+    if compacto:
+        return (f'<span class="dg" data-tip="{tip(f"Likes: {f_int(l)}", f"Comentarios: {f_int(c)}", f"Compartidos: {f_int(sh)}")}">'
+                f'<i>♥</i>{f_int(l)} <i>💬</i>{f_int(c)} <i>↗</i>{f_int(sh)}</span>')
+    return f'♥ {f_int(l)} likes · 💬 {f_int(c)} comentarios · ↗ {f_int(sh)} compartidos'
+
+def resumen(ps):
+    return dict(n=len(ps), imp=sum(n(p["imp"]) for p in ps), int=sum(inter(p) for p in ps),
+                com=sum(n(p["com"]) for p in ps), sh=sum(n(p["sh"]) for p in ps), er=tasa(ps),
+                med=statistics.median([n(p["imp"]) for p in ps if p["formato"] != "Historia"] or [0]) if ps else None)
+
+def marca(red, x, y, r, extra=""):
+    """Marca con forma distinta por red (identidad no depende solo del color)."""
+    st = f'style="fill:{COLOR[red]}" class="mk" {extra}'
+    f = FORMA[red]
+    if f == "circulo": return f'<circle cx="{x:.1f}" cy="{y:.1f}" r="{r:.1f}" {st}/>'
+    if f == "cuadro": return f'<rect x="{x-r*.9:.1f}" y="{y-r*.9:.1f}" width="{r*1.8:.1f}" height="{r*1.8:.1f}" rx="1.5" {st}/>'
+    if f == "rombo": return f'<path d="M{x:.1f},{y-r*1.2:.1f}L{x+r*1.2:.1f},{y:.1f}L{x:.1f},{y+r*1.2:.1f}L{x-r*1.2:.1f},{y:.1f}Z" {st}/>'
+    return f'<path d="M{x:.1f},{y-r*1.2:.1f}L{x+r*1.15:.1f},{y+r*.85:.1f}L{x-r*1.15:.1f},{y+r*.85:.1f}Z" {st}/>'
+
+def leyenda(redes=REDES):
+    sw = lambda r: f'<svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true">{marca(r, 7, 7, 5)}</svg>'
+    return '<div class="legend">' + "".join(f'<span>{sw(r)}{r}</span>' for r in redes) + "</div>"
+
+def tip_pub(p):
+    t = tasa([p])
+    return tip(f'{d.TEMAS[p["tema"]][0]}', f'{p["red"]} · {p["formato"]} · {fecha(p["fecha"])}',
+               f'{f_int(p["imp"])} impresiones · {f_int(inter(p))} interacciones · {f_pct(t)}',
+               "")
+
+DEST_ACTUAL = {}
+def calcular_destacados(ps):
+    """Top 3 del mes en vistas, interacciones y tasa (tasa solo entre publicaciones con vistas al menos típicas)."""
+    base = [p for p in ps if p["formato"] != "Historia"]
+    med = statistics.median([n(p["imp"]) for p in base] or [0])
+    out = {}
+    for etq, cls, key, pool in [("★ Top vistas", "t-v", lambda p: n(p["imp"]), base),
+                                ("★ Top interacciones", "t-i", lambda p: inter(p), base),
+                                ("★ Top tasa", "t-r", lambda p: tasa([p]) or 0, [p for p in base if n(p["imp"]) >= med])]:
+        for p in sorted(pool, key=lambda p: -key(p))[:3]:
+            out.setdefault(p["url"], []).append((etq, cls))
+    DEST_ACTUAL.clear(); DEST_ACTUAL.update(out)
+
+def fuente_tag(p):
+    if p.get("fuente") == "HubSpot":
+        return ' <span class="src" data-tip="Metricool no registró esta publicación; el dato viene de HubSpot.">dato de HubSpot</span>'
+    if p.get("hs"):
+        return f' <span class="src" data-tip="Metricool no da {p["hs"]} de este formato; esos números vienen de HubSpot.">{p["hs"]} de HubSpot</span>'
+    return ""
+
+def url_pieza(tema, red=None, mes=None):
+    """Enlace a la versión con más impresiones de una pieza (opcional: de una red y un mes)."""
+    v = [p for p in d.P if p["tema"] == tema and (not red or p["red"] == red) and (not mes or p["fecha"][:7] == mes)]
+    v = v or [p for p in d.P if p["tema"] == tema]
+    return max(v, key=lambda p: n(p["imp"]))["url"] if v else None
+
+def enlazar(txt, mes):
+    import re
+    def rep(m):
+        t, r, label = m.group(1), m.group(2) or None, m.group(3)
+        u = url_pieza(t, r, mes)
+        return f'<a href="{e(u)}" target="_blank" rel="noopener">{label}</a>' if u else label
+    return re.sub(r"\[\[([A-Z0-9]+)\|([A-Za-z]*)\|(.+?)\]\]", rep, txt)
+
+def dest_badges(p):
+    return "".join(f' <span class="tag {c}">{t}</span>' for t, c in DEST_ACTUAL.get(p["url"], []))
+
+INICIAL = {"LinkedIn": "LI", "Instagram": "IG", "Facebook": "FB", "TikTok": "TT"}
+TINTA = {"LinkedIn": "#0d2236", "Instagram": "#fff", "Facebook": "#fff", "TikTok": "#fff"}
+
+def tabla_publicaciones(ps):
+    """Agrupada por pieza (tema): fila de resumen y debajo una fila por red donde se publicó."""
+    base = [p for p in ps if p["formato"] != "Historia"]
+    med_imp = {r: statistics.median([n(p["imp"]) for p in base if p["red"] == r] or [0]) for r in REDES}
+    med_er = {r: statistics.median([tasa([p]) or 0 for p in base if p["red"] == r] or [0]) for r in REDES}
+    vals = sorted([n(p["imp"]) for p in ps], reverse=True) + [1, 1, 1]
+    mx_imp = vals[2] * 1.25 if vals[0] > 4 * vals[2] else vals[0]
+    mx_er = max([tasa([p]) or 0 for p in ps] + [0.1])
+    grupos = {}
+    for p in ps: grupos.setdefault(p["tema"], []).append(p)
+    cuerpos = []
+    for t, v in sorted(grupos.items(), key=lambda kv: -sum(n(p["imp"]) for p in kv[1])):
+        nom, pil, modo = d.TEMAS[t]
+        if t == "HIST": nom = "Historias de Instagram"
+        v = sorted(v, key=lambda p: (REDES.index(p["red"]), p["fecha"]))
+        ti, tn = sum(n(p["imp"]) for p in v), sum(inter(p) for p in v)
+        redes_txt = ", ".join(r for r in REDES if any(p["red"] == r for p in v))
+        chips = "".join(f'<a href="{e(max([p for p in v if p["red"] == r], key=lambda p: n(p["imp"]))["url"])}" target="_blank" rel="noopener" data-tip="Abrir en {r}"><span class="chip" style="background:{COLOR[r]};color:{TINTA[r]};text-shadow:none">{INICIAL[r]}</span></a>' for r in REDES if any(p["red"] == r for p in v))
+        u_top = max(v, key=lambda p: n(p["imp"]))["url"]
+        filas = [f'<tr class="grp-h"><td colspan="2">{chips}</td><td class="t"><a class="pz" href="{e(u_top)}" target="_blank" rel="noopener" data-tip="Abrir la versión con más impresiones"><b>{e(nom)}</b></a><div class="small">{"" if t == "HIST" else e(pil) + " · " + e(modo) + " · "}{len(v)} {"pieza" if len(v) == 1 else "piezas"} en {redes_txt}</div></td>'
+                 f'<td class="l"><b>{f_int(ti)}</b> <span class="small">en total</span></td><td class="l"><b>{f_pct(tasa(v))}</b> <span class="small">en total</span></td><td class="l"><b>{f_int(tn)}</b><div>{desg_html(v, True)}</div></td></tr>']
+        for p in v:
+            i, tt = n(p["imp"]), tasa([p]) or 0
+            wi = min(100, 100 * i / mx_imp); wt = 100 * tt / mx_er
+            filas.append(
+                f'<tr class="sub{" dest" if p["url"] in DEST_ACTUAL else ""}" data-red="{p["red"]}" data-imp="{i}" data-int="{inter(p)}" data-fecha="{p["fecha"]}">'
+                f'<td><span class="chip" style="background:{COLOR[p["red"]]};color:{TINTA[p["red"]]};text-shadow:none">{INICIAL[p["red"]]}</span></td>'
+                f'<td class="l">{fecha(p["fecha"])}</td>'
+                f'<td class="t"><a href="{e(p["url"])}" target="_blank" rel="noopener">{p["red"]} · {p["formato"]}</a>{fuente_tag(p)}{dest_badges(p)}</td>'
+                f'<td class="bar"><div class="track"><div class="fill{" over" if i > mx_imp else ""}" style="width:{wi:.1f}%;background:{COLOR[p["red"]]}"></div></div><span>{f_int(i)}</span></td>'
+                f'<td class="bar"><div class="track"><div class="fill" style="width:{wt:.1f}%;background:{COLOR[p["red"]]}"></div></div><span>{f_pct(tt)}</span></td>'
+                f'<td class="l"><b>{f_int(inter(p))}</b><div>{desg_html([p], True)}</div></td></tr>')
+        cuerpos.append(f'<tbody class="grp">{"".join(filas)}</tbody>')
+    botones = '<button class="on" data-f="">Todas</button>' + "".join(f'<button data-f="{r}"><span class="chip" style="background:{COLOR[r]};color:{TINTA[r]};text-shadow:none">{INICIAL[r]}</span>{r}</button>' for r in REDES)
+    orden = '<label class="small">Ordenar por <select class="ord"><option value="imp">Impresiones</option><option value="er">Tasa de interacción</option><option value="int">Interacciones</option><option value="fecha">Fecha</option></select></label>'
+    return (f'<div class="pubs"><div class="ctrl"><div class="seg">{botones}</div>{orden}</div>'
+            f'<div class="scroll"><table class="ptab"><thead><tr><th>Red</th><th class="l">Fecha</th><th class="l">Pieza y red</th><th class="l">Impresiones</th><th class="l">Tasa de interacción</th><th class="l">Interacciones</th></tr></thead>'
+            f'{"".join(cuerpos)}</table></div></div>')
+
+def calendario_mes(ps, clave):
+    import calendar
+    y, m = int(clave[:4]), int(clave[5:])
+    semanas = calendar.Calendar(firstweekday=0).monthdayscalendar(y, m)
+    por_dia = {}
+    for p in ps: por_dia.setdefault(int(p["fecha"][8:]), []).append(p)
+    cab = "".join(f'<div class="dow">{x}</div>' for x in ["Lun", "Mar", "Mié", "Jue", "Vie", "Sáb", "Dom"])
+    celdas = []
+    for sem in semanas:
+        for dd in sem:
+            if dd == 0: celdas.append('<div class="day out"></div>'); continue
+            if f"{clave}-{dd:02d}" > CORTE: celdas.append(f'<div class="day future"><b>{dd}</b></div>'); continue
+            q = por_dia.get(dd, [])
+            if not q: celdas.append(f'<div class="day empty pick" data-day="{clave}-{dd:02d}"><b>{dd}</b></div>'); continue
+            chips = ""
+            for r in REDES:
+                k = sum(1 for p in q if p["red"] == r)
+                if k: chips += f'<span class="chip" style="background:{COLOR[r]};color:{TINTA[r]};text-shadow:none">{INICIAL[r]}{"×" + str(k) if k > 1 else ""}</span>'
+            lista = [f'{fecha(f"{clave}-{dd:02d}")}: {len(q)} publicaciones'] + [f'· {p["red"]} {p["formato"].lower()}: {d.TEMAS[p["tema"]][0]}' for p in sorted(q, key=lambda p: REDES.index(p["red"]))]
+            celdas.append(f'<div class="day pick" data-day="{clave}-{dd:02d}" data-tip="{tip(*lista)}"><b>{dd}</b><div class="chips">{chips}</div></div>')
+    dias_con = len(por_dia); tot = min(calendar.monthrange(y, m)[1], int(CORTE[8:]) if CORTE[:7] == clave else 99)
+    return f'<div class="cal">{cab}{"".join(celdas)}</div>', dias_con, tot
+
+FORMATOS_RED = {
+    "LinkedIn": ["Post", "Documento"],
+    "Instagram": ["Reel", "Carrusel", "Imagen"],
+    "Facebook": ["Reel", "Álbum", "Imagen", "Enlace"],
+    "TikTok": ["Video"],
+}
+
+def formatos_por_red(ps, clave):
+    """Una tarjeta por red con todos sus formatos y sus métricas, aunque no hayan funcionado."""
+    tarjetas = []
+    for r in REDES:
+        q = [p for p in ps if p["red"] == r]
+        filas_d = []
+        for f in FORMATOS_RED[r] + sorted({p["formato"] for p in q} - set(FORMATOS_RED[r])):
+            v = [p for p in q if p["formato"] == f]
+            if not v:
+                filas_d.append((f, None, "No se registraron historias (ni en Metricool ni en HubSpot)" if f == "Historia" else "No se publicó este mes"))
+                continue
+            imp = sum(n(p["imp"]) for p in v)
+            filas_d.append((f, dict(n=len(v), imp=imp, prom=imp / len(v), int=sum(inter(p) for p in v), er=tasa(v), dg=desg_html(v, True)), ""))
+        con = [x for x in filas_d if x[1]]
+        mx_prom = max([x[1]["prom"] for x in con] + [1]); mx_er = max([x[1]["er"] or 0 for x in con] + [0.1])
+        mejor_prom = max(con, key=lambda x: x[1]["prom"])[0] if len(con) > 1 else None
+        mejor_er = max(con, key=lambda x: x[1]["er"] or 0)[0] if len(con) > 1 else None
+        peor_er = min(con, key=lambda x: x[1]["er"] or 0)[0] if len(con) > 2 else None
+        filas = []
+        for f, m, nota in sorted(filas_d, key=lambda x: -(x[1]["er"] or 0) if x[1] else 1):
+            if not m:
+                filas.append(f'<tr class="vacio"><th scope="row">{f}</th><td colspan="4" class="l small">{nota}</td></tr>'); continue
+            tags = ""
+            if f == mejor_er: tags += '<span class="tag t-i">Mejor tasa</span>'
+            if f == mejor_prom: tags += '<span class="tag t-v">Más alcance</span>'
+            if f == peor_er and f != mejor_prom: tags += '<span class="tag t-down">Tasa más baja</span>'
+            filas.append(
+                f'<tr><th scope="row">{f}{("<div class=tags>" + tags + "</div>") if tags else ""}</th><td class="num">{m["n"]}</td>'
+                f'<td class="bar"><div class="track sm"><div class="fill" style="width:{100*m["prom"]/mx_prom:.1f}%;background:{COLOR[r]}"></div></div><span>{f_int(m["prom"])}</span></td>'
+                f'<td class="l"><b>{f_int(m["int"])}</b><div>{m["dg"]}</div></td>'
+                f'<td class="bar"><div class="track sm"><div class="fill" style="width:{100*(m["er"] or 0)/mx_er:.1f}%;background:{COLOR[r]}"></div></div><span>{f_pct(m["er"])}</span></td></tr>')
+        tarjetas.append(f'<div class="card net" style="border-top-color:{COLOR[r]}"><h3>{r}</h3><div class="scroll flat"><table class="ftab"><thead><tr><th>Formato</th><th>Pub.</th><th class="l">Impresiones promedio</th><th class="l">Interacciones (♥ likes · 💬 comentarios · ↗ compartidos)</th><th class="l">Tasa</th></tr></thead><tbody>{"".join(filas)}</tbody></table></div></div>')
+    return '<div class="fgrid">' + "".join(tarjetas) + "</div>"
+
+def barras_h(items, fmt=f_pct, ancho=680, lw=230):
+    """items: (etiqueta, valor, color, detalle). Barras horizontales ordenadas."""
+    items = [it for it in items if it[1] is not None]
+    rw, bh, gap = 64, 18, 10
+    corta = lambda t: t if len(t) * 7.4 < lw - 8 else t[: int((lw - 8) / 7.4) - 1] + "…"
+    H = len(items) * (bh + gap) + 4
+    mx = max([it[1] for it in items] + [0.0001])
+    o = [f'<svg viewBox="0 0 {ancho} {H}" class="chart{" wide" if ancho > 500 else ""}" role="img">']
+    for i, it in enumerate(items):
+        lab, v, col, det = it[:4]; url = it[4] if len(it) > 4 else None
+        y = i * (bh + gap) + 2; w = max(2, (ancho - lw - rw) * v / mx)
+        o.append(f'<g data-tip="{tip(lab, det)}"><text x="0" y="{y+13}" class="lab">{e(corta(lab))}</text>'
+                 f'<rect x="{lw}" y="{y}" width="{w:.1f}" height="{bh}" rx="3" style="fill:{col}"/>'
+                 f'<text x="{lw+w+6:.1f}" y="{y+13}" class="val">{fmt(v)}</text><rect x="0" y="{y-4}" width="{ancho}" height="{bh+8}" class="hit"/></g>')
+        if url: o[-1] = f'<a href="{e(url)}" target="_blank" rel="noopener">{o[-1]}</a>'
+    o.append("</svg>")
+    return "".join(o)
+
+def seguidores_dia(clave):
+    """Seguidores netos por día: Facebook e Instagram en filas (misma escala)."""
+    dias = sorted(k for k in d.FB_TOTAL if k[:7] == clave)
+    fb = {k: d.FB_TOTAL[k] - d.FB_TOTAL[prev] for prev, k in zip(sorted(d.FB_TOTAL)[:-1], sorted(d.FB_TOTAL)[1:]) if k[:7] == clave}
+    ig = {k: v[0] - v[1] for k, v in d.IG_DIA.items() if k[:7] == clave}
+    ult = int(dias[-1][8:]) if dias else 30
+    import calendar
+    ultimo = calendar.monthrange(int(clave[:4]), int(clave[5:]))[1]
+    W, ml, mr, rh = 680, 82, 12, 84
+    H = rh * 2 + 46
+    mx = max([abs(v) for v in list(fb.values()) + list(ig.values())] + [1])
+    X = lambda dd: ml + (dd - 1) / ultimo * (W - ml - mr)
+    bw = (W - ml - mr) / ultimo - 2
+    o = [f'<svg viewBox="0 0 {W} {H}" class="chart wide" role="img" aria-label="Seguidores netos por día">']
+    for i, (red, serie) in enumerate([("Facebook", fb), ("Instagram", ig)]):
+        base = 8 + rh * i + rh - 14
+        o.append(f'<text x="0" y="{base-rh/2+10}" class="lab">{red}</text><line x1="{ml}" x2="{W-mr}" y1="{base}" y2="{base}" class="axis"/>')
+        for k, v in sorted(serie.items()):
+            dd = int(k[8:]); h = (rh - 26) * abs(v) / mx
+            y = base - h if v >= 0 else base
+            o.append(f'<g class="pick" data-day="{k}" data-tip="{tip(red + " · " + fecha(k), f"{v:+d} seguidores netos", "Haz clic para ver qué se publicó")}"><rect x="{X(dd)+1:.1f}" y="{y:.1f}" width="{bw:.1f}" height="{max(h,1):.1f}" rx="2" style="fill:{COLOR[red]}"/>'
+                     + (f'<text x="{X(dd)+1+bw/2:.1f}" y="{y-3:.1f}" text-anchor="middle" class="val dval">+{v}</text>' if v > 0 else f'<text x="{X(dd)+1+bw/2:.1f}" y="{base+max(h,1)+11:.1f}" text-anchor="middle" class="val dval neg">{v}</text>' if v < 0 else "")
+                     + f'<rect x="{X(dd):.1f}" y="{base-rh+16}" width="{bw+2:.1f}" height="{rh-10}" class="hit"/></g>')
+    for dd in range(1, ultimo + 1):
+        if dd == 1 or dd % 5 == 0: o.append(f'<text x="{X(dd)+1+bw/2:.1f}" y="{H-6}" text-anchor="middle" class="tick">{dd}</text>')
+    o.append("</svg>")
+    return "".join(o)
+
+def datos_dias(ps, clave):
+    import json
+    fb = {k: d.FB_TOTAL[k] - d.FB_TOTAL[prev] for prev, k in zip(sorted(d.FB_TOTAL)[:-1], sorted(d.FB_TOTAL)[1:]) if k[:7] == clave}
+    ig = {k: v[0] - v[1] for k, v in d.IG_DIA.items() if k[:7] == clave}
+    out = {}
+    for k in sorted(set(fb) | set(ig) | {p["fecha"] for p in ps}):
+        out[k] = {"t": fecha(k), "fb": fb.get(k), "ig": ig.get(k), "p": [
+            {"r": p["red"], "f": p["formato"], "n": d.TEMAS[p["tema"]][0], "i": f_int(p["imp"]), "x": f_pct(tasa([p])), "u": p["url"], "a": [t for t, _ in DEST_ACTUAL.get(p["url"], [])]}
+            for p in sorted([p for p in ps if p["fecha"] == k], key=lambda p: REDES.index(p["red"]))]}
+    mejor = max(out, key=lambda k: (out[k]["fb"] or 0) + (out[k]["ig"] or 0)) if out else ""
+    return json.dumps(out, ensure_ascii=False).replace("</", "<\\/"), mejor
+
+def barras_mes(meses, valor, etiqueta):
+    W, H, ml, mb, mt = 440, 200, 8, 28, 22
+    vals = [[valor(m, r) for r in REDES] for m in meses]
+    mx = max([v or 0 for fila in vals for v in fila] + [1])
+    gw = (W - ml) / len(meses); bw = min(34, (gw - 24) / len(REDES))
+    out = [f'<svg viewBox="0 0 {W} {H}" role="img" aria-label="{e(etiqueta)}" class="chart">']
+    for i, m in enumerate(meses):
+        x0 = ml + i * gw + (gw - bw * len(REDES)) / 2
+        for j, r in enumerate(REDES):
+            v = vals[i][j]; x = x0 + j * bw
+            if v is None:
+                out.append(f'<text x="{x+bw/2:.1f}" y="{H-mb-5}" text-anchor="middle" class="val">n/d</text>'); continue
+            h = (H - mb - mt) * v / mx; y = H - mb - h
+            out.append(f'<g data-tip="{tip(r + " · " + m["titulo"], f"{v:,.0f}")}"><rect x="{x+2:.1f}" y="{y:.1f}" width="{bw-4:.1f}" height="{h:.1f}" rx="3" style="fill:{COLOR[r]}"/>'
+                       f'<text x="{x+bw/2:.1f}" y="{y-5:.1f}" text-anchor="middle" class="val">{v:,.0f}</text></g>')
+        out.append(f'<text x="{ml+i*gw+gw/2:.1f}" y="{H-8}" text-anchor="middle" class="lab">{e(m["titulo"].replace(" 2026", ""))}</text>')
+    out.append(f'<line x1="{ml}" x2="{W}" y1="{H-mb}" y2="{H-mb}" class="axis"/></svg>')
+    return "".join(out)
+
+def tabla(cab, filas):
+    return f'<details><summary>Ver tabla</summary><div class="scroll"><table><thead><tr>{"".join(f"<th>{c}</th>" for c in cab)}</tr></thead><tbody>{"".join(filas)}</tbody></table></div></details>'
+
+def pagina(idx):
+    import calendar
+    M = MESES[idx]; clave = M["clave"]; previos = MESES[: idx + 1]
+    ps = [p for p in d.P if p["fecha"][:7] == clave]
+    calcular_destacados(ps)
+    R = resumen(ps); sin = [p for p in ps if p["url"] not in ATIPICOS]
+    seg = SEGUIDORES[clave]; hay_atip = len(sin) != len(ps)
+    ultimo = calendar.monthrange(int(clave[:4]), int(clave[5:]))[1]
+
+    # Evolución
+    filas = []
+    for r in REDES:
+        celdas = []
+        for m in previos:
+            q = [p for p in d.P if p["fecha"][:7] == m["clave"] and p["red"] == r]
+            s = resumen(q); sg = SEGUIDORES[m["clave"]].get(r)
+            celdas.append(f'<td>{s["n"]}</td><td>{f_int(s["imp"])}</td><td>{f_pct(s["er"])}</td><td>{f_int(s["med"])}</td><td>{("+" + str(sg[0])) if sg else "no disp."}</td>')
+        filas.append(f'<tr><th scope="row">{r}</th>{"".join(celdas)}</tr>')
+    cab1 = "".join(f'<th colspan="5" class="grp">{e(m["titulo"])}</th>' for m in previos)
+    cab2 = "<th>Pub.</th><th>Impr.</th><th>Tasa</th><th>Mediana</th><th>Seguidores</th>" * len(previos)
+    evol_tabla = f'<details><summary>Ver tabla de evolución</summary><div class="scroll"><table class="evo"><thead><tr><th></th>{cab1}</tr><tr><th>Red</th>{cab2}</tr></thead><tbody>{"".join(filas)}</tbody></table></div></details>'
+    imp_mes = lambda m, r: sum(n(p["imp"]) for p in d.P if p["fecha"][:7] == m["clave"] and p["red"] == r and p["url"] not in ATIPICOS)
+    er_mes = lambda m, r: tasa([p for p in d.P if p["fecha"][:7] == m["clave"] and p["red"] == r and p["url"] not in ATIPICOS])
+    med_mes = lambda m, r: resumen([p for p in d.P if p["fecha"][:7] == m["clave"] and p["red"] == r])["med"]
+    seg_mes = lambda m, r: (SEGUIDORES[m["clave"]].get(r) or (None,))[0]
+    fmt1 = lambda v: f"{v:.1f}"
+
+    def barras_mes_pct(meses):
+        W, H, ml, mb, mt = 440, 200, 8, 28, 22
+        vals = [[er_mes(m, r) for r in REDES] for m in meses]; mx = max([v or 0 for f in vals for v in f] + [1])
+        gw = (W - ml) / len(meses); bw = min(34, (gw - 24) / len(REDES)); o = [f'<svg viewBox="0 0 {W} {H}" class="chart" role="img" aria-label="Tasa de interacción por mes">']
+        for i, m in enumerate(meses):
+            x0 = ml + i * gw + (gw - bw * len(REDES)) / 2
+            for j, r in enumerate(REDES):
+                v = vals[i][j] or 0; x = x0 + j * bw; h = (H - mb - mt) * v / mx; y = H - mb - h
+                o.append(f'<g data-tip="{tip(r + " · " + m["titulo"], f_pct(v))}"><rect x="{x+2:.1f}" y="{y:.1f}" width="{bw-4:.1f}" height="{h:.1f}" rx="3" style="fill:{COLOR[r]}"/><text x="{x+bw/2:.1f}" y="{y-5:.1f}" text-anchor="middle" class="val">{v:.1f}</text></g>')
+            o.append(f'<text x="{ml+i*gw+gw/2:.1f}" y="{H-8}" text-anchor="middle" class="lab">{e(m["titulo"].replace(" 2026", ""))}</text>')
+        o.append(f'<line x1="{ml}" x2="{W}" y1="{H-mb}" y2="{H-mb}" class="axis"/></svg>'); return "".join(o)
+
+    # Por red
+    tarjetas = []
+    for r in REDES:
+        q = [p for p in ps if p["red"] == r]; s = resumen(q); sg = seg.get(r)
+        tarjetas.append(f'''<div class="card net" style="border-top-color:{COLOR[r]}"><h3>{r}</h3>
+<dl><div><dt>Publicaciones</dt><dd>{s["n"]}</dd></div><div><dt>Impresiones</dt><dd>{f_int(s["imp"])}</dd></div>
+<div><dt>Interacciones</dt><dd>{f_int(s["int"])}</dd></div><div><dt>Tasa</dt><dd>{f_pct(s["er"])}</dd></div><div style="grid-column:span 2"><dt>Desglose</dt><dd class="dd">{desg_html(q, True)}</dd></div>
+<div><dt>Mediana por publicación</dt><dd>{f_int(s["med"])}</dd></div><div><dt>Seguidores</dt><dd>{("+" + str(sg[0])) if sg else "no disponible"}</dd></div></dl>
+<p class="small">{e(sg[1]) if sg else ("HubSpot no da seguidores." if r == "LinkedIn" else "Metricool no tiene historial de seguidores de TikTok.")}</p></div>''')
+
+    def grupo(clave_fn, color_fn, ancho_g=680, lw_g=230):
+        g = {}
+        for p in ps: g.setdefault(clave_fn(p), []).append(p)
+        base = [p for p in ps if p["url"] not in ATIPICOS]
+        items, filas = [], []
+        for k, v in g.items():
+            v2 = [p for p in v if p["url"] not in ATIPICOS]
+            items.append((k, tasa(v2), color_fn(k), f'{len(v)} publicaciones · {f_int(sum(n(p["imp"]) for p in v))} impresiones · {f_int(sum(inter(p) for p in v))} interacciones'))
+            filas.append(f'<tr><th scope="row">{e(k)}</th><td>{len(v)}</td><td>{f_int(sum(n(p["imp"]) for p in v))}</td><td>{f_int(sum(inter(p) for p in v))}</td><td>{f_pct(tasa(v))}</td></tr>')
+        items.sort(key=lambda it: -(it[1] or 0))
+        return barras_h(items, ancho=ancho_g, lw=lw_g) + tabla(["", "Pub.", "Impr.", "Interacc.", "Tasa"], filas)
+
+    acento = "var(--mono)"
+    pilares = grupo(lambda p: d.TEMAS[p["tema"]][1], lambda k: acento, 440, 190)
+    modos = grupo(lambda p: d.TEMAS[p["tema"]][2], lambda k: acento, 440, 190)
+
+    # Temas
+    temas = {}
+    for p in ps: temas.setdefault(p["tema"], []).append(p)
+    trows = []
+    for t, v in sorted(temas.items(), key=lambda kv: -sum(inter(p) for p in kv[1])):
+        nom, pil, modo = d.TEMAS[t]
+        piezas = ", ".join(sorted(set(f'{p["red"]} {p["formato"].lower()}' for p in v)))
+        trows.append(f'<tr><th scope="row"><a href="{e(max(v, key=lambda p: n(p["imp"]))["url"])}" target="_blank" rel="noopener">{e(nom)}</a></th><td class="l">{e(pil)}</td><td class="l">{e(modo)}</td><td class="small t">{e(piezas)}</td><td>{f_int(sum(n(p["imp"]) for p in v))}</td><td>{f_int(sum(inter(p) for p in v))}</td><td>{f_pct(tasa(v))}</td></tr>')
+    temas_items = sorted([(d.TEMAS[t][0], sum(inter(p) for p in v), acento, f'{d.TEMAS[t][1]} · {d.TEMAS[t][2]} · {len(v)} piezas · {f_pct(tasa(v))} · clic para abrir la versión con más impresiones', max(v, key=lambda p: n(p["imp"]))["url"]) for t, v in temas.items() if t != "HIST"], key=lambda it: -it[1])[:10]
+    temas_html = barras_h(temas_items, fmt=lambda v: f"{v:,.0f}") + tabla(["Tema", "Pilar", "Modo", "Piezas", "Impr.", "Interacc.", "Tasa"], trows)
+
+    # Top 10 por interacciones
+    top_int = sorted(ps, key=lambda p: (-inter(p), -n(p["imp"])))[:10]
+    top_items = [(d.TEMAS[p["tema"]][0], inter(p), COLOR[p["red"]], f'{p["red"]} · {p["formato"]} · {fecha(p["fecha"])} · {f_int(p["imp"])} impresiones · {f_pct(tasa([p]))} · clic para abrir', p["url"]) for p in top_int]
+    top_imp = sorted(ps, key=lambda p: -n(p["imp"]))[:10]
+    top_filas = [f'<tr><td>{fecha(p["fecha"])}</td><td class="l">{p["red"]}</td><td class="l">{p["formato"]}</td><td class="t">{e(d.TEMAS[p["tema"]][0])}{dest_badges(p)}</td><td>{f_int(p["imp"])}</td><td>{f_int(p["likes"])}</td><td>{f_int(p["com"])}</td><td>{f_int(p["sh"])}</td><td>{f_pct(tasa([p]))}</td><td><a href="{e(p["url"])}" target="_blank" rel="noopener">Ver</a></td></tr>' for p in top_imp]
+
+    cal_html, cal_dias, cal_tot = calendario_mes(ps, clave)
+    prev = [p for p in d.P if idx > 0 and p["fecha"][:7] == MESES[idx - 1]["clave"]]
+    RP = resumen(prev) if prev else None
+    nom_prev = MESES[idx - 1]["titulo"].split(" ")[0].lower() if idx > 0 else ""
+    def delta(a, b, pct=False):
+        if b is None: return '<div class="dl neu">Primer mes con datos</div>'
+        dv = a - b
+        if pct: txt = f"{dv:+.1f} puntos"
+        else: txt = f"{dv:+,.0f}"
+        cls = "up" if dv > 0 else "down" if dv < 0 else "neu"
+        flecha = "▲" if dv > 0 else "▼" if dv < 0 else "="
+        return f'<div class="dl {cls}">{flecha} {txt} vs {nom_prev}</div>'
+    l_, c_, s_ = desglose(ps)
+    seg_prev = SEGUIDORES[MESES[idx - 1]["clave"]] if idx > 0 else {}
+    seg_lines = "".join(f'<div>{r} <b>+{v[0]}</b>' + (f' <span class="small">· en {nom_prev} fueron +{seg_prev[r][0]}</span>' if r in seg_prev else "") + "</div>" for r, v in seg.items())
+    parcial = '<p class="small">Noviembre va al día 16, así que la comparación con octubre todavía no es pareja.</p>' if clave == CORTE[:7] else ""
+    kpis_html = f"""<div class="kpis">
+<div class="card kpi"><div class="v">{R["n"]}</div><div class="l">publicaciones</div>{delta(R["n"], RP["n"] if RP else None)}</div>
+<div class="card kpi"><div class="v">{f_int(R["imp"])}</div><div class="l">veces que se vieron nuestras publicaciones (impresiones)</div>{delta(R["imp"], RP["imp"] if RP else None)}</div>
+<div class="card kpi wide2"><div class="v">{f_int(R["int"])}</div><div class="l">reacciones (interacciones)</div>
+<div class="brk"><span><b>♥ {f_int(l_)}</b> {"like" if l_ == 1 else "likes"}</span><span><b>💬 {f_int(c_)}</b> {"comentario" if c_ == 1 else "comentarios"}</span><span><b>↗ {f_int(s_)}</b> {"compartido" if s_ == 1 else "compartidos"}</span></div>{delta(R["int"], RP["int"] if RP else None)}</div>
+<div class="card kpi half"><div class="v">{(R["er"] or 0):.1f} <span class="u">de cada 100</span></div><div class="l">personas que vieron una publicación reaccionaron (tasa de interacción)</div>{delta(R["er"] or 0, RP["er"] if RP else None, pct=True)}</div>
+<div class="card kpi half"><div class="v2">{seg_lines}</div><div class="l">seguidores nuevos (LinkedIn y TikTok: no disponible)</div></div>
+</div>{parcial}"""
+    dias_json, dia_inicial = datos_dias(ps, clave)
+    A = APRENDIZAJES[clave]
+    li = lambda xs: "".join(f"<li>{enlazar(x, clave)}</li>" for x in xs)
+    hip = HIPOTESIS.get(clave, [])
+    hipotesis_html = ("<h2>Conclusiones e hipótesis</h2><p class=\"lead\">Posibles explicaciones de lo que muestran los datos. Son hipótesis: hay que comprobarlas con la parrilla del siguiente mes.</p><div class=\"hips\">"
+        + "".join(f'<div class="card hip"><h3>{i}. {e(h["titulo"])}</h3><p><span class="hl v">Lo que vemos</span>{enlazar(h["vemos"], clave)}</p><p><span class="hl h">Posible explicación</span>{enlazar(h["hipotesis"], clave)}</p><p><span class="hl c">Cómo comprobarlo</span>{enlazar(h["comprobar"], clave)}</p></div>' for i, h in enumerate(hip, 1))
+        + "</div>") if hip else ""
+    seg_txt = "<br>".join(f'{r} <b>+{v[0]}</b>' for r, v in seg.items())
+    nav = " · ".join(f'<a href="../{m["clave"]}/"{" aria-current=page" if m["clave"] == clave else ""}>{e(m["titulo"])}</a>' for m in MESES)
+    atip_kpi = ""
+    nota_atip = ""
+
+    return f'''<!doctype html>
+<html lang="es-MX"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Redes Lapzo · {e(M["titulo"])}</title>
+<style>
+:root{{--bg:#f5f7fa;--fg:#16202e;--muted:#5d6878;--panel:#fff;--line:#dfe4ec;--grid:#eceff4;--accent:#6b3fd4;--dest-bg:#fff7d6;--mono:#4cc3a2;--td:#b23b3b;--tv:#5b3cc4;--ti:#1d7a46;--tr:#b4540a;
+--c-li:#4ba3e3;--c-ig:#c2417a;--c-fb:#2f6fb5;--c-tt:#64309e;color-scheme:light}}
+@media (prefers-color-scheme:dark){{:root{{--bg:#0f141b;--fg:#e8edf4;--muted:#9aa5b5;--panel:#171e28;--line:#2a3442;--grid:#222b37;--accent:#a98bff;--dest-bg:#2e2a14;--mono:#5fd1b1;--td:#f08c8c;--tv:#b9a2ff;--ti:#6fd39a;--tr:#f5a35c;
+--c-li:#3f99d4;--c-ig:#d0507f;--c-fb:#2f5cb0;--c-tt:#9d5bd8;color-scheme:dark}}}}
+*{{box-sizing:border-box}} body{{margin:0;background:var(--bg);color:var(--fg);font:15px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif}}
+main{{max-width:1040px;margin:0 auto;padding:32px 16px 64px}} a{{color:var(--accent)}}
+.eyebrow{{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}}
+h1{{font-size:34px;font-weight:600;margin:6px 0 4px}} h2{{font-size:22px;margin:44px 0 4px}} h3{{margin:0 0 8px;font-size:17px}}
+.lead{{color:var(--muted);margin:0 0 12px}} nav{{margin:10px 0 24px;font-size:14px}} nav a[aria-current]{{font-weight:700;color:var(--fg);text-decoration:none}}
+.kpis{{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:16px}} .kpi.half{{grid-column:span 2}} @media (max-width:760px){{.kpis{{grid-template-columns:1fr 1fr}}}}
+.card{{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px}}
+.kpi .v{{font-size:28px;font-weight:600}} .kpi .v .u{{font-size:14px;font-weight:500;color:var(--muted)}} .kpi.wide2{{grid-column:span 2}} .brk{{display:flex;flex-wrap:wrap;gap:4px 14px;margin-top:8px;font-size:14px}} .dl{{font-size:12.5px;margin-top:8px;font-weight:600}} .dl.up{{color:var(--ti)}} .dl.down{{color:var(--td)}} .dl.neu{{color:var(--muted);font-weight:500}} .dg{{white-space:nowrap;font-size:13px}} .dg i{{font-style:normal;margin:0 2px 0 8px;opacity:.8}} .dg i:first-child{{margin-left:0}} @media (max-width:640px){{.kpi.wide2{{grid-column:auto}}}} .kpi .v2{{font-size:17px;line-height:1.5;margin-bottom:2px}} .kpi .l{{color:var(--muted);font-size:13px}}
+.nets{{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}} .net{{border-top:4px solid}}
+dl{{display:grid;grid-template-columns:1fr 1fr;gap:6px 12px;margin:0}} dt{{color:var(--muted);font-size:12px}} dd{{margin:0;font-weight:600}}
+.small{{font-size:13px;color:var(--muted)}}
+.charts{{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(420px,100%),1fr));gap:12px}} .chart{{width:100%;height:auto;display:block;overflow:visible}}
+.chart .val,.chart .tick{{font-size:11px;fill:var(--muted)}} .chart .dval{{font-size:10px;fill:var(--fg);font-weight:600}} .chart .dval.neg{{fill:#b23b3b}} .chart .lab{{font-size:12.5px;fill:var(--fg)}} .chart .quad{{font-size:12px;fill:var(--muted);font-style:italic;stroke:var(--panel);stroke-width:4px;paint-order:stroke;stroke-linejoin:round}}
+.chart .axis{{stroke:var(--line)}} .chart .grid{{stroke:var(--grid)}} .chart .ref{{stroke:var(--muted);stroke-dasharray:4 4;opacity:.7}}
+.chart .mk{{stroke:var(--panel);stroke-width:1.5}} .chart .hit{{fill:transparent}} .chart a:hover .mk,.chart g:hover rect{{filter:brightness(1.12)}} .chart a{{cursor:pointer}} .chart a:hover .lab{{text-decoration:underline}}
+.legend{{display:flex;flex-wrap:wrap;gap:14px;font-size:13px;color:var(--muted);margin:4px 0 8px}} .legend span{{display:inline-flex;align-items:center;gap:5px}}
+details{{margin-top:10px}} summary{{cursor:pointer;color:var(--accent);font-size:14px}}
+.scroll{{overflow-x:auto;background:var(--panel);border:1px solid var(--line);border-radius:12px;margin-top:8px}}
+table{{border-collapse:collapse;width:100%;font-size:14px}} th,td{{padding:8px 10px;border-bottom:1px solid var(--line);text-align:right;white-space:nowrap}}
+th:first-child,td:first-child,tbody th,th.l,td.l{{text-align:left}} thead th{{color:var(--muted);font-weight:600;font-size:12px}} tbody tr:last-child>*{{border-bottom:0}}
+.evo .grp{{text-align:center;border-left:1px solid var(--line)}} td.t{{white-space:normal;min-width:180px;text-align:left}} tbody th{{white-space:normal;min-width:180px;font-weight:500}}
+.learn{{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px}} .learn ul{{margin:0;padding-left:18px}} .learn li{{margin-bottom:8px}}
+.note{{border-left:4px solid var(--accent)}}
+.hips{{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(460px,100%),1fr));gap:12px}} .hip p{{margin:8px 0 0;font-size:14.5px}} .hip a{{color:inherit;text-decoration:underline;text-decoration-color:var(--accent);text-underline-offset:2px}}
+.hl{{display:block;font-size:11.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;margin-bottom:2px}} .hl.v{{color:var(--muted)}} .hl.h{{color:var(--tv)}} .hl.c{{color:var(--ti)}}
+.ctrl{{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;margin-bottom:8px}}
+.seg{{display:flex;flex-wrap:wrap;gap:6px}} .seg button{{font:inherit;font-size:13px;border:1px solid var(--line);background:var(--panel);color:var(--fg);border-radius:999px;padding:5px 12px;cursor:pointer;display:inline-flex;gap:6px;align-items:center}}
+.seg button.on{{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent) inset}} select{{font:inherit;font-size:13px;padding:4px 6px;border-radius:8px;border:1px solid var(--line);background:var(--panel);color:var(--fg)}}
+.chip{{display:inline-block;color:#fff;text-shadow:0 0 1px rgba(0,0,0,.35);font-size:11px;font-weight:700;border-radius:5px;padding:1px 5px;line-height:1.5}}
+.ptab td{{vertical-align:middle}} .ptab tbody.grp{{border-top:10px solid var(--bg)}} .ptab tr.grp-h td{{background:var(--grid);border-bottom:0;padding-top:10px;padding-bottom:10px}} .ptab tr.grp-h .chip{{margin-right:3px}} .ptab a.pz{{color:var(--fg);text-decoration:none}} .ptab a.pz:hover{{text-decoration:underline}} .learn a{{color:inherit;text-decoration:underline;text-decoration-color:var(--accent);text-underline-offset:2px}}
+.ptab tr.sub td{{padding-top:6px;padding-bottom:6px}} .ptab tr.sub.dest td{{background:var(--dest-bg)}} .tag{{display:inline-block;margin-left:4px;font-size:11px;font-weight:600;border-radius:999px;padding:1px 7px;white-space:nowrap;border:1px solid}} .t-v{{color:var(--tv);border-color:var(--tv)}} .t-i{{color:var(--ti);border-color:var(--ti)}} .t-r{{color:var(--tr);border-color:var(--tr)}} .ptab tr.sub td.t a{{font-weight:400}} .ptab tr.sub td:first-child{{padding-left:22px}} .ptab td.num b{{font-size:15px}} .ptab td.t{{min-width:180px}} .ptab td.t a{{color:var(--fg);text-decoration:none;font-weight:500}} .ptab td.t a:hover{{text-decoration:underline}}
+.ptab .bar{{min-width:130px;text-align:left}} .track{{display:inline-block;vertical-align:middle;width:66px;height:10px;background:var(--grid);border-radius:5px;overflow:hidden;margin-right:8px}}
+.fill{{height:100%;border-radius:5px}} .fill.over{{background-image:repeating-linear-gradient(135deg,transparent 0 4px,rgba(255,255,255,.45) 4px 6px)!important}}
+.est{{font-size:12.5px;padding:2px 8px;border-radius:999px;white-space:nowrap;border:1px solid var(--line)}} .est.up{{color:#1d7a46;border-color:#9fd6b4}} .est.down{{color:#b23b3b;border-color:#efb3b3}} .est.mix,.est.neu{{color:var(--muted)}}
+@media (prefers-color-scheme:dark){{.est.up{{color:#6fd39a;border-color:#2f6b47}} .est.down{{color:#f08c8c;border-color:#6b2f2f}}}}
+.cal{{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}} .dow{{font-size:12px;color:var(--muted);text-align:center;padding-bottom:2px}}
+.day{{min-height:74px;border:1px solid var(--line);border-radius:10px;padding:6px;background:var(--panel)}} .day b{{font-size:12px;font-weight:600}}
+.day.empty{{background:var(--grid);border-color:transparent}} .day.empty b{{color:var(--muted);font-weight:400}} .day.out{{border:0;background:transparent}} .day.future{{border:1px dashed var(--line);background:transparent}} .day.future b{{color:var(--muted);font-weight:400}}
+.day .chips{{display:flex;flex-wrap:wrap;gap:3px;margin-top:4px}} .day:not(.empty):not(.out):hover{{border-color:var(--accent)}}
+@media (max-width:640px){{.day{{min-height:58px;padding:4px}} .day .chip{{font-size:9.5px;padding:0 3px}}}}
+.pick{{cursor:pointer}} g.pick.sel rect:not(.hit){{stroke:var(--fg);stroke-width:2}} .day.sel{{outline:2px solid var(--accent);outline-offset:1px}}
+.dia{{margin-top:12px;border-top:1px solid var(--line);padding-top:12px}} .dia-h{{margin-bottom:6px}} .dia-l{{list-style:none;padding:0;margin:0;display:grid;gap:8px}}
+.dia-l li{{display:flex;flex-wrap:wrap;gap:6px;align-items:baseline}} .dia-l a{{font-weight:500;color:var(--fg)}}
+.fgrid{{display:grid;grid-template-columns:1fr;gap:12px}} .scroll.flat{{border:0;border-radius:0;margin:0;background:transparent}}
+.ftab th,.ftab td{{padding:7px 6px}} .ftab tbody th{{min-width:0}} .ftab .tags{{margin-top:3px;margin-left:-4px}} .ftab .bar{{min-width:150px;white-space:nowrap;text-align:left}} .ftab td.l{{text-align:left}} .track.sm{{width:110px}} .ftab tbody th{{width:200px}} .ftab tr.vacio td{{white-space:normal}} .ftab{{table-layout:auto}} .ftab tr.vacio th,.ftab tr.vacio td{{color:var(--muted)}}
+.t-down{{color:var(--td);border-color:var(--td)}} .src{{display:inline-block;margin-left:4px;font-size:11px;color:var(--muted);border:1px dashed var(--line);border-radius:999px;padding:0 7px;white-space:nowrap}}
+@media (max-width:640px){{.card{{overflow-x:auto}} .chart.wide{{min-width:600px}}}}
+#tip{{position:fixed;pointer-events:none;background:var(--fg);color:var(--bg);font-size:13px;line-height:1.4;padding:8px 10px;border-radius:8px;max-width:300px;white-space:pre-line;opacity:0;transition:opacity .1s;z-index:9}}
+</style></head><body><main>
+<div class="eyebrow">Lapzo · Redes sociales orgánicas</div>
+<h1>{e(M["titulo"])}</h1>
+<p class="lead">{e(M["periodo"])} · LinkedIn, Instagram, Facebook y TikTok · datos extraídos el {EXTRAIDO}</p>
+{f'<p class="small">{e(M["nota_periodo"])}</p>' if M["nota_periodo"] else ""}
+<nav>Reportes: {nav} · <a href="../../">Inicio</a></nav>
+
+{kpis_html}
+{atip_kpi}
+
+<h2>Cómo le fue a cada publicación</h2>
+<p class="lead">♥ likes · 💬 comentarios · ↗ compartidos. Un guion (—) significa que la red no da ese dato. Cada bloque es una pieza: arriba su total y debajo cómo le fue en cada red donde se publicó. Filtra por red, cambia el orden y haz clic en la red para abrir la publicación.</p>
+{tabla_publicaciones(ps)}
+<p class="small">Etiquetas: <span class="tag t-v">★ Top vistas</span> <span class="tag t-i">★ Top interacciones</span> <span class="tag t-r">★ Top tasa</span> marcan las 3 publicaciones del mes que más destacaron en cada medida. Si una barra va rayada es porque se sale de la escala.</p>
+
+<h2>Cuándo publicamos</h2>
+<p class="lead">{cal_dias} de {cal_tot} días con al menos una publicación. Pasa el cursor sobre un día para ver qué se publicó.</p>
+<div class="card">{cal_html}</div>
+
+<h2>Las 10 con más interacción</h2>
+<p class="lead">Likes + comentarios + compartidos. El color indica la red.</p>
+<div class="card">{leyenda()}{barras_h(top_items, fmt=lambda v: f"{v:,.0f}")}
+{tabla(["Fecha", "Red", "Formato", "Tema (top 10 por impresiones)", "Impr.", "Likes", "Coment.", "Compart.", "Tasa", ""], top_filas)}</div>
+
+<h2>Evolución mes a mes</h2>
+<p class="lead">Cómo cambia cada red desde septiembre.</p>
+<div class="charts">
+<div class="card"><h3>Impresiones</h3>{leyenda()}{barras_mes(previos, imp_mes, "Impresiones por mes y red")}</div>
+<div class="card"><h3>Tasa de interacción (%)</h3>{leyenda()}{barras_mes_pct(previos)}</div>
+<div class="card"><h3>Impresiones de la publicación típica</h3>{leyenda()}{barras_mes(previos, med_mes, "Mediana de impresiones por publicación")}<p class="small">Mediana: no la infla un solo éxito.</p></div>
+<div class="card"><h3>Seguidores nuevos</h3>{leyenda()}{barras_mes(previos, seg_mes, "Seguidores netos por mes y red")}<p class="small">n/d: LinkedIn y TikTok no tienen el dato.</p></div>
+</div>
+{evol_tabla}
+
+<h2>Seguidores día por día</h2>
+<p class="lead">Seguidores ganados menos perdidos en cada día. <b>Haz clic en cualquier día</b> (aquí o en el calendario) para ver qué se publicó ese día.</p>
+<div class="card">{seguidores_dia(clave)}<p class="small">LinkedIn y TikTok no tienen el dato. Instagram llega al 14 nov y Facebook al 16 nov.</p>
+<div id="dia" class="dia" aria-live="polite"></div></div>
+
+<h2>Cada red este mes</h2>
+<div class="nets">{"".join(tarjetas)}</div>
+
+<h2>Qué tipo de contenido funcionó</h2>
+<p class="lead">Tasa de interacción por pilar, modo y formato. Pilar y modo según el plugin de contenido de Lapzo (marca-lapzo): es una clasificación propuesta, valídala con la hoja de planeación.</p>
+<div class="charts">
+<div class="card"><h3>Por pilar</h3>{pilares}</div>
+<div class="card"><h3>Por modo de comunicación</h3>{modos}</div>
+</div>
+<h3 style="margin-top:20px">Por red y formato</h3>
+<p class="small">Todos los formatos de cada red, de la mejor a la peor tasa de interacción. Impresiones promedio = cuánta gente vio, en promedio, cada publicación de ese formato. «Publicación» = publicación que solo registró HubSpot, que no indica el formato. Ojo: si un formato tiene 1 o 2 publicaciones, su resultado puede ser casualidad. En LinkedIn, HubSpot no indica el formato; el documento se identificó por su texto.</p>
+{formatos_por_red(ps, clave)}
+<div class="card" style="margin-top:12px"><h3>Temas con más interacción</h3><p class="small">Cada tema suma todas sus versiones en las distintas redes.</p>{temas_html}</div>
+{nota_atip}
+
+{hipotesis_html}
+<h2>Qué hacer con esto</h2>
+<div class="learn">
+<div class="card"><h3>Qué funcionó</h3><ul>{li(A["funciono"])}</ul></div>
+<div class="card"><h3>Qué no funcionó</h3><ul>{li(A["no_funciono"])}</ul></div>
+<div class="card note"><h3>Para la parrilla del siguiente mes</h3><ul>{li(A["parrilla"])}</ul></div>
+</div>
+
+<h2>Cómo se calculan estas cifras</h2>
+<div class="card small">
+<p><b>Fuentes:</b> LinkedIn sale de HubSpot Social. Instagram, Facebook y TikTok salen de Metricool (marca go_lapzo); lo que Metricool no tiene y HubSpot sí se completa con HubSpot y se marca con la etiqueta «de HubSpot»: comentarios y compartidos de los reels de Facebook, y una publicación de Kirkpatrick en Facebook que Metricool no registró. Las publicaciones que se borraron y se volvieron a subir no se cuentan. Seguidores: Metricool; Facebook trae el total diario e Instagram los ganados y perdidos por día.</p>
+<p><b>Definiciones:</b> interacciones = likes + comentarios + compartidos; tasa de interacción = interacciones ÷ impresiones. Impresiones = vistas en Instagram, impresiones en Facebook y LinkedIn, reproducciones en reels de Facebook y en TikTok.</p>
+<p><b>Historias:</b> las historias de Instagram y Facebook no se incluyen en este reporte; se agregarán más adelante.</p>
+<p><b>Lo que no está disponible en ninguna fuente:</b> clics y seguidores de LinkedIn; compartidos de la mayoría de carruseles e imágenes de Instagram; historial de seguidores de TikTok. Se muestran con «—» y cuentan como 0 en las sumas.</p>
+<p><b>Ojo:</b> las cifras de cada publicación son acumuladas al {EXTRAIDO}; las más recientes todavía siguen sumando. El detalle de cada publicación está en <a href="publicaciones.csv">publicaciones.csv</a>.</p>
+</div>
+</main>
+<div id="tip" role="tooltip"></div>
+<script type="application/json" id="dias">{dias_json}</script>
+<script>
+(function(){{var t=document.getElementById('tip');
+function show(ev){{var el=ev.target.closest('[data-tip]');if(!el){{t.style.opacity=0;return}}
+t.textContent=el.getAttribute('data-tip');t.style.opacity=1;var x=ev.clientX+14,y=ev.clientY+14;
+var w=t.offsetWidth,h=t.offsetHeight;if(x+w>innerWidth-8)x=ev.clientX-w-14;if(y+h>innerHeight-8)y=ev.clientY-h-14;t.style.left=x+'px';t.style.top=y+'px'}}
+document.addEventListener('pointermove',show);
+document.querySelectorAll('.pubs').forEach(function(w){{var tab=w.querySelector('table'),f='';
+function apply(){{var k=w.querySelector('.ord').value;var gs=[].slice.call(tab.tBodies);
+gs.forEach(function(g){{var imp=0,it=0,fe='9',vis=0;[].forEach.call(g.querySelectorAll('tr.sub'),function(r){{var ok=!f||r.dataset.red===f;r.style.display=ok?'':'none';if(ok){{vis++;imp+=+r.dataset.imp;it+=+r.dataset.int;if(r.dataset.fecha<fe)fe=r.dataset.fecha}}}});
+g.style.display=vis?'':'none';g._k={{imp:imp,int:it,er:imp?it/imp:0,fecha:fe}}}});
+gs.sort(function(a,b){{return k==='fecha'?(a._k.fecha<b._k.fecha?-1:1):(b._k[k]-a._k[k])}});gs.forEach(function(g){{tab.appendChild(g)}})}}
+w.querySelectorAll('.seg button').forEach(function(b){{b.onclick=function(){{f=b.dataset.f;w.querySelectorAll('.seg button').forEach(function(x){{x.classList.toggle('on',x===b)}});apply()}}}});
+w.querySelector('.ord').onchange=apply;}});
+var D=JSON.parse(document.getElementById('dias').textContent),C={{LinkedIn:'var(--c-li)',Instagram:'var(--c-ig)',Facebook:'var(--c-fb)',TikTok:'var(--c-tt)'}},I={{LinkedIn:'LI',Instagram:'IG',Facebook:'FB',TikTok:'TT'}},box=document.getElementById('dia');
+function el(t,c,x){{var e=document.createElement(t);if(c)e.className=c;if(x!=null)e.textContent=x;return e}}
+function sg(v){{return v==null?'sin dato':(v>0?'+':'')+v}}
+function pick(k){{var o=D[k];if(!o)return;box.replaceChildren();
+document.querySelectorAll('.pick').forEach(function(p){{p.classList.toggle('sel',p.dataset.day===k)}});
+var h=el('div','dia-h');h.appendChild(el('b',null,o.t));h.appendChild(el('span','small',' · Seguidores nuevos: Facebook '+sg(o.fb)+' · Instagram '+sg(o.ig)));box.appendChild(h);
+if(!o.p.length){{box.appendChild(el('p','small','No se publicó nada este día.'));return}}
+var ul=el('ul','dia-l');o.p.forEach(function(p){{var li=el('li');var c=el('span','chip',I[p.r]);c.style.background=C[p.r];c.style.color={{LinkedIn:'#0d2236',TikTok:'#fff'}}[p.r]||'#fff';c.style.textShadow='none';li.appendChild(c);
+var a=el('a',null,p.n);a.href=p.u;a.target='_blank';a.rel='noopener';li.appendChild(a);(p.a||[]).forEach(function(t){{li.appendChild(el('span','tag '+{{'★ Top vistas':'t-v','★ Top interacciones':'t-i','★ Top tasa':'t-r'}}[t],t))}});li.appendChild(el('span','small',' '+p.r+' · '+p.f+' · '+p.i+' impresiones · '+p.x+' de interacción'));ul.appendChild(li)}});box.appendChild(ul);
+box.appendChild(el('p','small','Ojo: un seguidor nuevo también puede venir de una publicación de días anteriores.'))}}
+document.querySelectorAll('.pick').forEach(function(p){{p.addEventListener('click',function(){{pick(p.dataset.day);if(p.classList.contains('day'))box.scrollIntoView({{behavior:'smooth',block:'nearest'}})}})}});
+pick('{dia_inicial}');document.addEventListener('pointerleave',function(){{t.style.opacity=0}});}})();
+</script>
+</body></html>'''
+
+def csv_mes(clave):
+    ruta = os.path.join(RAIZ, "rrss", clave, "publicaciones.csv")
+    with open(ruta, "w", newline="", encoding="utf-8-sig") as f:
+        w = csv.writer(f)
+        w.writerow(["fecha", "red", "formato", "tema", "pilar", "modo", "impresiones", "likes", "comentarios", "compartidos", "interacciones", "tasa_%", "fuente", "enlace"])
+        for p in sorted([p for p in d.P if p["fecha"][:7] == clave], key=lambda p: (p["fecha"], p["red"])):
+            nom, pil, modo = d.TEMAS[p["tema"]]; t = tasa([p])
+            w.writerow([p["fecha"], p["red"], p["formato"], nom, pil, modo, p["imp"],
+                        "" if p["likes"] is None else p["likes"], "" if p["com"] is None else p["com"],
+                        "" if p["sh"] is None else p["sh"], inter(p), "" if t is None else round(t, 1), "HubSpot" if p.get("fuente") else ("Metricool + HubSpot (" + p["hs"] + ")" if p.get("hs") else ("HubSpot" if p["red"] == "LinkedIn" else "Metricool")), p["url"]])
+
+if __name__ == "__main__":
+    for i, M in enumerate(MESES):
+        os.makedirs(os.path.join(RAIZ, "rrss", M["clave"]), exist_ok=True)
+        with open(os.path.join(RAIZ, "rrss", M["clave"], "index.html"), "w", encoding="utf-8") as f:
+            f.write(pagina(i))
+        csv_mes(M["clave"])
+        print("ok", M["clave"])

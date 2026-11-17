@@ -4,8 +4,13 @@ Reportes de marketing de Lapzo publicados como páginas estáticas (GitHub Pages
 
 | Reporte | Ruta | Periodo |
 |---|---|---|
-| Redes sociales orgánicas (Facebook, Instagram, LinkedIn, TikTok) | [`rrss/2026-11/`](rrss/2026-11/) | 10 oct – 9 nov 2026 |
-| Meta Ads (campañas, conjuntos y anuncios) · PDF y Excel | [`meta-ads/2026-11/`](meta-ads/2026-11/) — versión principal: `Reporte_MetaAds_Lapzo_Final_30dias.pdf` | Últimos 30 días (generado el 10 nov 2026) |
+| Redes sociales orgánicas · noviembre 2026 (parcial) | [`rrss/2026-11/`](rrss/2026-11/) | 1 – 16 nov 2026 (se reemplaza con el mes completo en diciembre) |
+| Redes sociales orgánicas · octubre 2026 | [`rrss/2026-10/`](rrss/2026-10/) | 1 – 31 oct 2026 |
+| Redes sociales orgánicas · septiembre 2026 | [`rrss/2026-09/`](rrss/2026-09/) | 1 – 30 sep 2026 (actividad desde el 19 sep) |
+
+Cada carpeta de redes trae la página del reporte (`index.html`) y el detalle de cada publicación
+en `publicaciones.csv`, que se abre en Excel o Google Sheets.
+Los reportes de Meta Ads irán en `meta-ads/AAAA-MM/`. Las historias de Instagram y Facebook todavía no se incluyen en los reportes (próximamente).
 
 ## Aprendizajes
 
@@ -13,12 +18,19 @@ Lo que aprendemos de cada reporte se registra en [`APRENDIZAJES.md`](APRENDIZAJE
 
 ## Cómo verlos
 
-- **GitHub Pages:** en *Settings → Pages*, elige *Deploy from a branch*, la rama del reporte y la carpeta `/ (root)`. El índice queda en `https://marketinglapzo.github.io/Marketing-Reports/`.
-- **En local:** abre `index.html` en el navegador (necesita internet para cargar d3 y las fuentes).
+- **GitHub Pages:** en *Settings → Pages*, elige *Deploy from a branch*, la rama `main` y la carpeta `/ (root)`. El índice queda en `https://marketinglapzo.github.io/Marketing-Reports/`.
+- **En local:** abre `index.html` en el navegador. Las páginas no necesitan internet.
 
 ## Datos
 
 Cada reporte es una instantánea: los datos van incrustados en la página al momento de generarla.
-El de redes sociales viene de HubSpot Social (publicaciones hechas directamente en cada red).
 Interacciones = likes + comentarios + compartidos; tasa de interacción = interacciones ÷ impresiones.
-HubSpot no reporta clics ni seguidores para estas publicaciones.
+
+| Red | Fuente | Nota |
+|---|---|---|
+| LinkedIn | HubSpot (Social) | HubSpot no da clics ni seguidores: aparecen como "no disponible". |
+| Instagram, Facebook, TikTok | Metricool (marca go_lapzo) | Lo que Metricool no tiene y HubSpot sí (por ejemplo, comentarios y compartidos de reels de Facebook) se completa con HubSpot y se marca «de HubSpot». Metricool no tiene historial de seguidores de TikTok. |
+| Meta Ads (pagado) | Facebook Ads | |
+
+Los reportes de redes se generan con `herramientas/generar_rrss.py` (seguidores, aprendizajes y diseño)
+a partir de `herramientas/datos_rrss.py` (publicaciones y su clasificación por pilar y modo).

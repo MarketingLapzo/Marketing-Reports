@@ -8,7 +8,7 @@ explícale todo en español, sin jerga técnica, y encárgate tú de Git.
 | Red | Fuente | Nota |
 |---|---|---|
 | **LinkedIn** | **HubSpot** (Social) | Nunca desde Metricool (ahí requiere plan de pago). HubSpot no da clics ni seguidores: márcalos como "no disponible". |
-| **Instagram, Facebook, TikTok** | **Metricool** (conector MCP) | Si Metricool no está conectado, avisa y pide conectarlo en claude.ai → Connectors y abrir un chat nuevo. No uses otra fuente en su lugar. |
+| **Instagram, Facebook, TikTok** | **Metricool** (conector MCP) | Si Metricool no está conectado, avisa y pide conectarlo en claude.ai → Connectors y abrir un chat nuevo. No uses otra fuente en su lugar. Si Metricool sí está conectado pero le falta un dato o una publicación que HubSpot sí tiene (por ejemplo, comentarios y compartidos de reels de Facebook o historias), complétalo con HubSpot y márcalo en el reporte como «de HubSpot». |
 | **Meta Ads (pagado)** | Conector de Facebook Ads | |
 
 - Nunca inventes ni estimes cifras. Si un dato no existe en la fuente, dilo.
