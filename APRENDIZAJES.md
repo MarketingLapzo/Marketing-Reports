@@ -12,6 +12,15 @@ Las historias de Instagram y Facebook todavía no se incluyen (próximamente).
 - **Qué cambiamos en la parrilla del mes siguiente:**
 -->
 
+## Atención de mensajes y leads (18 nov 2026)
+
+- **Contacto no es lo mismo que lead.** Un contacto es alguien que escribe; se vuelve lead cuando ya tenemos sus datos (correo empresarial, teléfono y empresa) y se pasa a Ventas. En Q4 van 10 contactos y 4 leads.
+- **Si Ventas tarda, el prospecto se queja en público.** Un lead de AI Course Builder esperó 16 días su acceso y lo escribió en los comentarios. Al pasar un lead, acordar con Ventas quién lo contacta y por qué medio, y decírselo al prospecto.
+- **En público, no repetir la misma respuesta.** Si ya se dijo «te escribimos por privado para dar seguimiento», la siguiente debe decir el paso concreto (por ejemplo, que Ventas lo va a llamar).
+- **Los mensajes de la página pueden caer en «Solicitudes de mensajes».** Si alguien pregunta en público dónde le escribimos, decirle que fue por Messenger y que revise esa carpeta.
+- **Al pedir datos por mensaje directo:** en viñetas y solo lo necesario (correo empresarial, teléfono y nombre de la empresa), con el aviso de privacidad correcto: lapzo.com/avisodeprivacidad (no lapzo.co).
+- **Casi todos los contactos vienen de anuncios.** 9 de 10 llegaron por un anuncio de Facebook. Anotar en la hoja el anuncio de origen (hay 3 pendientes) permite saber cuál trae más leads.
+
 ## 2026-11 (parcial, 1–16 nov)
 
 27 publicaciones · 20,105 impresiones · 0.8 % de interacción · Facebook +47 seguidores, Instagram +20.

@@ -26,6 +26,16 @@ MESES = [
      "nota_periodo": "Mes en curso: este reporte se reemplaza con el de noviembre completo a partir del 1 de diciembre."},
 ]
 
+# Aprendizajes de la atención de mensajes y leads de redes (no salen de las métricas).
+APRENDIZAJES_ATENCION = [
+ ("18 nov 2026", "<b>Contacto no es lo mismo que lead.</b> Un contacto es alguien que escribe; se vuelve lead cuando ya tenemos sus datos (correo empresarial, teléfono y empresa) y se pasa a Ventas. En Q4 van 10 contactos y 4 leads."),
+ ("18 nov 2026", "<b>Si Ventas tarda, el prospecto se queja en público.</b> Un lead de AI Course Builder esperó 16 días su acceso y lo escribió en los comentarios. Al pasar un lead, hay que acordar con Ventas quién lo contacta y por qué medio, y decírselo al prospecto."),
+ ("18 nov 2026", "<b>En público, no repetir la misma respuesta.</b> Si ya se dijo «te escribimos por privado para dar seguimiento», la siguiente respuesta debe decir el paso concreto (por ejemplo, que Ventas lo va a llamar)."),
+ ("18 nov 2026", "<b>Los mensajes de la página pueden caer en «Solicitudes de mensajes».</b> Si alguien pregunta en público dónde le escribimos, se le dice que fue por Messenger y que revise esa carpeta."),
+ ("18 nov 2026", "<b>Al pedir datos por mensaje directo:</b> en viñetas y solo lo necesario (correo empresarial, teléfono y nombre de la empresa), con el aviso de privacidad correcto: lapzo.com/avisodeprivacidad (no lapzo.co)."),
+ ("18 nov 2026", "<b>Casi todos los contactos vienen de anuncios.</b> 9 de los 10 contactos llegaron por un anuncio de Facebook. Anotar en la hoja el anuncio de origen (hay 3 pendientes) permite saber cuál trae más leads."),
+]
+
 NOTAS = {  # notas del equipo que no salen de las fuentes de datos
     "2026-10": "Octubre cerró con 19 piezas orgánicas. Aparte, se hicieron 5 anuncios BOFU (pagados), que no se incluyen en este reporte porque es solo de redes orgánicas.",
 }
@@ -954,6 +964,10 @@ def pagina_aprendizajes():
         f'<title>Lapzo · Aprendizajes de redes</title>\n{estilo}</head><body>{barra_nav("../", "aprendizajes")}<main>\n'
         '<div class="eyebrow">Lapzo · Redes sociales</div>\n<h1>Aprendizajes e hipótesis</h1>\n'
         '<p class="lead">Lo que nos enseñó cada mes, para armar la parrilla del siguiente. Lo más reciente va arriba. La clasificación por pilar y modo es una propuesta: valídala con la hoja de planeación.</p>\n'
+        + ('<section class="mes"><h2>Atención de mensajes y leads <a class="small" href="../leads/index.html">ver leads →</a></h2>'
+           '<p class="lead">Lo aprendido al responder comentarios y mensajes y al pasar leads a Ventas.</p>'
+           '<div class="card"><ul class="rs">' + "".join(f'<li>{t} <span class="small">· {f}</span></li>' for f, t in APRENDIZAJES_ATENCION) + '</ul></div></section>'
+           if APRENDIZAJES_ATENCION else "")
         + "".join(bloques) + '\n</main></body></html>')
 
 # ---------------------------------------------------------------- Página de leads
