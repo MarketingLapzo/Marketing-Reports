@@ -12,6 +12,12 @@ Las historias de Instagram y Facebook todavía no se incluyen (próximamente).
 - **Qué cambiamos en la parrilla del mes siguiente:**
 -->
 
+## Planeación de LinkedIn (18 nov 2026)
+
+- **Antes de programar un post en LinkedIn, compararlo con el último que salió.** P8 (cursos terminados que no se aplican) chocaba con P15, publicado el 17 nov (cursos que no se terminan): las dos dudan de los cursos completados como medida, usan el formato de «tres» y el mismo cierre. Como en LinkedIn cada post llega a unas 200–300 personas, es probable que sean las mismas. P8 se movió al martes 24 nov.
+- **Las piezas BOFU Ads no se publican como post orgánico**, aunque su Plataforma diga LinkedIn (P5 y P6).
+- **Prueba de cierre:** P8 cerrará con una pregunta que se contesta con una palabra (aplicación, desempeño o resultados) y sin «Te leemos en comentarios». Sirve para comprobar la hipótesis 3 («Sin una pregunta concreta, nadie comenta»).
+
 ## Atención de mensajes y leads (18 nov 2026)
 
 - **Contacto no es lo mismo que lead.** Un contacto es alguien que escribe; se vuelve lead cuando ya tenemos sus datos (correo empresarial, teléfono y empresa) y se pasa a Ventas. En Q4 van 10 contactos y 4 leads.
