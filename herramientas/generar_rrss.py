@@ -571,7 +571,7 @@ th:first-child,td:first-child,tbody th,th.l,td.l{{text-align:left}} thead th{{co
 .pdf{{font:inherit;font-size:13px;border:1px solid var(--line);background:var(--panel);color:var(--fg);border-radius:999px;padding:5px 12px;cursor:pointer}} .pdf:hover{{border-color:var(--accent)}}
 .reps{{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(300px,100%),1fr));gap:12px}} a.card.rep{{color:inherit;text-decoration:none;display:flex;flex-direction:column;gap:6px}} a.card.rep:hover{{border-color:var(--accent)}} a.card.rep h3{{margin:4px 0 0}} .rep .tag{{margin-left:0;align-self:flex-start}}
 .mini{{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin:4px 0}} .mini b{{display:block;font-size:20px}} .mini span{{font-size:12px;color:var(--muted)}} .hl-txt{{font-size:13.5px;margin:2px 0}} .go{{margin-top:auto;color:var(--accent);font-size:13.5px;font-weight:600}}
-section.mes{{margin-bottom:28px}} .nota-eq{{margin-top:12px;border-left:4px solid var(--tr);font-size:14.5px}} .nota-mini{{font-size:13px;margin:2px 0;padding:6px 8px;border-radius:8px;background:var(--grid)}} .learn{{margin-top:12px}} h3.sub{{margin:18px 0 8px}} h2 .small{{font-weight:400;margin-left:8px}}
+section.mes{{margin-bottom:28px}} .nota-sutil{{margin-top:10px;max-width:80ch}} .nota-eq.urg{{border-left-color:var(--td)}} .nota-eq{{margin-top:12px;border-left:4px solid var(--tr);font-size:14.5px}} .nota-mini{{font-size:13px;margin:2px 0;padding:6px 8px;border-radius:8px;background:var(--grid)}} .learn{{margin-top:12px}} h3.sub{{margin:18px 0 8px}} h2 .small{{font-weight:400;margin-left:8px}}
 @media print{{.top,.pdf,details summary,.ctrl{{display:none!important}} details>*{{display:block}} body{{background:#fff}} .kpi,.net,.hip,.learn .card,tbody.grp,.rep{{break-inside:avoid}} .scroll{{overflow:visible}} main{{padding-top:0}} #tip{{display:none}}}}
 #tip{{position:fixed;pointer-events:none;background:var(--fg);color:var(--bg);font-size:13px;line-height:1.4;padding:8px 10px;border-radius:8px;max-width:300px;white-space:pre-line;opacity:0;transition:opacity .1s;z-index:9}}
 </style></head><body>{barra_nav('../../', clave)}<main>
@@ -835,11 +835,12 @@ def pagina_semana(a, b, pa, pb):
 def barra_nav(raiz, activo):
     """Menú fijo arriba, igual en todas las páginas. raiz = ruta relativa a la carpeta principal."""
     links = [("inicio", "Inicio", "index.html")]
-    links += [(m["clave"], m["titulo"].replace(" 2026", ""), f'rrss/{m["clave"]}/index.html') for m in MESES]
+    links += [(m["clave"], m["titulo"][:3] + (" (parcial)" if "parcial" in m["titulo"] else ""), f'rrss/{m["clave"]}/index.html') for m in MESES]
     links += [(f"sem-{a}", f"Semana {int(a[8:])}–{int(b[8:])} {MES[int(b[5:7])-1][:3]}", f"rrss/semanal/{a}/index.html") for a, b, _, _ in SEMANAS]
+    links += [("leads", "Leads", "leads/index.html")]
     links += [("aprendizajes", "Aprendizajes", "aprendizajes/index.html")]
     items = "".join(f'<a href="{raiz}{u}"{" aria-current=page" if k == activo else ""}>{e(t)}</a>' for k, t, u in links)
-    return (f'<header class="top"><div class="top-in"><a class="brand" href="{raiz}index.html">Lapzo · Reportes de redes</a>'
+    return (f'<header class="top"><div class="top-in"><a class="brand" href="{raiz}index.html">Lapzo · Reportes</a>'
             f'<nav class="menu">{items}</nav>'
             + ("" if MODO_ARTIFACT else '<button class="pdf" onclick="window.print()" title="Guardar esta página como PDF">Descargar PDF</button>')
             + '</div></header>')
@@ -900,6 +901,11 @@ def pagina_inicio():
             f'<p class="small">Comparada con la semana del {fecha(pa)} al {fecha(pb)}</p>'
             f'<div class="mini"><div><b>{len({p["tema"] for p in ps})}</b><span>piezas</span></div><div><b>{f_int(R["imp"])}</b><span>impresiones</span></div><div><b>{f_pct(R["er"])}</b><span>tasa</span></div></div>'
             f'<p class="small">Seguidores: Facebook {sum(fb.values()):+d} · Instagram {sum(ig.values()):+d}</p><span class="go">Ver reporte →</span></a>')
+    n_l = len(d.LEADS); n_v = sum(1 for x in d.LEADS if x[5] in ("Pasado a Ventas", "Reescalado a Ventas"))
+    tarjetas.append(f'<a class="card rep" href="leads/index.html"><span class="tag t-down">Leads</span><h3>Leads de redes</h3>'
+                    f'<p class="small">Personas que escribieron por redes y cuántas se convirtieron en lead (Q4 2026).</p>'
+                    f'<div class="mini"><div><b>{n_l}</b><span>contactos</span></div><div><b>{n_v}</b><span>leads</span></div><div><b>{n_l-n_v}</b><span>por convertir</span></div></div>'
+                    '<span class="go">Ver leads →</span></a>')
     tarjetas.append('<a class="card rep" href="aprendizajes/index.html"><span class="tag t-r">Para la parrilla</span><h3>Aprendizajes e hipótesis</h3>'
                     '<p class="small">Qué repetir, qué ajustar y qué dejar de hacer, mes por mes, y las hipótesis por comprobar.</p><span class="go">Ver aprendizajes →</span></a>')
 
@@ -950,6 +956,97 @@ def pagina_aprendizajes():
         '<p class="lead">Lo que nos enseñó cada mes, para armar la parrilla del siguiente. Lo más reciente va arriba. La clasificación por pilar y modo es una propuesta: valídala con la hoja de planeación.</p>\n'
         + "".join(bloques) + '\n</main></body></html>')
 
+# ---------------------------------------------------------------- Página de leads
+def pagina_leads():
+    from collections import Counter, OrderedDict
+    estilo = _estilo_y_scripts()
+    def grupo(pz):
+        if "AI Course Builder" in pz: return "Anuncio de AI Course Builder"
+        if "universidad corporativa" in pz: return "Anuncio de universidad corporativa"
+        if "Elearning" in pz: return "Anuncio Elearning"
+        return "Mensaje directo sin anuncio"
+    L = [dict(fecha=f, red=r, origen=o, pieza=pz, grupo=grupo(pz), interes=i, estado=es, a=a) for f, r, o, pz, i, es, a in d.LEADS]
+    tot = len(L)
+    en_ventas = ("Pasado a Ventas", "Reescalado a Ventas")
+    pasados = [x for x in L if x["estado"] in en_ventas]
+    pend = [x for x in L if x["estado"] not in en_ventas]
+    anuncio = [x for x in L if x["origen"] == "Anuncio"]
+    md = [x for x in L if x["origen"] != "Anuncio"]
+    meses = OrderedDict()
+    for x in sorted(L, key=lambda x: x["fecha"]):
+        k = MES[int(x["fecha"][5:7]) - 1].capitalize()
+        meses[k] = meses.get(k, 0) + 1
+    reesc = sum(1 for x in pasados if x["estado"] == "Reescalado a Ventas")
+    kpis = (
+        '<div class="kpis">'
+        f'<div class="card kpi"><div class="v">{tot}</div><div class="l">contactos: personas que escribieron por redes</div>'
+        f'<div class="dl neu">{" · ".join(f"{k}: {v}" for k, v in meses.items())}</div></div>'
+        f'<div class="card kpi"><div class="v">{len(pasados)}</div><div class="l">leads: ya tenemos sus datos y se pasaron a Ventas</div>'
+        f'<div class="dl neu">{round(100*len(pasados)/tot)} % de los contactos se convirtió en lead' + (f' · {reesc} reescalado' if reesc else '') + '</div></div>'
+        f'<div class="card kpi"><div class="v">{len(pend)}</div><div class="l">contactos por convertir en lead</div><div class="dl neu">faltan sus datos, su respuesta o un seguimiento</div></div>'
+        f'<div class="card kpi"><div class="v">{len(anuncio)} <span class="u">de {tot}</span></div><div class="l">contactos que llegaron por un anuncio</div><div class="dl neu">{len(md)} por mensaje directo sin anuncio</div></div>'
+        '</div>')
+
+    def barras(clave, color="var(--mono)"):
+        cnt = Counter(x[clave] for x in L)
+        items = [(k, v, color, f"{v} {'contacto' if v == 1 else 'contactos'}") for k, v in cnt.most_common()]
+        return barras_h(items, fmt=lambda v: f"{v:,.0f}", ancho=440, lw=230)
+
+    color_estado = {"Pasado a Ventas": "var(--ti)", "Reescalado a Ventas": "var(--td)", "Esperando datos": "var(--tr)", "Esperando respuesta": "var(--tr)", "Pendiente de seguimiento": "var(--td)"}
+    cnt_est = Counter(x["estado"] for x in L)
+    estados = barras_h([(k, v, color_estado.get(k, "var(--mono)"), f"{v} {'contacto' if v == 1 else 'contactos'}") for k, v in cnt_est.most_common()],
+                       fmt=lambda v: f"{v:,.0f}", ancho=440, lw=200)
+
+    clase_est = {"Pasado a Ventas": "up", "Reescalado a Ventas": "down", "Esperando datos": "mix", "Esperando respuesta": "mix", "Pendiente de seguimiento": "down"}
+    filas = "".join(
+        f'<tr><td>{fecha(x["fecha"])}</td><td class="l">{x["red"]}</td><td class="l">{e(x["origen"])}</td><td class="t">{e(x["pieza"])}</td>'
+        f'<td class="l">{e(x["interes"])}</td><td class="l"><span class="est {clase_est.get(x["estado"], "neu")}">{e(x["estado"])}</span></td>'
+        f'<td class="l">{"✓ Lead" if x["estado"] in en_ventas else "Aún no"}</td><td class="l">{e(x["a"]) or "—"}</td></tr>'
+        for x in sorted(L, key=lambda x: (x["fecha"], x["estado"])))
+    tabla_l = ('<div class="scroll"><table><thead><tr><th>Fecha</th><th class="l">Red</th><th class="l">Cómo llegó</th><th class="l">Pieza o anuncio de origen</th>'
+               '<th class="l">Interés</th><th class="l">Estado</th><th class="l">¿Es lead?</th><th class="l">Pasado a</th></tr></thead>'
+               f'<tbody>{filas}</tbody></table></div>')
+
+    n_acb = sum(1 for x in L if x["interes"] == "AI Course Builder")
+    n_cya = sum(1 for x in L if "CyA" in x["interes"])
+    n_dia = Counter(x["fecha"] for x in L).most_common(1)[0]
+    lect = [
+        f'<b>{n_dia[1]} de los {tot} contactos llegaron el {fecha(n_dia[0])}</b>, casi todos por anuncios de AI Course Builder y de universidad corporativa.',
+        f'<b>Lo que más piden:</b> AI Course Builder ({n_acb}) y universidad corporativa (CyA, {n_cya}).',
+        f'<b>{len(pend)} contactos todavía no son leads:</b> {cnt_est.get("Esperando datos", 0)} esperando sus datos, {cnt_est.get("Esperando respuesta", 0)} esperando respuesta y {cnt_est.get("Pendiente de seguimiento", 0)} pendiente de seguimiento. Conseguir sus datos esta semana los convierte en leads para Ventas.',
+        f'<b>Todos llegaron por Facebook.</b> Ningún contacto se registró desde Instagram, LinkedIn ni TikTok en este periodo.',
+        'En la hoja, 3 contactos tienen marcado «[PENDIENTE: link]» del anuncio de origen. Completarlo ayuda a saber qué anuncio trae más contactos y leads.',
+    ]
+    return (
+        '<!doctype html>\n<html lang="es-MX"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">\n'
+        f'<title>Leads de redes Lapzo</title>\n{estilo}</head><body>{barra_nav("../", "leads")}<main>\n'
+        '<div class="eyebrow">Lapzo · Redes sociales · leads</div>\n<h1>Leads de redes</h1>\n'
+        f'<p class="lead">Personas que escribieron por redes y que Marketing atendió y registró · Q4 2026 · leído el {d.LEADS_LEIDO}</p>\n'
+        '<p class="small">Un <b>contacto</b> es alguien que escribió. Se vuelve <b>lead</b> cuando ya recopilamos sus datos y se pasa a Ventas.</p>\n'
+        f'{kpis}\n'
+        '<h2>Lectura rápida</h2>\n'
+        f'<div class="card"><ul class="rs">{"".join(f"<li>{x}</li>" for x in lect)}</ul></div>\n'
+        '<h2>De dónde vienen y qué piden</h2>\n<div class="charts">'
+        f'<div class="card"><h3>Estado</h3>{estados}</div>'
+        f'<div class="card"><h3>Interés</h3>{barras("interes")}</div>'
+        f'<div class="card"><h3>Cómo llegaron</h3>{barras("origen")}</div>'
+        f'<div class="card"><h3>Anuncio o mensaje de origen</h3>{barras("grupo")}</div>'
+        '</div>\n'
+        '<h2>Cada contacto</h2>\n'
+        '<p class="lead">Sin nombres, correos ni teléfonos: esos datos están en la hoja de registro.</p>\n'
+        f'{tabla_l}\n'
+        + "".join(f'<p class="small nota-sutil"><b>Nota:</b> {e(t)}</p>' for _, t in d.LEADS_URGENTES)
+        + '<h2>De dónde salen estos datos</h2>\n'
+        f'<div class="card small"><p>Hoja de Google «{e(d.LEADS_FUENTE)}», llenada a mano por Marketing. Solo incluye los contactos que se registraron ahí; '
+        'los que llegan por formularios o landings se cuentan en HubSpot y no aparecen aquí. Aunque la hoja se llama «leads orgánicos», '
+        'varios llegaron a partir de un anuncio: la columna «Cómo llegó» lo indica.</p></div>\n'
+        '</main>\n'
+        '<div id="tip" role="tooltip"></div>\n<script>\n(function(){var t=document.getElementById("tip");\n'
+        'document.addEventListener("pointermove",function(ev){var el=ev.target.closest("[data-tip]");if(!el){t.style.opacity=0;return}'
+        't.textContent=el.getAttribute("data-tip");t.style.opacity=1;var x=ev.clientX+14,y=ev.clientY+14;'
+        'if(x+t.offsetWidth>innerWidth-8)x=ev.clientX-t.offsetWidth-14;if(y+t.offsetHeight>innerHeight-8)y=ev.clientY-t.offsetHeight-14;'
+        't.style.left=x+"px";t.style.top=y+"px"});})();\n</script>\n</body></html>')
+
 def csv_mes(clave):
     ruta = os.path.join(RAIZ, "rrss", clave, "publicaciones.csv")
     with open(ruta, "w", newline="", encoding="utf-8-sig") as f:
@@ -973,7 +1070,10 @@ if __name__ == "__main__":
     os.makedirs(os.path.join(RAIZ, "aprendizajes"), exist_ok=True)
     with open(os.path.join(RAIZ, "aprendizajes", "index.html"), "w", encoding="utf-8") as f:
         f.write(pagina_aprendizajes())
-    print("ok portada y aprendizajes")
+    os.makedirs(os.path.join(RAIZ, "leads"), exist_ok=True)
+    with open(os.path.join(RAIZ, "leads", "index.html"), "w", encoding="utf-8") as f:
+        f.write(pagina_leads())
+    print("ok portada, aprendizajes y leads")
     for a, b, pa, pb in SEMANAS:
         carpeta = os.path.join(RAIZ, "rrss", "semanal", a)
         os.makedirs(carpeta, exist_ok=True)

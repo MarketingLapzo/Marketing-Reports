@@ -252,3 +252,27 @@ BORRADAS = {
  "https://www.linkedin.com/feed/update/urn:li:ugcPost:7524216742357663745",
  "https://www.linkedin.com/feed/update/urn:li:ugcPost:7525587134225780736",
 }
+
+# Leads de redes atendidos por Marketing. Fuente: hoja «Registro de leads orgánicos (redes)», pestaña Q4 2026
+# (leída el 18 nov 2026). Sin nombres, correos ni teléfonos: esos datos se quedan en la hoja.
+# (fecha, red, origen, pieza o anuncio de origen, interés, estado, pasado a)
+# Leads que necesitan atención: (fecha del lead, texto). Sin datos de contacto.
+LEADS_URGENTES = [
+ ("2026-11-02", "El lead de Imagen Creativa (2 nov, por mensaje a un anuncio) pidió demo de AI Course Builder y una propuesta para 250 cursos. "
+  "Hace unas dos semanas se le dio seguimiento y se pasó a Fer, pero a 16 días del primer contacto sigue sin demo habilitada. "
+  "El 18 nov comentó en público «¡Sigo esperando mi acceso!». Se reescaló a Ricardo Garza (leads), que está en contacto con Fernando Núñez (líder de ventas)."),
+]
+LEADS_FUENTE = "Registro de leads orgánicos (redes) · pestaña Q4 2026"
+LEADS_LEIDO = "18 de noviembre de 2026"
+LEADS = [
+ ("2026-10-13", "Facebook", "Mensaje directo", "Mensaje directo (sin anuncio)", "Información general", "Pasado a Ventas", "Julio"),
+ ("2026-11-02", "Facebook", "Anuncio", "Mensaje directo a un anuncio (Facebook)", "AI Course Builder", "Reescalado a Ventas", "Ricardo Garza → Fernando Núñez"),
+ ("2026-11-17", "Facebook", "Anuncio", "Anuncio Elearning", "Universidad corporativa (CyA)", "Pasado a Ventas", "Julio"),
+ ("2026-11-17", "Facebook", "Anuncio", "Anuncio de universidad corporativa", "Universidad corporativa (CyA)", "Pasado a Ventas", "Julio"),
+ ("2026-11-17", "Facebook", "Anuncio", "Anuncio de AI Course Builder (por mensaje directo)", "AI Course Builder", "Esperando datos", ""),
+ ("2026-11-17", "Facebook", "Anuncio", "Anuncio de universidad corporativa", "Universidad corporativa (CyA)", "Esperando datos", ""),
+ ("2026-11-17", "Facebook", "Anuncio", "Anuncio de universidad corporativa", "Por aclarar (hosting)", "Esperando respuesta", ""),
+ ("2026-11-17", "Facebook", "Anuncio", "Anuncio de AI Course Builder", "AI Course Builder", "Esperando datos", ""),
+ ("2026-11-17", "Facebook", "Anuncio", "Anuncio de AI Course Builder", "AI Course Builder", "Esperando datos", ""),
+ ("2026-11-17", "Facebook", "Anuncio", "Anuncio de AI Course Builder (otro diseño)", "AI Course Builder", "Pendiente de seguimiento", ""),
+]
