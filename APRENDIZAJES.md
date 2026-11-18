@@ -36,7 +36,9 @@ Las historias de Instagram y Facebook todavía no se incluyen (próximamente).
 
 ## 2026-10
 
-53 publicaciones · 12,636 impresiones · 3.0 % de interacción · Facebook +12 seguidores, Instagram +21.
+19 piezas · 53 publicaciones · 12,636 impresiones · 3.0 % de interacción · Facebook +12 seguidores, Instagram +21.
+
+> Nota del equipo: octubre cerró con 19 piezas orgánicas. Aparte, se hicieron 5 anuncios BOFU (pagados), que no se incluyen en este reporte.
 
 - **Qué funcionó:**
   - Modo reflexivo: 3.5 % de interacción contra 2.4 % del educativo.

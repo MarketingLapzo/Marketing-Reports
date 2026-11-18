@@ -24,6 +24,10 @@ MESES = [
      "nota_periodo": "Mes en curso: este reporte se reemplaza con el de noviembre completo a partir del 1 de diciembre."},
 ]
 
+NOTAS = {  # notas del equipo que no salen de las fuentes de datos
+    "2026-10": "Octubre cerró con 19 piezas orgánicas. Aparte, se hicieron 5 anuncios BOFU (pagados), que no se incluyen en este reporte porque es solo de redes orgánicas.",
+}
+
 SEGUIDORES = {  # neto del mes; None = no disponible
     "2026-09": {"Facebook": (26, "2,409 → 2,435"), "Instagram": (26, "29 ganados, 3 perdidos")},
     "2026-10": {"Facebook": (12, "2,435 → 2,447"), "Instagram": (21, "28 ganados, 7 perdidos")},
@@ -482,6 +486,7 @@ def pagina(idx):
     seg_prev = SEGUIDORES[MESES[idx - 1]["clave"]] if idx > 0 else {}
     seg_lines = "".join(f'<div>{r} <b>+{v[0]}</b>' + (f' <span class="small">· en {nom_prev} fueron +{seg_prev[r][0]}</span>' if r in seg_prev else "") + "</div>" for r, v in seg.items())
     parcial = '<p class="small">Noviembre va al día 16, así que la comparación con octubre todavía no es pareja.</p>' if clave == CORTE[:7] else ""
+    nota_mes = f'<div class="card nota-eq"><b>Nota del equipo:</b> {e(NOTAS[clave])}</div>' if clave in NOTAS else ""
     kpis_html = f"""<div class="kpis">
 <div class="card kpi"><div class="v">{R["n"]}</div><div class="l">publicaciones</div>{delta(R["n"], RP["n"] if RP else None)}</div>
 <div class="card kpi"><div class="v">{f_int(R["imp"])}</div><div class="l">veces que se vieron nuestras publicaciones (impresiones)</div>{delta(R["imp"], RP["imp"] if RP else None)}</div>
@@ -489,7 +494,7 @@ def pagina(idx):
 <div class="brk"><span><b>♥ {f_int(l_)}</b> {"like" if l_ == 1 else "likes"}</span><span><b>💬 {f_int(c_)}</b> {"comentario" if c_ == 1 else "comentarios"}</span><span><b>↗ {f_int(s_)}</b> {"compartido" if s_ == 1 else "compartidos"}</span></div>{delta(R["int"], RP["int"] if RP else None)}</div>
 <div class="card kpi half"><div class="v">{(R["er"] or 0):.1f} <span class="u">de cada 100</span></div><div class="l">personas que vieron una publicación reaccionaron (tasa de interacción)</div>{delta(R["er"] or 0, RP["er"] if RP else None, pct=True)}</div>
 <div class="card kpi half"><div class="v2">{seg_lines}</div><div class="l">seguidores nuevos (LinkedIn y TikTok: no disponible)</div></div>
-</div>{parcial}"""
+</div>{parcial}{nota_mes}"""
     dias_json, dia_inicial = datos_dias(ps, clave)
     A = APRENDIZAJES[clave]
     li = lambda xs: "".join(f"<li>{enlazar(x, clave)}</li>" for x in xs)
@@ -562,7 +567,7 @@ th:first-child,td:first-child,tbody th,th.l,td.l{{text-align:left}} thead th{{co
 .pdf{{font:inherit;font-size:13px;border:1px solid var(--line);background:var(--panel);color:var(--fg);border-radius:999px;padding:5px 12px;cursor:pointer}} .pdf:hover{{border-color:var(--accent)}}
 .reps{{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(300px,100%),1fr));gap:12px}} a.card.rep{{color:inherit;text-decoration:none;display:flex;flex-direction:column;gap:6px}} a.card.rep:hover{{border-color:var(--accent)}} a.card.rep h3{{margin:4px 0 0}} .rep .tag{{margin-left:0;align-self:flex-start}}
 .mini{{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin:4px 0}} .mini b{{display:block;font-size:20px}} .mini span{{font-size:12px;color:var(--muted)}} .hl-txt{{font-size:13.5px;margin:2px 0}} .go{{margin-top:auto;color:var(--accent);font-size:13.5px;font-weight:600}}
-section.mes{{margin-bottom:28px}} h3.sub{{margin:18px 0 8px}} h2 .small{{font-weight:400;margin-left:8px}}
+section.mes{{margin-bottom:28px}} .nota-eq{{margin-top:12px;border-left:4px solid var(--tr);font-size:14.5px}} .nota-mini{{font-size:13px;margin:2px 0;padding:6px 8px;border-radius:8px;background:var(--grid)}} .learn{{margin-top:12px}} h3.sub{{margin:18px 0 8px}} h2 .small{{font-weight:400;margin-left:8px}}
 @media print{{.top,.pdf,details summary,.ctrl{{display:none!important}} details>*{{display:block}} body{{background:#fff}} .kpi,.net,.hip,.learn .card,tbody.grp,.rep{{break-inside:avoid}} .scroll{{overflow:visible}} main{{padding-top:0}} #tip{{display:none}}}}
 #tip{{position:fixed;pointer-events:none;background:var(--fg);color:var(--bg);font-size:13px;line-height:1.4;padding:8px 10px;border-radius:8px;max-width:300px;white-space:pre-line;opacity:0;transition:opacity .1s;z-index:9}}
 </style></head><body>{barra_nav('../../', clave)}<main>
@@ -879,7 +884,9 @@ def pagina_inicio():
             f'<a class="card rep" href="rrss/{m["clave"]}/"><span class="tag t-v">Mensual</span><h3>{e(m["titulo"])}</h3>'
             f'<p class="small">{e(m["periodo"])}</p>'
             f'<div class="mini"><div><b>{st["piezas"]}</b><span>piezas</span></div><div><b>{f_int(st["imp"])}</b><span>impresiones</span></div><div><b>{f_pct(st["er"])}</b><span>tasa</span></div></div>'
-            f'<p class="small">Seguidores: {seg}</p><p class="hl-txt">{e(dest)}</p><span class="go">Ver reporte →</span></a>')
+            f'<p class="small">Seguidores: {seg}</p><p class="hl-txt">{e(dest)}</p>'
+            + (f'<p class="nota-mini">{e(NOTAS[m["clave"]])}</p>' if m["clave"] in NOTAS else "")
+            + '<span class="go">Ver reporte →</span></a>')
     for a, b, pa, pb in reversed(SEMANAS):
         ps = [p for p in d.P if a <= p["fecha"] <= b]
         R = resumen(ps); fb, ig = seg_rango(a, b)
@@ -925,7 +932,8 @@ def pagina_aprendizajes():
         bloques.append(
             f'<section class="mes"><h2>{e(m["titulo"])} <a class="small" href="../rrss/{c}/">ver reporte →</a></h2>'
             f'<p class="lead">{st["piezas"]} piezas · {st["n"]} publicaciones · {f_int(st["imp"])} impresiones · {f_pct(st["er"])} de tasa · seguidores: {seg}</p>'
-            '<div class="learn">'
+            + (f'<div class="card nota-eq"><b>Nota del equipo:</b> {e(NOTAS[c])}</div>' if c in NOTAS else "")
+            + '<div class="learn">'
             f'<div class="card"><h3>Qué funcionó</h3><ul>{li(A["funciono"], c)}</ul></div>'
             f'<div class="card"><h3>Qué no funcionó</h3><ul>{li(A["no_funciono"], c)}</ul></div>'
             f'<div class="card note"><h3>Para la parrilla del siguiente mes</h3><ul>{li(A["parrilla"], c)}</ul></div>'
