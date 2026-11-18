@@ -24,11 +24,24 @@ explícale todo en español, sin jerga técnica, y encárgate tú de Git.
 - Lo aprendido de cada mes: `APRENDIZAJES.md` (lo más reciente arriba)
 - Cada reporte nuevo se agrega a la tabla del `README.md`.
 
+## Chats de reportes con dos repos
+
+En los chats de reportes se abren dos repos, los dos en su rama `main`:
+
+| Repo | Papel | ¿Se modifica? |
+|---|---|---|
+| **Marketing-Reports** (este) | Donde se trabaja: reportes, leads, aprendizajes y el sitio. | Sí, con la regla de abajo. |
+| **Lapzo-contenido-RRSS** | Referencia: pilares, formatos, voz de marca, cómo se responde y reglas del registro de leads. Manda sobre el plugin instalado. | Solo si un aprendizaje cambia cómo se hace el contenido o cómo se responde: se propone el cambio en la skill que corresponde y se sube solo con visto bueno. |
+
+- Lo que mide (cifras, hipótesis, qué funcionó) va solo en Marketing-Reports.
+- Lo que cambia la forma de trabajar (una respuesta aprobada, una regla del registro, un formato que se deja) va también en Lapzo-contenido-RRSS.
+- Al preguntar si se sube, nombra siempre de qué repo es el `main`: "¿Subimos al `main` de Marketing-Reports…?" o "¿Subimos al `main` de Lapzo-contenido-RRSS…?". Si son los dos, pregunta por los dos.
+
 ## Al terminar un trabajo: SIEMPRE preguntar antes de subir
 
 Cuando termines un reporte o un análisis, **pregunta cada vez**:
 
-> "¿Subimos a `main` el reporte y lo aprendido?"
+> "¿Subimos al `main` de Marketing-Reports el reporte y lo aprendido?"
 
 - Si dice que sí: guarda el reporte en su carpeta del mes, agrega los aprendizajes
   a `APRENDIZAJES.md`, actualiza el `README.md` y sube todo directo a `main`
