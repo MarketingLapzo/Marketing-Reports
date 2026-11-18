@@ -4,10 +4,12 @@
 <style>
 :root{--bg:#f5f7fa;--fg:#16202e;--muted:#5d6878;--panel:#fff;--line:#dfe4ec;--grid:#eceff4;--accent:#6b3fd4;--dest-bg:#fff7d6;--mono:#4cc3a2;--td:#b23b3b;--tv:#5b3cc4;--ti:#1d7a46;--tr:#b4540a;
 --c-li:#4ba3e3;--c-ig:#c2417a;--c-fb:#2f6fb5;--c-tt:#64309e;color-scheme:light}
-@media (prefers-color-scheme:dark){:root{--bg:#0f141b;--fg:#e8edf4;--muted:#9aa5b5;--panel:#171e28;--line:#2a3442;--grid:#222b37;--accent:#a98bff;--dest-bg:#2e2a14;--mono:#5fd1b1;--td:#f08c8c;--tv:#b9a2ff;--ti:#6fd39a;--tr:#f5a35c;
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f141b;--fg:#e8edf4;--muted:#9aa5b5;--panel:#171e28;--line:#2a3442;--grid:#222b37;--accent:#a98bff;--dest-bg:#2e2a14;--mono:#5fd1b1;--td:#f08c8c;--tv:#b9a2ff;--ti:#6fd39a;--tr:#f5a35c;
 --c-li:#3f99d4;--c-ig:#d0507f;--c-fb:#2f5cb0;--c-tt:#9d5bd8;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0f141b;--fg:#e8edf4;--muted:#9aa5b5;--panel:#171e28;--line:#2a3442;--grid:#222b37;--accent:#a98bff;--dest-bg:#2e2a14;--mono:#5fd1b1;--td:#f08c8c;--tv:#b9a2ff;--ti:#6fd39a;--tr:#f5a35c;
+--c-li:#3f99d4;--c-ig:#d0507f;--c-fb:#2f5cb0;--c-tt:#9d5bd8;color-scheme:dark}
 *{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif}
-main{max-width:1040px;margin:0 auto;padding:32px 16px 64px} a{color:var(--accent)}
+main{max-width:1040px;margin:0 auto;padding-block:32px 64px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))} a{color:var(--accent)}
 .eyebrow{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
 h1{font-size:34px;font-weight:600;margin:6px 0 4px} h2{font-size:22px;margin:44px 0 4px} h3{margin:0 0 8px;font-size:17px}
 .lead{color:var(--muted);margin:0 0 12px} nav{margin:10px 0 24px;font-size:14px} nav a[aria-current]{font-weight:700;color:var(--fg);text-decoration:none}
@@ -53,7 +55,7 @@ th:first-child,td:first-child,tbody th,th.l,td.l{text-align:left} thead th{color
 .ftab th,.ftab td{padding:7px 6px} .ftab tbody th{min-width:0} .ftab .tags{margin-top:3px;margin-left:-4px} .ftab .bar{min-width:150px;white-space:nowrap;text-align:left} .ftab td.l{text-align:left} .track.sm{width:110px} .ftab tbody th{width:200px} .ftab tr.vacio td{white-space:normal} .ftab{table-layout:auto} .ftab tr.vacio th,.ftab tr.vacio td{color:var(--muted)}
 .t-down{color:var(--td);border-color:var(--td)} .src{display:inline-block;margin-left:4px;font-size:11px;color:var(--muted);border:1px dashed var(--line);border-radius:999px;padding:0 7px;white-space:nowrap}
 @media (max-width:640px){.card{overflow-x:auto} .chart.wide{min-width:600px}}
-.top{position:sticky;top:0;z-index:5;background:var(--panel);border-bottom:1px solid var(--line)} .top-in{max-width:1040px;margin:0 auto;padding:10px 16px;display:flex;gap:14px;align-items:center;flex-wrap:wrap}
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--panel);border-bottom:1px solid var(--line)} .top-in{max-width:1040px;margin:0 auto;padding-block:10px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:flex;gap:14px;align-items:center;flex-wrap:wrap}
 .brand{font-weight:700;color:var(--fg);text-decoration:none;margin-right:auto} .menu{display:flex;flex-wrap:wrap;gap:4px} .menu a{font-size:13.5px;color:var(--muted);text-decoration:none;padding:5px 10px;border-radius:999px} .menu a:hover{background:var(--grid);color:var(--fg)} .menu a[aria-current]{background:var(--fg);color:var(--bg)}
 .pdf{font:inherit;font-size:13px;border:1px solid var(--line);background:var(--panel);color:var(--fg);border-radius:999px;padding:5px 12px;cursor:pointer} .pdf:hover{border-color:var(--accent)}
 .reps{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(300px,100%),1fr));gap:12px} a.card.rep{color:inherit;text-decoration:none;display:flex;flex-direction:column;gap:6px} a.card.rep:hover{border-color:var(--accent)} a.card.rep h3{margin:4px 0 0} .rep .tag{margin-left:0;align-self:flex-start}
@@ -61,7 +63,7 @@ th:first-child,td:first-child,tbody th,th.l,td.l{text-align:left} thead th{color
 section.mes{margin-bottom:28px} .nota-eq{margin-top:12px;border-left:4px solid var(--tr);font-size:14.5px} .nota-mini{font-size:13px;margin:2px 0;padding:6px 8px;border-radius:8px;background:var(--grid)} .learn{margin-top:12px} h3.sub{margin:18px 0 8px} h2 .small{font-weight:400;margin-left:8px}
 @media print{.top,.pdf,details summary,.ctrl{display:none!important} details>*{display:block} body{background:#fff} .kpi,.net,.hip,.learn .card,tbody.grp,.rep{break-inside:avoid} .scroll{overflow:visible} main{padding-top:0} #tip{display:none}}
 #tip{position:fixed;pointer-events:none;background:var(--fg);color:var(--bg);font-size:13px;line-height:1.4;padding:8px 10px;border-radius:8px;max-width:300px;white-space:pre-line;opacity:0;transition:opacity .1s;z-index:9}
-</style></head><body><header class="top"><div class="top-in"><a class="brand" href="../../">Lapzo · Reportes de redes</a><nav class="menu"><a href="../../">Inicio</a><a href="../../rrss/2026-09/" aria-current=page>Septiembre</a><a href="../../rrss/2026-10/">Octubre</a><a href="../../rrss/2026-11/">Noviembre (parcial)</a><a href="../../rrss/semanal/2026-11-10/">Semana 10–16 nov</a><a href="../../aprendizajes/">Aprendizajes</a></nav><button class="pdf" onclick="window.print()" title="Guardar esta página como PDF">Descargar PDF</button></div></header><main>
+</style></head><body><header class="top"><div class="top-in"><a class="brand" href="../../index.html">Lapzo · Reportes de redes</a><nav class="menu"><a href="../../index.html">Inicio</a><a href="../../rrss/2026-09/index.html" aria-current=page>Septiembre</a><a href="../../rrss/2026-10/index.html">Octubre</a><a href="../../rrss/2026-11/index.html">Noviembre (parcial)</a><a href="../../rrss/semanal/2026-11-10/index.html">Semana 10–16 nov</a><a href="../../aprendizajes/index.html">Aprendizajes</a></nav><button class="pdf" onclick="window.print()" title="Guardar esta página como PDF">Descargar PDF</button></div></header><main>
 <div class="eyebrow">Lapzo · Redes sociales orgánicas</div>
 <h1>Septiembre 2026</h1>
 <p class="lead">1 – 30 sep 2026 · LinkedIn, Instagram, Facebook y TikTok · datos extraídos el 17 de noviembre de 2026</p>

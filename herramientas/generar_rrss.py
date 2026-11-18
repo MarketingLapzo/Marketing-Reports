@@ -6,7 +6,9 @@ import datos_rrss as d
 # Las historias quedan fuera de estos reportes por ahora (próximamente).
 d.P = [p for p in d.P if p["formato"] != "Historia" and p["url"] not in d.BORRADAS]
 
-RAIZ = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+RAIZ = os.environ.get("SALIDA") or os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+# ARTIFACT=1 genera la versión para la página privada de Claude (sin botón de PDF ni enlace al CSV).
+MODO_ARTIFACT = os.environ.get("ARTIFACT") == "1"
 REDES = ["LinkedIn", "Instagram", "Facebook", "TikTok"]
 COLOR = {"LinkedIn": "var(--c-li)", "Instagram": "var(--c-ig)", "Facebook": "var(--c-fb)", "TikTok": "var(--c-tt)"}
 FORMA = {"LinkedIn": "cuadro", "Instagram": "circulo", "Facebook": "rombo", "TikTok": "triangulo"}
@@ -513,10 +515,12 @@ def pagina(idx):
 <style>
 :root{{--bg:#f5f7fa;--fg:#16202e;--muted:#5d6878;--panel:#fff;--line:#dfe4ec;--grid:#eceff4;--accent:#6b3fd4;--dest-bg:#fff7d6;--mono:#4cc3a2;--td:#b23b3b;--tv:#5b3cc4;--ti:#1d7a46;--tr:#b4540a;
 --c-li:#4ba3e3;--c-ig:#c2417a;--c-fb:#2f6fb5;--c-tt:#64309e;color-scheme:light}}
-@media (prefers-color-scheme:dark){{:root{{--bg:#0f141b;--fg:#e8edf4;--muted:#9aa5b5;--panel:#171e28;--line:#2a3442;--grid:#222b37;--accent:#a98bff;--dest-bg:#2e2a14;--mono:#5fd1b1;--td:#f08c8c;--tv:#b9a2ff;--ti:#6fd39a;--tr:#f5a35c;
+@media (prefers-color-scheme:dark){{:root:not([data-theme="light"]){{--bg:#0f141b;--fg:#e8edf4;--muted:#9aa5b5;--panel:#171e28;--line:#2a3442;--grid:#222b37;--accent:#a98bff;--dest-bg:#2e2a14;--mono:#5fd1b1;--td:#f08c8c;--tv:#b9a2ff;--ti:#6fd39a;--tr:#f5a35c;
 --c-li:#3f99d4;--c-ig:#d0507f;--c-fb:#2f5cb0;--c-tt:#9d5bd8;color-scheme:dark}}}}
+:root[data-theme="dark"]{{--bg:#0f141b;--fg:#e8edf4;--muted:#9aa5b5;--panel:#171e28;--line:#2a3442;--grid:#222b37;--accent:#a98bff;--dest-bg:#2e2a14;--mono:#5fd1b1;--td:#f08c8c;--tv:#b9a2ff;--ti:#6fd39a;--tr:#f5a35c;
+--c-li:#3f99d4;--c-ig:#d0507f;--c-fb:#2f5cb0;--c-tt:#9d5bd8;color-scheme:dark}}
 *{{box-sizing:border-box}} body{{margin:0;background:var(--bg);color:var(--fg);font:15px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif}}
-main{{max-width:1040px;margin:0 auto;padding:32px 16px 64px}} a{{color:var(--accent)}}
+main{{max-width:1040px;margin:0 auto;padding-block:32px 64px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}} a{{color:var(--accent)}}
 .eyebrow{{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}}
 h1{{font-size:34px;font-weight:600;margin:6px 0 4px}} h2{{font-size:22px;margin:44px 0 4px}} h3{{margin:0 0 8px;font-size:17px}}
 .lead{{color:var(--muted);margin:0 0 12px}} nav{{margin:10px 0 24px;font-size:14px}} nav a[aria-current]{{font-weight:700;color:var(--fg);text-decoration:none}}
@@ -562,7 +566,7 @@ th:first-child,td:first-child,tbody th,th.l,td.l{{text-align:left}} thead th{{co
 .ftab th,.ftab td{{padding:7px 6px}} .ftab tbody th{{min-width:0}} .ftab .tags{{margin-top:3px;margin-left:-4px}} .ftab .bar{{min-width:150px;white-space:nowrap;text-align:left}} .ftab td.l{{text-align:left}} .track.sm{{width:110px}} .ftab tbody th{{width:200px}} .ftab tr.vacio td{{white-space:normal}} .ftab{{table-layout:auto}} .ftab tr.vacio th,.ftab tr.vacio td{{color:var(--muted)}}
 .t-down{{color:var(--td);border-color:var(--td)}} .src{{display:inline-block;margin-left:4px;font-size:11px;color:var(--muted);border:1px dashed var(--line);border-radius:999px;padding:0 7px;white-space:nowrap}}
 @media (max-width:640px){{.card{{overflow-x:auto}} .chart.wide{{min-width:600px}}}}
-.top{{position:sticky;top:0;z-index:5;background:var(--panel);border-bottom:1px solid var(--line)}} .top-in{{max-width:1040px;margin:0 auto;padding:10px 16px;display:flex;gap:14px;align-items:center;flex-wrap:wrap}}
+.top{{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--panel);border-bottom:1px solid var(--line)}} .top-in{{max-width:1040px;margin:0 auto;padding-block:10px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:flex;gap:14px;align-items:center;flex-wrap:wrap}}
 .brand{{font-weight:700;color:var(--fg);text-decoration:none;margin-right:auto}} .menu{{display:flex;flex-wrap:wrap;gap:4px}} .menu a{{font-size:13.5px;color:var(--muted);text-decoration:none;padding:5px 10px;border-radius:999px}} .menu a:hover{{background:var(--grid);color:var(--fg)}} .menu a[aria-current]{{background:var(--fg);color:var(--bg)}}
 .pdf{{font:inherit;font-size:13px;border:1px solid var(--line);background:var(--panel);color:var(--fg);border-radius:999px;padding:5px 12px;cursor:pointer}} .pdf:hover{{border-color:var(--accent)}}
 .reps{{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(300px,100%),1fr));gap:12px}} a.card.rep{{color:inherit;text-decoration:none;display:flex;flex-direction:column;gap:6px}} a.card.rep:hover{{border-color:var(--accent)}} a.card.rep h3{{margin:4px 0 0}} .rep .tag{{margin-left:0;align-self:flex-start}}
@@ -637,7 +641,7 @@ section.mes{{margin-bottom:28px}} .nota-eq{{margin-top:12px;border-left:4px soli
 <p><b>Definiciones:</b> interacciones = likes + comentarios + compartidos; tasa de interacción = interacciones ÷ impresiones. Impresiones = vistas en Instagram, impresiones en Facebook y LinkedIn, reproducciones en reels de Facebook y en TikTok.</p>
 <p><b>Historias:</b> las historias de Instagram y Facebook no se incluyen en este reporte; se agregarán más adelante.</p>
 <p><b>Lo que no está disponible en ninguna fuente:</b> clics y seguidores de LinkedIn; compartidos de la mayoría de carruseles e imágenes de Instagram; historial de seguidores de TikTok. Se muestran con «—» y cuentan como 0 en las sumas.</p>
-<p><b>Ojo:</b> las cifras de cada publicación son acumuladas al {EXTRAIDO}; las más recientes todavía siguen sumando. El detalle de cada publicación está en <a href="publicaciones.csv">publicaciones.csv</a>.</p>
+<p><b>Ojo:</b> las cifras de cada publicación son acumuladas al {EXTRAIDO}; las más recientes todavía siguen sumando. {"El detalle de cada publicación está en el archivo publicaciones.csv del repositorio." if MODO_ARTIFACT else 'El detalle de cada publicación está en <a href="publicaciones.csv">publicaciones.csv</a>.'}</p>
 </div>
 </main>
 <div id="tip" role="tooltip"></div>
@@ -830,14 +834,15 @@ def pagina_semana(a, b, pa, pb):
 # ---------------------------------------------------------------- Mini sitio: menú, portada y aprendizajes
 def barra_nav(raiz, activo):
     """Menú fijo arriba, igual en todas las páginas. raiz = ruta relativa a la carpeta principal."""
-    links = [("inicio", "Inicio", "")]
-    links += [(m["clave"], m["titulo"].replace(" 2026", "").replace(" (parcial)", " (parcial)"), f'rrss/{m["clave"]}/') for m in MESES]
-    links += [(f"sem-{a}", f"Semana {int(a[8:])}–{int(b[8:])} {MES[int(b[5:7])-1][:3]}", f"rrss/semanal/{a}/") for a, b, _, _ in SEMANAS]
-    links += [("aprendizajes", "Aprendizajes", "aprendizajes/")]
+    links = [("inicio", "Inicio", "index.html")]
+    links += [(m["clave"], m["titulo"].replace(" 2026", ""), f'rrss/{m["clave"]}/index.html') for m in MESES]
+    links += [(f"sem-{a}", f"Semana {int(a[8:])}–{int(b[8:])} {MES[int(b[5:7])-1][:3]}", f"rrss/semanal/{a}/index.html") for a, b, _, _ in SEMANAS]
+    links += [("aprendizajes", "Aprendizajes", "aprendizajes/index.html")]
     items = "".join(f'<a href="{raiz}{u}"{" aria-current=page" if k == activo else ""}>{e(t)}</a>' for k, t, u in links)
-    return (f'<header class="top"><div class="top-in"><a class="brand" href="{raiz}">Lapzo · Reportes de redes</a>'
+    return (f'<header class="top"><div class="top-in"><a class="brand" href="{raiz}index.html">Lapzo · Reportes de redes</a>'
             f'<nav class="menu">{items}</nav>'
-            '<button class="pdf" onclick="window.print()" title="Guardar esta página como PDF">Descargar PDF</button></div></header>')
+            + ("" if MODO_ARTIFACT else '<button class="pdf" onclick="window.print()" title="Guardar esta página como PDF">Descargar PDF</button>')
+            + '</div></header>')
 
 def _estilo_y_scripts():
     import re
@@ -881,7 +886,7 @@ def pagina_inicio():
         dest = _texto_plano(APRENDIZAJES[m["clave"]]["funciono"][0])
         seg = " · ".join(f'{r} +{v[0]}' for r, v in st["seg"].items())
         tarjetas.append(
-            f'<a class="card rep" href="rrss/{m["clave"]}/"><span class="tag t-v">Mensual</span><h3>{e(m["titulo"])}</h3>'
+            f'<a class="card rep" href="rrss/{m["clave"]}/index.html"><span class="tag t-v">Mensual</span><h3>{e(m["titulo"])}</h3>'
             f'<p class="small">{e(m["periodo"])}</p>'
             f'<div class="mini"><div><b>{st["piezas"]}</b><span>piezas</span></div><div><b>{f_int(st["imp"])}</b><span>impresiones</span></div><div><b>{f_pct(st["er"])}</b><span>tasa</span></div></div>'
             f'<p class="small">Seguidores: {seg}</p><p class="hl-txt">{e(dest)}</p>'
@@ -891,18 +896,18 @@ def pagina_inicio():
         ps = [p for p in d.P if a <= p["fecha"] <= b]
         R = resumen(ps); fb, ig = seg_rango(a, b)
         tarjetas.insert(0,
-            f'<a class="card rep" href="rrss/semanal/{a}/"><span class="tag t-i">Semanal</span><h3>Semana del {int(a[8:])} al {fecha(b)}</h3>'
+            f'<a class="card rep" href="rrss/semanal/{a}/index.html"><span class="tag t-i">Semanal</span><h3>Semana del {int(a[8:])} al {fecha(b)}</h3>'
             f'<p class="small">Comparada con la semana del {fecha(pa)} al {fecha(pb)}</p>'
             f'<div class="mini"><div><b>{len({p["tema"] for p in ps})}</b><span>piezas</span></div><div><b>{f_int(R["imp"])}</b><span>impresiones</span></div><div><b>{f_pct(R["er"])}</b><span>tasa</span></div></div>'
             f'<p class="small">Seguidores: Facebook {sum(fb.values()):+d} · Instagram {sum(ig.values()):+d}</p><span class="go">Ver reporte →</span></a>')
-    tarjetas.append('<a class="card rep" href="aprendizajes/"><span class="tag t-r">Para la parrilla</span><h3>Aprendizajes e hipótesis</h3>'
+    tarjetas.append('<a class="card rep" href="aprendizajes/index.html"><span class="tag t-r">Para la parrilla</span><h3>Aprendizajes e hipótesis</h3>'
                     '<p class="small">Qué repetir, qué ajustar y qué dejar de hacer, mes por mes, y las hipótesis por comprobar.</p><span class="go">Ver aprendizajes →</span></a>')
 
     imp_mes = lambda m, r: sum(n(p["imp"]) for p in d.P if p["fecha"][:7] == m["clave"] and p["red"] == r)
     seg_mes = lambda m, r: (SEGUIDORES[m["clave"]].get(r) or (None,))[0]
     return (
         '<!doctype html>\n<html lang="es-MX"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">\n'
-        f'<title>Lapzo · Reportes de redes</title>\n{estilo}</head><body>{barra_nav("", "inicio")}<main>\n'
+        f'<title>Reportes de redes Lapzo</title>\n{estilo}</head><body>{barra_nav("", "inicio")}<main>\n'
         '<div class="eyebrow">Lapzo · Marketing</div>\n<h1>Reportes de redes sociales</h1>\n'
         f'<p class="lead">LinkedIn, Instagram, Facebook y TikTok · datos al {EXTRAIDO}</p>\n'
         f'<h2>Así vamos en {ult["titulo"].split(" ")[0].lower()} <span class="small">(al día {int(CORTE[8:])})</span></h2>\n{kpis}\n'
@@ -930,7 +935,7 @@ def pagina_aprendizajes():
                     + "".join(f'<div class="card hip"><h3>{i}. {e(h["titulo"])}</h3><p><span class="hl v">Lo que vemos</span>{enlazar(h["vemos"], c)}</p><p><span class="hl h">Posible explicación</span>{enlazar(h["hipotesis"], c)}</p><p><span class="hl c">Cómo comprobarlo</span>{enlazar(h["comprobar"], c)}</p></div>' for i, h in enumerate(hip, 1))
                     + "</div>") if hip else ""
         bloques.append(
-            f'<section class="mes"><h2>{e(m["titulo"])} <a class="small" href="../rrss/{c}/">ver reporte →</a></h2>'
+            f'<section class="mes"><h2>{e(m["titulo"])} <a class="small" href="../rrss/{c}/index.html">ver reporte →</a></h2>'
             f'<p class="lead">{st["piezas"]} piezas · {st["n"]} publicaciones · {f_int(st["imp"])} impresiones · {f_pct(st["er"])} de tasa · seguidores: {seg}</p>'
             + (f'<div class="card nota-eq"><b>Nota del equipo:</b> {e(NOTAS[c])}</div>' if c in NOTAS else "")
             + '<div class="learn">'
