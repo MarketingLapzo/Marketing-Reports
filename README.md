@@ -6,7 +6,7 @@ Reportes de marketing de Lapzo publicados como páginas estáticas (GitHub Pages
 |---|---|---|
 | Leads de redes (atendidos por Marketing) | [`leads/`](leads/) | Q4 2026, desde la hoja «Registro de leads orgánicos (redes)» · sin datos de contacto |
 | Redes sociales · reporte semanal | [`rrss/semanal/2026-11-10/`](rrss/semanal/2026-11-10/) | 10 – 16 nov 2026 (comparado con 3 – 9 nov) |
-| Redes sociales orgánicas · noviembre 2026 (parcial) | [`rrss/2026-11/`](rrss/2026-11/) | 1 – 16 nov 2026 (se reemplaza con el mes completo en diciembre) |
+| Redes sociales orgánicas · noviembre 2026 (parcial) | [`rrss/2026-11/`](rrss/2026-11/) | 1 – 18 nov 2026 (se reemplaza con el mes completo en diciembre) |
 | Redes sociales orgánicas · octubre 2026 | [`rrss/2026-10/`](rrss/2026-10/) | 1 – 31 oct 2026 |
 | Redes sociales orgánicas · septiembre 2026 | [`rrss/2026-09/`](rrss/2026-09/) | 1 – 30 sep 2026 (actividad desde el 19 sep) |
 

@@ -27,16 +27,16 @@ Las historias de Instagram y Facebook todavía no se incluyen (próximamente).
 - **Al pedir datos por mensaje directo:** en viñetas y solo lo necesario (correo empresarial, teléfono y nombre de la empresa), con el aviso de privacidad correcto: lapzo.com/avisodeprivacidad (no lapzo.co).
 - **Casi todos los contactos vienen de anuncios.** 9 de 10 llegaron por un anuncio de Facebook. Anotar en la hoja el anuncio de origen (hay 3 pendientes) permite saber cuál trae más leads.
 
-## 2026-11 (parcial, 1–16 nov)
+## 2026-11 (parcial, 1–18 nov; actualizado el 19 nov)
 
-27 publicaciones · 20,105 impresiones · 0.8 % de interacción · Facebook +47 seguidores, Instagram +20.
+30 publicaciones · 20,749 impresiones · 0.8 % de interacción · Facebook +48 seguidores, Instagram +23 (al 17 nov).
 
 - **Qué funcionó:**
-  - LinkedIn · documento (Experta en talento, educativo): [la guía de incorporación](https://www.linkedin.com/feed/update/urn:li:ugcPost:7526689422331822080) tuvo 3.8 % de interacción, la mejor de LinkedIn en noviembre.
-  - Instagram: reels con 7.0 % y carruseles con 6.4 % de interacción.
-  - Seguidores en Facebook: +47 en 16 días, contra +12 en todo octubre. Los días con más seguidores nuevos (+13 el 7 nov y +10 el 10 nov) son los mismos días de los dos reels de Facebook más vistos.
+  - LinkedIn · documento (Experta en talento, educativo): [la guía de incorporación](https://www.linkedin.com/feed/update/urn:li:ugcPost:7526689422331822080) tuvo 3.5 % de interacción, la mejor de LinkedIn en noviembre.
+  - Instagram: reels y carruseles con 6.2 % de interacción cada uno.
+  - Seguidores en Facebook: +48 en 17 días, contra +12 en todo octubre. Los días con más seguidores nuevos (+13 el 7 nov y +10 el 10 nov) son los mismos días de los dos reels de Facebook más vistos.
 - **Qué no funcionó:**
-  - Reels de Facebook [«¿Cuántas plataformas abres?»](https://www.facebook.com/reel/2424825538289478/) (10,365) y [«El talento también merece números»](https://www.facebook.com/reel/990593957434490/) (5,744): las publicaciones más vistas de los tres periodos (80 % de las impresiones del mes), pero con 0.3 % de interacción.
+  - Reels de Facebook [«¿Cuántas plataformas abres?»](https://www.facebook.com/reel/2424825538289478/) (10,372) y [«El talento también merece números»](https://www.facebook.com/reel/990593957434490/) (5,746): las publicaciones más vistas de los tres periodos (78 % de las impresiones del mes), pero con 0.3 % de interacción.
   - 0 comentarios en publicaciones, aunque varias cerraban con «Te leemos en comentarios».
 - **Qué cambiamos en la parrilla del mes siguiente:**
   - Repetir: documentos en LinkedIn y reels en Instagram.
@@ -44,10 +44,10 @@ Las historias de Instagram y Facebook todavía no se incluyen (próximamente).
   - Dejar de hacer: cerrar con «Te leemos en comentarios» sin una pregunta concreta: hubo 0 comentarios.
 - **Hipótesis para comprobar en diciembre:**
   1. **Facebook está mostrando los reels a gente que no nos sigue.** Los reels del 7 y 10 nov tuvieron de 2 a 4 veces más reproducciones que seguidores tiene la página, y el mismo reel en Instagram y TikTok no despegó. Comprobar: al menos un reel por semana en Facebook y revisar en Meta Business Suite el alcance de no seguidores.
-  2. **Los reels que abren con un problema del día a día rinden más.** Los dos que despegaron empiezan con una pregunta reconocible para RH; los otros dos, con una afirmación o con el producto. Comprobar: comparar reels con los dos tipos de inicio.
-  3. **Sin una pregunta concreta, nadie comenta.** 0 comentarios en 27 publicaciones. Comprobar: cerrar con preguntas fáciles de contestar y contar comentarios.
-  4. **Instagram conecta pero no llega a gente nueva.** Mejor tasa (6.7 %), pero la publicación típica bajó de 282 a 140 y a 74 personas. Comprobar: cerrar noviembre completo y probar en Instagram el inicio que funcionó en Facebook.
-  5. **En LinkedIn, los documentos rinden más que los posts** (3.8 % contra 2.4 %, con un solo documento). Comprobar: publicar al menos 2 documentos en diciembre.
+  2. **Los reels que abren con un problema del día a día rinden más.** Los dos que despegaron empiezan con una pregunta reconocible para RH; los del 12 y 15 nov, con una afirmación o con el producto. El del 17 nov también abre con una pregunta y lleva 184 reproducciones en dos días: verlo al cerrar el mes. Comprobar: comparar reels con los dos tipos de inicio.
+  3. **Sin una pregunta concreta, nadie comenta.** 0 comentarios en 30 publicaciones. Comprobar: cerrar con preguntas fáciles de contestar y contar comentarios.
+  4. **Instagram conecta pero no llega a gente nueva.** Mejor tasa (6.2 %), pero la publicación típica bajó de 282 a 140 y a 74 personas. Comprobar: cerrar noviembre completo y probar en Instagram el inicio que funcionó en Facebook.
+  5. **En LinkedIn, los documentos rinden más que los posts** (3.5 % contra 2.3 %, con un solo documento). Comprobar: publicar al menos 2 documentos en diciembre.
 
 ## 2026-10
 

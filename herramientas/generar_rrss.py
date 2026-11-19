@@ -13,8 +13,8 @@ REDES = ["LinkedIn", "Instagram", "Facebook", "TikTok"]
 COLOR = {"LinkedIn": "var(--c-li)", "Instagram": "var(--c-ig)", "Facebook": "var(--c-fb)", "TikTok": "var(--c-tt)"}
 FORMA = {"LinkedIn": "cuadro", "Instagram": "circulo", "Facebook": "rombo", "TikTok": "triangulo"}
 MES = ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"]
-EXTRAIDO = "17 de noviembre de 2026"
-CORTE = "2026-11-16"  # último día con datos
+EXTRAIDO = "19 de noviembre de 2026"
+CORTE = "2026-11-18"  # último día con datos
 
 ATIPICOS = set()  # ya no se separa ninguna publicación
 
@@ -22,7 +22,7 @@ MESES = [
     {"clave": "2026-09", "titulo": "Septiembre 2026", "periodo": "1 – 30 sep 2026",
      "nota_periodo": "La primera publicación que registran Metricool y HubSpot es del 19 de septiembre, así que el mes tiene 12 días de actividad."},
     {"clave": "2026-10", "titulo": "Octubre 2026", "periodo": "1 – 31 oct 2026", "nota_periodo": ""},
-    {"clave": "2026-11", "titulo": "Noviembre 2026 (parcial)", "periodo": "1 – 16 nov 2026",
+    {"clave": "2026-11", "titulo": "Noviembre 2026 (parcial)", "periodo": "1 – 18 nov 2026",
      "nota_periodo": "Mes en curso: este reporte se reemplaza con el de noviembre completo a partir del 1 de diciembre."},
 ]
 
@@ -36,6 +36,13 @@ APRENDIZAJES_ATENCION = [
  ("18 nov 2026", "<b>Casi todos los contactos vienen de anuncios.</b> 9 de los 10 contactos llegaron por un anuncio de Facebook. Anotar en la hoja el anuncio de origen (hay 3 pendientes) permite saber cuál trae más leads."),
 ]
 
+# Aprendizajes de planeación (cómo se arma la parrilla; no salen de las métricas).
+APRENDIZAJES_PLANEACION = [
+ ("18 nov 2026", "<b>Antes de programar un post en LinkedIn, compararlo con el último que salió.</b> P8 (cursos terminados que no se aplican) chocaba con P15, publicado el 17 nov (cursos que no se terminan): las dos dudan de los cursos completados como medida, usan el formato de «tres» y el mismo cierre. Como en LinkedIn cada post llega a unas 200–300 personas, es probable que sean las mismas. P8 se movió al martes 24 nov."),
+ ("18 nov 2026", "<b>Las piezas BOFU Ads no se publican como post orgánico</b>, aunque su Plataforma diga LinkedIn (P5 y P6)."),
+ ("18 nov 2026", "<b>Prueba de cierre:</b> P8 cerrará con una pregunta que se contesta con una palabra (aplicación, desempeño o resultados) y sin «Te leemos en comentarios». Sirve para comprobar la hipótesis 3 («Mucho alcance, pero nadie conversa»)."),
+]
+
 NOTAS = {  # notas del equipo que no salen de las fuentes de datos
     "2026-10": "Octubre cerró con 19 piezas orgánicas. Aparte, se hicieron 5 anuncios BOFU (pagados), que no se incluyen en este reporte porque es solo de redes orgánicas.",
 }
@@ -43,7 +50,7 @@ NOTAS = {  # notas del equipo que no salen de las fuentes de datos
 SEGUIDORES = {  # neto del mes; None = no disponible
     "2026-09": {"Facebook": (26, "2,409 → 2,435"), "Instagram": (26, "29 ganados, 3 perdidos")},
     "2026-10": {"Facebook": (12, "2,435 → 2,447"), "Instagram": (21, "28 ganados, 7 perdidos")},
-    "2026-11": {"Facebook": (47, "2,447 → 2,494 al 16 nov"), "Instagram": (20, "23 ganados, 3 perdidos, al 14 nov · 653 seguidores")},
+    "2026-11": {"Facebook": (48, "2,447 → 2,495 al 17 nov"), "Instagram": (23, "27 ganados, 4 perdidos, al 17 nov · 656 seguidores")},
 }
 
 APRENDIZAJES = {
@@ -87,12 +94,12 @@ APRENDIZAJES = {
  },
  "2026-11": {
   "funciono": [
-   "<b>LinkedIn · documento:</b> [[N9|LinkedIn|la guía de incorporación (onboarding)]] tuvo 3.8 % de interacción, la mejor de LinkedIn en noviembre.",
-   "<b>Instagram:</b> reels con 7.0 % y carruseles con 6.4 % de interacción.",
-   "<b>Seguidores en Facebook:</b> +47 en 16 días, contra +12 en todo octubre. Los días con más seguidores nuevos (+13 el 7 nov y +10 el 10 nov) son los mismos días de los dos reels de Facebook con más reproducciones.",
+   "<b>LinkedIn · documento:</b> [[N9|LinkedIn|la guía de incorporación (onboarding)]] tuvo 3.5 % de interacción, la mejor de LinkedIn en noviembre.",
+   "<b>Instagram:</b> reels y carruseles con 6.2 % de interacción cada uno.",
+   "<b>Seguidores en Facebook:</b> +48 en 17 días, contra +12 en todo octubre. Los días con más seguidores nuevos (+13 el 7 nov y +10 el 10 nov) son los mismos días de los dos reels de Facebook con más reproducciones.",
   ],
   "no_funciono": [
-   "<b>Facebook · reels con alcance alto, poca interacción:</b> [[N7|Facebook|«¿Cuántas plataformas abres?»]] (10,365) y [[N6|Facebook|«El talento también merece números»]] (5,744) fueron las publicaciones más vistas de los tres periodos y suman el 80 % de las impresiones del mes, pero tuvieron 0.3 % de interacción.",
+   "<b>Facebook · reels con alcance alto, poca interacción:</b> [[N7|Facebook|«¿Cuántas plataformas abres?»]] (10,372) y [[N6|Facebook|«El talento también merece números»]] (5,746) fueron las publicaciones más vistas de los tres periodos y suman el 78 % de las impresiones del mes, pero tuvieron 0.3 % de interacción.",
    "<b>Comentarios:</b> 0 en publicaciones, aunque varias cerraban con «Te leemos en comentarios».",
   ],
   "parrilla": [
@@ -106,23 +113,23 @@ APRENDIZAJES = {
 HIPOTESIS = {
  "2026-11": [
   {"titulo": "Facebook empezó a mostrar los reels a gente que no nos sigue",
-   "vemos": "Los reels de Facebook pasaron de 81 a 311 reproducciones en septiembre y octubre a [[N7|Facebook|10,365]] y [[N6|Facebook|5,744]]. Son de 2 a 4 veces más que los 2,447 seguidores de la página. El mismo reel en Instagram tuvo [[N7|Instagram|121]] y en TikTok [[N7|TikTok|157]]. Los días de esos reels (7 y 10 nov) fueron los de más seguidores nuevos en Facebook (+13 y +10).",
+   "vemos": "Los reels de Facebook pasaron de 81 a 311 reproducciones en septiembre y octubre a [[N7|Facebook|10,372]] y [[N6|Facebook|5,746]]. Son de 2 a 4 veces más que los 2,447 seguidores de la página. El mismo reel en Instagram tuvo [[N7|Instagram|122]] y en TikTok [[N7|TikTok|157]]. Los días de esos reels (7 y 10 nov) fueron los de más seguidores nuevos en Facebook (+13 y +10).",
    "hipotesis": "El salto no viene solo del contenido, porque la misma pieza no despegó en otras redes. Lo más probable es que Facebook la recomendó a personas fuera de la página: eso explica que la vieran miles, que sumara seguidores y que casi nadie reaccionara (0.3 %), porque es gente que todavía no conoce a Lapzo.",
    "comprobar": "Publicar al menos un reel por semana en Facebook en diciembre y ver si alguno vuelve a pasar de 1,000 reproducciones. En Meta Business Suite, revisar qué parte del alcance de esos reels fue de personas que no siguen la página (Metricool no da ese dato)."},
   {"titulo": "Los reels que despegaron abren con un problema del día a día",
-   "vemos": "Los dos que despegaron empiezan con una situación que vive cualquier persona de RH: [[N7|Facebook|«¿Cuántas plataformas necesitas abrir para completar un solo proceso de RH?»]] y [[N6|Facebook|«Las empresas miden sus ventas… ¿qué tan claro tienen cómo está creciendo su gente?»]]. Los otros dos reels del mes se quedaron en [[N8|Facebook|549]] y [[N10|Facebook|266]]: uno abre con una afirmación sobre el sueldo y el otro presenta un producto (AI Course Builder).",
-   "hipotesis": "Un inicio con una pregunta o una situación reconocible hace que la gente se quede los primeros segundos, y eso le da a Facebook la señal para mostrarlo a más personas. Ojo: son solo 4 reels, así que puede ser casualidad.",
+   "vemos": "Los dos que despegaron empiezan con una situación que vive cualquier persona de RH: [[N7|Facebook|«¿Cuántas plataformas necesitas abrir para completar un solo proceso de RH?»]] y [[N6|Facebook|«Las empresas miden sus ventas… ¿qué tan claro tienen cómo está creciendo su gente?»]]. Los reels del 12 y 15 nov se quedaron en [[N8|Facebook|556]] y [[N10|Facebook|275]]: uno abre con una afirmación sobre el sueldo y el otro presenta un producto (AI Course Builder). El del 17 nov ([[N11|Facebook|184]]) también abre con una pregunta («¿Quién en tu equipo es la única persona que sabe cómo se hace algo?»), pero lleva solo dos días: hay que verlo al cerrar el mes.",
+   "hipotesis": "Un inicio con una pregunta o una situación reconocible hace que la gente se quede los primeros segundos, y eso le da a Facebook la señal para mostrarlo a más personas. Ojo: son solo 5 reels, así que puede ser casualidad.",
    "comprobar": "En diciembre, hacer reels con el mismo tipo de inicio (pregunta sobre un problema cotidiano) y otros que abran con una afirmación o con el producto, y comparar sus reproducciones."},
   {"titulo": "Mucho alcance, pero nadie conversa",
-   "vemos": "Noviembre lleva 0 comentarios en 27 publicaciones, aunque varias cerraban con «Te leemos en comentarios». Los dos reels más vistos sumaron más de 16,000 reproducciones y 53 reacciones.",
+   "vemos": "Noviembre lleva 0 comentarios en 30 publicaciones, aunque varias cerraban con «Te leemos en comentarios». Los dos reels más vistos sumaron más de 16,000 reproducciones y 53 reacciones.",
    "hipotesis": "Una invitación general a comentar no da una razón concreta para responder. Y la gente nueva que llega por los reels todavía no tiene confianza para comentar.",
    "comprobar": "Cerrar con preguntas concretas y fáciles de contestar (por ejemplo, de opción A o B) y contar los comentarios por publicación en diciembre."},
   {"titulo": "Instagram conecta, pero no está llegando a gente nueva",
-   "vemos": "Instagram tiene la mejor tasa de interacción (6.7 %), pero la publicación típica llega cada vez a menos personas: 282 en septiembre, 140 en octubre y 74 en lo que va de noviembre. La cuenta suma 20 seguidores en el mes (653 en total).",
+   "vemos": "Instagram tiene la mejor tasa de interacción (6.2 %), pero la publicación típica llega cada vez a menos personas: 282 en septiembre, 140 en octubre y 74 en lo que va de noviembre. La cuenta suma 23 seguidores en el mes (656 en total).",
    "hipotesis": "Quien ve el contenido es sobre todo gente que ya sigue la cuenta y reacciona bien, pero Instagram no lo está mostrando fuera de ella. Parte de la baja de noviembre puede ser que las publicaciones recientes todavía están sumando vistas.",
    "comprobar": "Cerrar noviembre completo antes de concluir. En diciembre, probar en Instagram el tipo de inicio que funcionó en los reels de Facebook y comparar el alcance."},
   {"titulo": "En LinkedIn, el documento rindió más que los posts",
-   "vemos": "La [[N9|LinkedIn|guía de incorporación]] en formato documento tuvo 3.8 % de interacción, contra 2.4 % de los posts. La publicación típica de LinkedIn bajó de 646 impresiones en septiembre a 474 en octubre y 271 en noviembre.",
+   "vemos": "La [[N9|LinkedIn|guía de incorporación]] en formato documento tuvo 3.5 % de interacción, contra 2.3 % de los posts. La publicación típica de LinkedIn bajó de 646 impresiones en septiembre a 474 en octubre y 269 en noviembre.",
    "hipotesis": "Los documentos invitan a deslizar y guardar, y eso puede darles más interacción. Pero es un solo documento, así que todavía no es una regla.",
    "comprobar": "Publicar al menos 2 documentos en LinkedIn en diciembre y comparar su tasa con la de los posts."},
  ],
@@ -497,7 +504,7 @@ def pagina(idx):
     l_, c_, s_ = desglose(ps)
     seg_prev = SEGUIDORES[MESES[idx - 1]["clave"]] if idx > 0 else {}
     seg_lines = "".join(f'<div>{r} <b>+{v[0]}</b>' + (f' <span class="small">· en {nom_prev} fueron +{seg_prev[r][0]}</span>' if r in seg_prev else "") + "</div>" for r, v in seg.items())
-    parcial = '<p class="small">Noviembre va al día 16, así que la comparación con octubre todavía no es pareja.</p>' if clave == CORTE[:7] else ""
+    parcial = '<p class="small">Noviembre va al día 18, así que la comparación con octubre todavía no es pareja.</p>' if clave == CORTE[:7] else ""
     nota_mes = f'<div class="card nota-eq"><b>Nota del equipo:</b> {e(NOTAS[clave])}</div>' if clave in NOTAS else ""
     kpis_html = f"""<div class="kpis">
 <div class="card kpi"><div class="v">{R["n"]}</div><div class="l">publicaciones</div>{delta(R["n"], RP["n"] if RP else None)}</div>
@@ -619,7 +626,7 @@ section.mes{{margin-bottom:28px}} .nota-sutil{{margin-top:10px;max-width:80ch}} 
 
 <h2>Seguidores día por día</h2>
 <p class="lead">Seguidores ganados menos perdidos en cada día. <b>Haz clic en cualquier día</b> (aquí o en el calendario) para ver qué se publicó ese día.</p>
-<div class="card">{seguidores_dia(clave)}<p class="small">LinkedIn y TikTok no tienen el dato. Instagram llega al 14 nov y Facebook al 16 nov.</p>
+<div class="card">{seguidores_dia(clave)}<p class="small">LinkedIn y TikTok no tienen el dato. Instagram y Facebook llegan al 17 nov.</p>
 <div id="dia" class="dia" aria-live="polite"></div></div>
 
 <h2>Cada red este mes</h2>
@@ -968,6 +975,10 @@ def pagina_aprendizajes():
            '<p class="lead">Lo aprendido al responder comentarios y mensajes y al pasar leads a Ventas.</p>'
            '<div class="card"><ul class="rs">' + "".join(f'<li>{t} <span class="small">· {f}</span></li>' for f, t in APRENDIZAJES_ATENCION) + '</ul></div></section>'
            if APRENDIZAJES_ATENCION else "")
+        + ('<section class="mes"><h2>Planeación de LinkedIn</h2>'
+           '<p class="lead">Lo aprendido al armar la parrilla.</p>'
+           '<div class="card"><ul class="rs">' + "".join(f'<li>{t} <span class="small">· {f}</span></li>' for f, t in APRENDIZAJES_PLANEACION) + '</ul></div></section>'
+           if APRENDIZAJES_PLANEACION else "")
         + "".join(bloques) + '\n</main></body></html>')
 
 # ---------------------------------------------------------------- Página de leads
