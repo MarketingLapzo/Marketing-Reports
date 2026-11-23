@@ -446,13 +446,13 @@ def seccion_videos(ps, periodo="del mes"):
         prom, dur, q3 = V(p, "prom"), V(p, "dur"), V(p, "quedan3")
         if prom is not None and dur:
             barra = f'<i class="vt" style="width:{pct(dur)}"><i class="vf" style="width:{100 * min(prom, dur) / dur:.1f}%;background:{COLOR[p["red"]]}"></i></i>'
-            txt = f'Vieron <b>{prom:.1f} s</b> de {dur} s ({100 * prom / dur:.0f} % del video)'
+            txt = f'Vieron <b>{prom:.1f} s</b> de {dur:g} s ({100 * prom / dur:.0f} % del video)'
         elif prom is not None:
             barra = f'<i class="vt sin" style="width:100%"><i class="vf" style="width:{pct(prom)};background:{COLOR[p["red"]]}"></i></i>'
             txt = f'Vieron <b>{prom:.1f} s</b> en promedio · no sabemos cuánto dura'
         elif dur:
             barra = f'<i class="vt" style="width:{pct(dur)}"></i>'
-            txt = f'Dura {dur} s · Metricool no da cuánto lo vieron'
+            txt = f'Dura {dur:g} s · Metricool no da cuánto lo vieron'
         else:
             barra = ''; txt = 'Sin datos de reproducción en Metricool'
         extra = f' <span class="tag t-v">{q3:.0f} % pasa de los 3 s</span>' if q3 is not None else ""
@@ -463,7 +463,7 @@ def seccion_videos(ps, periodo="del mes"):
             f'<div class="vb"><div class="vtrack">{barra}</div><div class="small">{txt}{extra}</div></div></div>')
     f1 = lambda v, fmt: "—" if v is None else fmt(v)
     tfilas = [f'<tr><td class="l">{p["red"]}</td><td>{fecha(p["fecha"])}</td><td class="t">{e(d.TEMAS[p["tema"]][0])}</td><td>{f_int(p["imp"])}</td><td>{f_pct(tasa([p]))}</td>'
-              f'<td>{f1(V(p, "prom"), lambda v: f"{v:.1f} s")}</td><td>{f1(V(p, "dur"), lambda v: f"{v} s")}</td><td>{f1(V(p, "quedan3"), lambda v: f"{v:.1f} %")}</td><td>{f1(V(p, "guard"), lambda v: f"{v:,}")}</td></tr>' for p in vs]
+              f'<td>{f1(V(p, "prom"), lambda v: f"{v:.1f} s")}</td><td>{f1(V(p, "dur"), lambda v: f"{v:g} s")}</td><td>{f1(V(p, "quedan3"), lambda v: f"{v:.1f} %")}</td><td>{f1(V(p, "guard"), lambda v: f"{v:,}")}</td></tr>' for p in vs]
     return (f'<h2>Videos</h2>\n<p class="lead">¿Cuánto de cada video ve la gente? Los reels y TikToks {periodo}, de más a menos reproducciones.</p>\n'
             '<div class="card"><div class="vleg"><span><i class="vt mini"></i> gris: lo que dura el video</span>'
             '<span><i class="vt mini"><i class="vf" style="width:40%;background:var(--muted)"></i></i> color: segundos que lo vieron en promedio</span>'
@@ -472,7 +472,7 @@ def seccion_videos(ps, periodo="del mes"):
             + "".join(filas) +
             tabla(["Red", "Fecha", "Pieza", "Reproducciones", "Tasa", "Tiempo promedio visto", "Duración", "Pasa de los 3 s", "Guardados"], tfilas)
             + '<p class="small">De Metricool: tiempo promedio visto (Instagram y Facebook), qué parte de las vistas pasa de los primeros 3 segundos y guardados (solo Instagram), y duración (TikTok). '
-            'La duración de los reels de Instagram y Facebook solo aparece cuando usan el mismo archivo que su TikTok. Metricool no da la retención completa, el porcentaje que vio el video completo ni de dónde llegaron las vistas de TikTok.</p></div>')
+            'La duración de los reels de Instagram y Facebook de noviembre se leyó del archivo de video en Metricool (o es la de su TikTok cuando usan el mismo archivo); los anteriores al 9 de noviembre no tienen archivo ahí. Metricool no da la retención completa, el porcentaje que vio el video completo ni de dónde llegaron las vistas de TikTok.</p></div>')
 
 def tabla(cab, filas):
     return f'<details><summary>Ver tabla</summary><div class="scroll"><table><thead><tr>{"".join(f"<th>{c}</th>" for c in cab)}</tr></thead><tbody>{"".join(filas)}</tbody></table></div></details>'

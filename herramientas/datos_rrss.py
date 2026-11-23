@@ -315,3 +315,10 @@ for vid, dur in [
 # Mismo archivo de video que su TikTok (según lo programado en Metricool): misma duración.
 for url, dur in [("https://www.instagram.com/reel/Dfpq6FADxuv/",23), ("https://www.facebook.com/reel/1770762847367790/",23)]:
     VIDEO[url]["dur"] = dur
+# Duración leída del archivo de video en Metricool (autorizado solo para estas piezas, 23 nov 2026; no se guardó copia).
+for url, dur in [
+ ("https://www.instagram.com/reel/DfkWDK8DV7Z/",32.5), ("https://www.facebook.com/reel/2424825538289478/",32.5),
+ ("https://www.instagram.com/reel/DfqIlNID-xu/",21.2), ("https://www.facebook.com/reel/1853456759298291/",21.2),
+ ("https://www.instagram.com/reel/Df2Ulj1FLvr/",23.5), ("https://www.facebook.com/reel/28606914692319621/",23.5),
+ ("https://www.instagram.com/reel/DgD7fVREbJQ/",33.0), ("https://www.facebook.com/reel/2521736088316301/",33.0),
+]: VIDEO.setdefault(url, {})["dur"] = dur

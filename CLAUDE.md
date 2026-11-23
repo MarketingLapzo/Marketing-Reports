@@ -12,6 +12,7 @@ explícale todo en español, sin jerga técnica, y encárgate tú de Git.
 | **Meta Ads (pagado)** | Conector de Facebook Ads | |
 
 - Nunca inventes ni estimes cifras. Si un dato no existe en la fuente, dilo.
+- No descargues ni abras archivos de video de Metricool (ni de otra fuente) para medir su duración u otro dato. La usuaria lo autorizó solo una vez, el 23 de noviembre de 2026, para los reels de noviembre. En adelante, la duración de los reels de Instagram y Facebook se marca "no disponible", salvo que usen el mismo archivo que su TikTok o que la usuaria la dé.
 - Mismas definiciones para todas las redes:
   - Interacciones = likes + comentarios + compartidos.
   - Tasa de interacción = interacciones ÷ impresiones.
