@@ -95,7 +95,7 @@ APRENDIZAJES = {
  "2026-11": {
   "funciono": [
    "<b>LinkedIn · documento:</b> [[N9|LinkedIn|la guía de incorporación (onboarding)]] tuvo 3.3 % de interacción; en noviembre solo la superó [[N13|LinkedIn|el post de AI Course Builder del 20 nov]] (4.7 %).",
-   "<b>Instagram:</b> reels con 7.6 % y carruseles con 6.4 % de interacción.",
+   "<b>Instagram:</b> reels con 7.5 % y carruseles con 6.4 % de interacción.",
    "<b>Seguidores en Facebook:</b> +47 en 21 días, contra +12 en todo octubre. Los días con más seguidores nuevos (+13 el 7 nov y +10 el 10 nov) son los mismos días de los dos reels de Facebook con más reproducciones.",
   ],
   "no_funciono": [
@@ -125,7 +125,7 @@ HIPOTESIS = {
    "hipotesis": "Una invitación general a comentar no da una razón concreta para responder. Y la gente nueva que llega por los reels todavía no tiene confianza para comentar.",
    "comprobar": "Cerrar con preguntas concretas y fáciles de contestar (por ejemplo, de opción A o B) y contar los comentarios por publicación en diciembre."},
   {"titulo": "Instagram conecta, pero no está llegando a gente nueva",
-   "vemos": "Instagram tiene la mejor tasa de interacción (7.1 %), pero la publicación típica llega cada vez a menos personas: 282 en septiembre, 140 en octubre y 73 en lo que va de noviembre. La cuenta suma 23 seguidores en el mes (656 en total).",
+   "vemos": "Instagram tiene la mejor tasa de interacción (7.1 %), pero la publicación típica llega cada vez a menos personas: 282 en septiembre, 140 en octubre y 77 en lo que va de noviembre. La cuenta suma 23 seguidores en el mes (656 en total).",
    "hipotesis": "Quien ve el contenido es sobre todo gente que ya sigue la cuenta y reacciona bien, pero Instagram no lo está mostrando fuera de ella. Parte de la baja de noviembre puede ser que las publicaciones recientes todavía están sumando vistas.",
    "comprobar": "Cerrar noviembre completo antes de concluir. En diciembre, probar en Instagram el tipo de inicio que funcionó en los reels de Facebook y comparar el alcance."},
   {"titulo": "En LinkedIn, el documento rindió más que los posts",

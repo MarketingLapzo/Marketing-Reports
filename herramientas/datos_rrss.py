@@ -162,7 +162,7 @@ for f, vid, t, imp, l, c, s in [
 def add_hs(*a):
     add(*a); P[-1]["fuente"] = "HubSpot"
 for f, red, fmt, t, imp, l, c, sh, url in [
- ("2026-11-22","Instagram","Reel","N14",72,4,0,6,"https://www.instagram.com/reel/DgD7fVREbJQ/"),
+ ("2026-11-22","Instagram","Reel","N14",78,4,0,6,"https://www.instagram.com/reel/DgD7fVREbJQ/"),
  ("2026-11-22","TikTok","Video","N14",0,0,0,0,"https://www.tiktok.com/@go_lapzo/video/7711025537925319988"),
  ("2026-10-28","Facebook","Publicación","O17",21,1,0,0,"https://www.facebook.com/613311597166199/posts/1653199913177357"),
  ("2026-10-26","Facebook","Publicación","O10",4,0,0,0,"https://www.facebook.com/613311597166199/posts/1651319543365394"),
@@ -190,7 +190,7 @@ for f, sid in [
 LI = "https://www.linkedin.com/feed/update/urn:li:"
 for f, urn, fmt, t, imp, l, c, s in [
  ("2026-11-20","share:7529572846990233600","Post","N13",170,8,0,0),
- ("2026-11-17","ugcPost:7526773977382338560","Post","N12",321,7,0,0),
+ ("2026-11-17","ugcPost:7526773977382338560","Post","N12",322,7,0,0),
  ("2026-11-13","ugcPost:7526721887725453312","Post","N10",205,5,0,0),
  ("2026-11-12","ugcPost:7526708442032410624","Post","N8",293,9,0,0),
  ("2026-11-12","ugcPost:7526689422331822080","Documento","N9",246,7,0,1),

@@ -29,11 +29,11 @@ Las historias de Instagram y Facebook todavía no se incluyen (próximamente).
 
 ## 2026-11 (parcial, 1–22 nov; actualizado el 23 nov)
 
-37 publicaciones · 22,546 impresiones · 1.1 % de interacción · Facebook +47 seguidores, Instagram +23 (al 21 nov).
+37 publicaciones · 22,553 impresiones · 1.1 % de interacción · Facebook +47 seguidores, Instagram +23 (al 21 nov).
 
 - **Qué funcionó:**
   - LinkedIn · documento (Experta en talento, educativo): [la guía de incorporación](https://www.linkedin.com/feed/update/urn:li:ugcPost:7526689422331822080) tuvo 3.3 % de interacción; en noviembre solo la superó el post de AI Course Builder del 20 nov (4.7 %).
-  - Instagram: reels con 7.6 % y carruseles con 6.4 % de interacción.
+  - Instagram: reels con 7.5 % y carruseles con 6.4 % de interacción.
   - Seguidores en Facebook: +47 en 21 días, contra +12 en todo octubre. Los días con más seguidores nuevos (+13 el 7 nov y +10 el 10 nov) son los mismos días de los dos reels de Facebook más vistos.
 - **Qué no funcionó:**
   - Reels de Facebook [«¿Cuántas plataformas abres?»](https://www.facebook.com/reel/2424825538289478/) (10,377) y [«El talento también merece números»](https://www.facebook.com/reel/990593957434490/) (5,749): las publicaciones más vistas de los tres periodos (72 % de las impresiones del mes), pero con 0.3 % de interacción.
@@ -46,7 +46,7 @@ Las historias de Instagram y Facebook todavía no se incluyen (próximamente).
   1. **Facebook está mostrando los reels a gente que no nos sigue.** Los reels del 7 y 10 nov tuvieron de 2 a 4 veces más reproducciones que seguidores tiene la página, y el mismo reel en Instagram y TikTok no despegó. Comprobar: al menos un reel por semana en Facebook y revisar en Meta Business Suite el alcance de no seguidores.
   2. **Los reels que abren con un problema del día a día rinden más.** Los dos que despegaron empiezan con una pregunta reconocible para RH; los del 12 y 15 nov, con una afirmación o con el producto. Pero el del 17 nov también abre con una pregunta y en seis días se quedó en 192: la pregunta inicial sola no basta. Comprobar: comparar reels con los dos tipos de inicio.
   3. **Sin una pregunta concreta, nadie comenta.** 0 comentarios en 37 publicaciones. Comprobar: cerrar con preguntas fáciles de contestar y contar comentarios.
-  4. **Instagram conecta pero no llega a gente nueva.** Mejor tasa (7.1 %), pero la publicación típica bajó de 282 a 140 y a 73 personas. Comprobar: cerrar noviembre completo y probar en Instagram el inicio que funcionó en Facebook.
+  4. **Instagram conecta pero no llega a gente nueva.** Mejor tasa (7.1 %), pero la publicación típica bajó de 282 a 140 y a 77 personas. Comprobar: cerrar noviembre completo y probar en Instagram el inicio que funcionó en Facebook.
   5. **En LinkedIn, los documentos rinden más que los posts** (3.3 % contra 2.6 %, con un solo documento; el post de AI Course Builder del 20 nov llegó a 4.7 %). Comprobar: publicar al menos 2 documentos en diciembre.
 
 ## 2026-10
