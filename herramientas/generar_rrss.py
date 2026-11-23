@@ -434,47 +434,45 @@ def meses_parejos(hasta_idx):
 # ---------------------------------------------------------------- Sección de videos
 def es_video(p): return p["formato"] in ("Reel", "Video")
 def seccion_videos(ps, periodo="del mes"):
-    import math
     vs = sorted([p for p in ps if es_video(p)], key=lambda p: -n(p["imp"]))
     if not vs: return ""
     V = lambda p, k: d.VIDEO.get(p["url"], {}).get(k)
-    # Gráfica: reproducciones (escala logarítmica) contra segundos promedio vistos
-    pts = [p for p in vs if V(p, "prom") is not None and n(p["imp"]) > 0]
-    graf = ""
-    if pts:
-        W, H, ml, mr, mt, mb = 680, 300, 46, 16, 14, 40
-        xs = [math.log10(n(p["imp"])) for p in pts]; x0, x1 = math.floor(min(xs)), math.ceil(max(xs))
-        if x1 == x0: x1 += 1
-        y1 = max(2, math.ceil(max(V(p, "prom") for p in pts) / 2) * 2)
-        X = lambda v: ml + (W - ml - mr) * (math.log10(v) - x0) / (x1 - x0)
-        Y = lambda v: H - mb - (H - mt - mb) * v / y1
-        o = [f'<svg viewBox="0 0 {W} {H}" class="chart wide" role="img" aria-label="Reproducciones contra tiempo promedio visto">']
-        for k in range(x0, x1 + 1):
-            o.append(f'<line x1="{X(10**k):.1f}" x2="{X(10**k):.1f}" y1="{mt}" y2="{H-mb}" class="grid"/><text x="{X(10**k):.1f}" y="{H-mb+16}" text-anchor="middle" class="tick">{10**k:,}</text>')
-        for v in range(0, y1 + 1, 2):
-            o.append(f'<line x1="{ml}" x2="{W-mr}" y1="{Y(v):.1f}" y2="{Y(v):.1f}" class="grid"/><text x="{ml-6}" y="{Y(v)+4:.1f}" text-anchor="end" class="tick">{v} s</text>')
-        o.append(f'<text x="{(ml+W-mr)/2:.1f}" y="{H-4}" text-anchor="middle" class="tick">Reproducciones (escala que crece de 10 en 10)</text>')
-        for p in pts:
-            t = tip(d.TEMAS[p["tema"]][0], f'{p["red"]} · {fecha(p["fecha"])}', f'{f_int(p["imp"])} reproducciones · {V(p, "prom"):.1f} s vistos en promedio', "Clic para abrir")
-            o.append(f'<a href="{e(p["url"])}" target="_blank" rel="noopener"><g data-tip="{t}">{marca(p["red"], X(n(p["imp"])), Y(V(p, "prom")), 6)}</g></a>')
-        o.append(f'<line x1="{ml}" x2="{W-mr}" y1="{H-mb}" y2="{H-mb}" class="axis"/></svg>')
-        graf = (f'<div class="card"><h3>¿Llegan lejos y retienen?</h3>{leyenda(["Instagram", "Facebook"])}{"".join(o)}'
-                '<p class="small">Cada punto es un reel. Más a la derecha: más reproducciones. Más arriba: la gente se quedó más segundos viéndolo. TikTok no aparece porque Metricool no da su tiempo visto.</p></div>')
-    f1 = lambda v, fmt: "—" if v is None else fmt(v)
+    seg_max = max([v for p in vs for v in (V(p, "dur"), V(p, "prom")) if v] + [10])
+    escala = int(-(-seg_max // 10) * 10)  # redondeado hacia arriba a decenas
+    pct = lambda v: f"{100 * v / escala:.2f}%"
+    marcas = "".join(f'<span style="left:{pct(t)}">{t} s</span>' for t in range(0, escala + 1, 10))
     filas = []
     for p in vs:
-        filas.append(f'<tr><td class="l"><span class="chip" style="background:{COLOR[p["red"]]}">{INICIAL[p["red"]]}</span></td><td>{fecha(p["fecha"])}</td>'
-                     f'<td class="t"><a href="{e(p["url"])}" target="_blank" rel="noopener">{e(d.TEMAS[p["tema"]][0])}</a>{fuente_tag(p)}</td>'
-                     f'<td>{f_int(p["imp"])}</td><td>{f_pct(tasa([p]))}</td>'
-                     f'<td>{f1(V(p, "prom"), lambda v: f"{v:.1f} s")}</td><td>{f1(V(p, "quedan3"), lambda v: f"{v:.1f} %")}</td>'
-                     f'<td>{f1(V(p, "guard"), lambda v: f"{v:,}")}</td><td>{f1(V(p, "dur"), lambda v: f"{v} s")}</td></tr>')
-    cab = ["Red", "Fecha", "Pieza", "Reproducciones", "Tasa", "Tiempo promedio visto", "Se quedan más de 3 s", "Guardados", "Duración"]
-    tabla_v = (f'<div class="scroll"><table class="ptab"><thead><tr>{"".join(f'<th class="l">{c}</th>' if c in ("Red", "Pieza") else f"<th>{c}</th>" for c in cab)}</tr></thead><tbody>{"".join(filas)}</tbody></table></div>')
-    return (f'<h2>Videos</h2>\n<p class="lead">Los reels de Instagram y Facebook y los videos de TikTok {periodo}, de más a menos reproducciones.</p>\n'
-            f'{graf}\n{tabla_v}\n'
-            '<p class="small">Un guion (—) significa que Metricool no da ese dato para esa red: <b>tiempo promedio visto</b> solo en Instagram y Facebook; '
-            '<b>se quedan más de 3 s</b> (qué parte de las vistas pasó de los primeros 3 segundos) y <b>guardados</b> solo en Instagram; <b>duración</b> solo en TikTok. '
-            'Metricool no da para nuestras cuentas la retención completa, el porcentaje que vio el video completo ni de dónde llegaron las vistas de TikTok.</p>')
+        prom, dur, q3 = V(p, "prom"), V(p, "dur"), V(p, "quedan3")
+        if prom is not None and dur:
+            barra = f'<i class="vt" style="width:{pct(dur)}"><i class="vf" style="width:{100 * min(prom, dur) / dur:.1f}%;background:{COLOR[p["red"]]}"></i></i>'
+            txt = f'Vieron <b>{prom:.1f} s</b> de {dur} s ({100 * prom / dur:.0f} % del video)'
+        elif prom is not None:
+            barra = f'<i class="vt sin" style="width:100%"><i class="vf" style="width:{pct(prom)};background:{COLOR[p["red"]]}"></i></i>'
+            txt = f'Vieron <b>{prom:.1f} s</b> en promedio · no sabemos cuánto dura'
+        elif dur:
+            barra = f'<i class="vt" style="width:{pct(dur)}"></i>'
+            txt = f'Dura {dur} s · Metricool no da cuánto lo vieron'
+        else:
+            barra = ''; txt = 'Sin datos de reproducción en Metricool'
+        extra = f' <span class="tag t-v">{q3:.0f} % pasa de los 3 s</span>' if q3 is not None else ""
+        filas.append(
+            f'<div class="vrow"><div class="vn"><span class="chip" style="background:{COLOR[p["red"]]}">{INICIAL[p["red"]]}</span> '
+            f'<a href="{e(p["url"])}" target="_blank" rel="noopener">{e(d.TEMAS[p["tema"]][0])}</a>'
+            f'<div class="small">{fecha(p["fecha"])} · <b>{f_int(p["imp"])}</b> reproducciones · {f_pct(tasa([p]))} de interacción</div></div>'
+            f'<div class="vb"><div class="vtrack">{barra}</div><div class="small">{txt}{extra}</div></div></div>')
+    f1 = lambda v, fmt: "—" if v is None else fmt(v)
+    tfilas = [f'<tr><td class="l">{p["red"]}</td><td>{fecha(p["fecha"])}</td><td class="t">{e(d.TEMAS[p["tema"]][0])}</td><td>{f_int(p["imp"])}</td><td>{f_pct(tasa([p]))}</td>'
+              f'<td>{f1(V(p, "prom"), lambda v: f"{v:.1f} s")}</td><td>{f1(V(p, "dur"), lambda v: f"{v} s")}</td><td>{f1(V(p, "quedan3"), lambda v: f"{v:.1f} %")}</td><td>{f1(V(p, "guard"), lambda v: f"{v:,}")}</td></tr>' for p in vs]
+    return (f'<h2>Videos</h2>\n<p class="lead">¿Cuánto de cada video ve la gente? Los reels y TikToks {periodo}, de más a menos reproducciones.</p>\n'
+            '<div class="card"><div class="vleg"><span><i class="vt mini"></i> gris: lo que dura el video</span>'
+            '<span><i class="vt mini"><i class="vf" style="width:40%;background:var(--muted)"></i></i> color: segundos que lo vieron en promedio</span>'
+            '<span><i class="vt mini sin"></i> punteado: no sabemos cuánto dura</span></div>'
+            f'<div class="vrow vhead"><div class="vn"></div><div class="vb"><div class="vscale">{marcas}</div></div></div>'
+            + "".join(filas) +
+            tabla(["Red", "Fecha", "Pieza", "Reproducciones", "Tasa", "Tiempo promedio visto", "Duración", "Pasa de los 3 s", "Guardados"], tfilas)
+            + '<p class="small">De Metricool: tiempo promedio visto (Instagram y Facebook), qué parte de las vistas pasa de los primeros 3 segundos y guardados (solo Instagram), y duración (TikTok). '
+            'La duración de los reels de Instagram y Facebook solo aparece cuando usan el mismo archivo que su TikTok. Metricool no da la retención completa, el porcentaje que vio el video completo ni de dónde llegaron las vistas de TikTok.</p></div>')
 
 def tabla(cab, filas):
     return f'<details><summary>Ver tabla</summary><div class="scroll"><table><thead><tr>{"".join(f"<th>{c}</th>" for c in cab)}</tr></thead><tbody>{"".join(filas)}</tbody></table></div></details>'
@@ -663,6 +661,7 @@ th:first-child,td:first-child,tbody th,th.l,td.l{{text-align:left}} thead th{{co
 .mini{{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin:4px 0}} .mini b{{display:block;font-size:20px}} .mini span{{font-size:12px;color:var(--muted)}} .hl-txt{{font-size:13.5px;margin:2px 0}} .go{{margin-top:auto;color:var(--accent);font-size:13.5px;font-weight:600}}
 section.mes{{margin-bottom:28px}} .nota-sutil{{margin-top:10px;max-width:80ch}} .nota-eq.urg{{border-left-color:var(--td)}} .nota-eq{{margin-top:12px;border-left:4px solid var(--tr);font-size:14.5px}} .nota-mini{{font-size:13px;margin:2px 0;padding:6px 8px;border-radius:8px;background:var(--grid)}} .learn{{margin-top:12px}} h3.sub{{margin:18px 0 8px}} h2 .small{{font-weight:400;margin-left:8px}}
 @media print{{.top,.pdf,details summary,.ctrl{{display:none!important}} details>*{{display:block}} body{{background:#fff}} .kpi,.net,.hip,.learn .card,tbody.grp,.rep{{break-inside:avoid}} .scroll{{overflow:visible}} main{{padding-top:0}} #tip{{display:none}}}}
+.vrow{{display:grid;grid-template-columns:minmax(200px,1fr) 2fr;gap:6px 16px;align-items:center;padding:10px 0;border-bottom:1px solid var(--line)}} .vrow.vhead{{padding:0 0 2px;border:0}} .vn a{{color:var(--fg);font-weight:500;text-decoration:none}} .vn a:hover{{text-decoration:underline}} .vtrack{{height:16px;margin-bottom:4px}} .vt{{display:block;height:16px;background:var(--grid);border-radius:4px;overflow:hidden}} .vt.sin{{background:transparent;outline:1.5px dashed var(--muted);outline-offset:-1.5px}} .vf{{display:block;height:100%}} .vscale{{position:relative;height:16px;font-size:11px;color:var(--muted)}} .vscale span{{position:absolute;transform:translateX(-50%);white-space:nowrap}} .vscale span:first-child{{transform:none}} .vscale span:last-child{{transform:translateX(-100%)}} .vleg{{display:flex;flex-wrap:wrap;gap:8px 18px;font-size:13px;color:var(--muted);margin-bottom:12px}} .vleg span{{display:inline-flex;align-items:center;gap:6px}} .vt.mini{{display:inline-block;width:46px;height:10px;vertical-align:middle}} .vt.mini .vf{{display:block}} @media (max-width:640px){{.vrow{{grid-template-columns:1fr}}}}
 #tip{{position:fixed;pointer-events:none;background:var(--fg);color:var(--bg);font-size:13px;line-height:1.4;padding:8px 10px;border-radius:8px;max-width:300px;white-space:pre-line;opacity:0;transition:opacity .1s;z-index:9}}
 </style></head><body>{barra_nav('../../', clave)}<main>
 <div class="eyebrow">Lapzo · Redes sociales orgánicas</div>

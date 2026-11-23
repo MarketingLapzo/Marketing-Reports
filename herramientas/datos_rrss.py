@@ -312,3 +312,6 @@ for vid, dur in [
  ("7706225961062157588",31), ("7701743114481929493",33), ("7701741158275353876",37), ("7701466327608823060",37),
  ("7701460908668669205",17), ("7698450686626794772",36), ("7694741663297621268",17), ("7689512251581091092",19),
 ]: VIDEO["https://www.tiktok.com/@go_lapzo/video/"+vid] = dict(dur=dur)
+# Mismo archivo de video que su TikTok (según lo programado en Metricool): misma duración.
+for url, dur in [("https://www.instagram.com/reel/Dfpq6FADxuv/",23), ("https://www.facebook.com/reel/1770762847367790/",23)]:
+    VIDEO[url]["dur"] = dur
