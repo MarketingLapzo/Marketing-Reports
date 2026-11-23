@@ -44,7 +44,7 @@ APRENDIZAJES_PLANEACION = [
 ]
 
 NOTAS = {  # notas del equipo que no salen de las fuentes de datos
-    "2026-10": "Octubre cerró con 19 piezas orgánicas. Aparte, se hicieron 5 anuncios BOFU (pagados), que no se incluyen en este reporte porque es solo de redes orgánicas.",
+    "2026-10": "Octubre cerró con 19 piezas orgánicas. Aparte, se hicieron 5 anuncios BOFU de AI Course Builder (pagados), que no se incluyen en este reporte porque es solo de redes orgánicas.",
 }
 
 SEGUIDORES = {  # neto del mes; None = no disponible
@@ -1114,7 +1114,7 @@ def pagina_okrs():
     st1 = estado("ok", "Cumplido este mes") if v_act >= O["kr1_meta_mes"] else estado("mid", f"Faltan {O['kr1_meta_mes'] - v_act} piezas para 25 este mes")
     kr1_html = (f'<div class="okr-big"><b>{trim}</b> de {O["kr1_meta_trim"]} piezas en el trimestre</div>{barra(trim, O["kr1_meta_trim"])}'
                 + columnas([(n + (f" (al {int(CORTE[8:])})" if c == mes_act else ""), kr1[c] if hay(c) else None) for c, n in meses_q], O["kr1_meta_mes"], O["kr1_base"], nombre="Piezas por mes")
-                + '<p class="small">' + " · ".join(f'{n}: {org[c]} orgánicas' + (f' + {O["bofu"][c]} anuncios BOFU' if c in O["bofu"] else "") for c, n in meses_q if hay(c))
+                + '<p class="small">' + " · ".join(f'{n}: {org[c]} orgánicas' + (f' + {O["bofu"][c]} anuncios BOFU de AI Course Builder' if c in O["bofu"] else "") for c, n in meses_q if hay(c))
                 + '. Una pieza cuenta una vez aunque salga en varias redes. Los anuncios BOFU de noviembre se suman cuando se confirme cuántos fueron.</p>')
     # KR2 · interacciones promedio por publicación, semana a semana
     def prom(ps): return (sum(inter(p) for p in ps) / len(ps)) if ps else None
