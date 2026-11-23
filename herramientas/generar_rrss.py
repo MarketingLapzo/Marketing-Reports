@@ -99,7 +99,7 @@ APRENDIZAJES = {
    "<b>Seguidores en Facebook:</b> +47 en 21 días, contra +2 en los mismos días de octubre (+12 en todo el mes). Los días con más seguidores nuevos (+13 el 7 nov y +10 el 10 nov) son los mismos días de los dos reels de Facebook con más reproducciones.",
   ],
   "no_funciono": [
-   "<b>Facebook · reels con alcance alto, poca interacción:</b> [[N7|Facebook|«¿Cuántas plataformas abres?»]] (10,377) y [[N6|Facebook|«El talento también merece números»]] (5,749) fueron las publicaciones más vistas de los tres periodos y suman el 72 % de las impresiones del mes, pero tuvieron 0.3 % de interacción.",
+   "<b>Facebook · reels con alcance alto, poca interacción:</b> [[N7|Facebook|«¿Cuántas plataformas abres?»]] (10,377) y [[N6|Facebook|«El talento también merece números»]] (5,749) fueron las publicaciones más vistas de los tres periodos y suman el 70 % de las impresiones del mes, pero tuvieron 0.3 % de interacción.",
    "<b>Comentarios:</b> 0 en publicaciones, aunque varias cerraban con «Te leemos en comentarios».",
   ],
   "parrilla": [
@@ -770,7 +770,7 @@ SEMANAS = [("2026-11-10", "2026-11-16", "2026-11-03", "2026-11-09"), ("2026-11-1
 # Avisos de cada semana sobre datos que las fuentes todavía no actualizan (clave: lunes de la semana).
 AVISOS_SEMANA = {
  "2026-11-16": [
-  "<b>Ojo con TikTok:</b> para el video de «Conocimiento compartido» (19 nov), Metricool registra 66 reproducciones y HubSpot 462. Parece que Metricool todavía no lo actualiza: la cifra real puede ser más alta.",
+  "<b>Cifra de HubSpot en TikTok:</b> para el video de «Conocimiento compartido» (19 nov), Metricool se quedó en 66 reproducciones y 9 likes, sin actualizarse. Se usa la de HubSpot: 462 reproducciones y 33 likes.",
   "<b>Ojo con «La mejor encuesta es la que sí mandas» (22 nov):</b> salió el domingo y Metricool aún no tiene sus cifras de Instagram ni de TikTok. Instagram se completó con HubSpot; el TikTok aparece con 0 porque ninguna de las dos fuentes lo ha actualizado.",
  ],
 }

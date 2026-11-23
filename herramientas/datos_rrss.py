@@ -144,7 +144,6 @@ for f, rid, t, imp, l, c, sh in [
 
 # TikTok · videos (impresiones = Views)
 for f, vid, t, imp, l, c, s in [
- ("2026-11-19","7709920922492357908","N11",66,9,0,0),
  ("2026-11-12","7707400839622708501","N10",535,14,0,1),
  ("2026-11-12","7707349358710295816","N8",464,11,0,0),
  ("2026-11-10","7706582004640402708","N7",180,2,0,0),
@@ -163,6 +162,7 @@ def add_hs(*a):
     add(*a); P[-1]["fuente"] = "HubSpot"
 for f, red, fmt, t, imp, l, c, sh, url in [
  ("2026-11-22","Instagram","Reel","N14",78,4,0,6,"https://www.instagram.com/reel/DgD7fVREbJQ/"),
+ ("2026-11-19","TikTok","Video","N11",462,33,0,0,"https://www.tiktok.com/@go_lapzo/video/7709920922492357908"),  # Metricool se quedó en 66 reproducciones
  ("2026-11-22","TikTok","Video","N14",0,0,0,0,"https://www.tiktok.com/@go_lapzo/video/7711025537925319988"),
  ("2026-10-28","Facebook","Publicación","O17",21,1,0,0,"https://www.facebook.com/613311597166199/posts/1653199913177357"),
  ("2026-10-26","Facebook","Publicación","O10",4,0,0,0,"https://www.facebook.com/613311597166199/posts/1651319543365394"),

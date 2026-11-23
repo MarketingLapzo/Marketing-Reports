@@ -29,14 +29,14 @@ Las historias de Instagram y Facebook todavía no se incluyen (próximamente).
 
 ## 2026-11 (parcial, 1–22 nov; actualizado el 23 nov)
 
-37 publicaciones · 22,570 impresiones · 1.1 % de interacción · Facebook +47 seguidores, Instagram +23 (al 21 nov).
+37 publicaciones · 22,966 impresiones · 1.2 % de interacción · Facebook +47 seguidores, Instagram +23 (al 21 nov).
 
 - **Qué funcionó:**
   - LinkedIn · documento (Experta en talento, educativo): [la guía de incorporación](https://www.linkedin.com/feed/update/urn:li:ugcPost:7526689422331822080) tuvo 3.3 % de interacción; en noviembre solo la superó el post de AI Course Builder del 20 nov (4.7 %).
   - Instagram: reels con 7.5 % y carruseles con 6.4 % de interacción.
   - Seguidores en Facebook: +47 en 21 días, contra +2 en los mismos días de octubre (+12 en todo el mes). Los días con más seguidores nuevos (+13 el 7 nov y +10 el 10 nov) son los mismos días de los dos reels de Facebook más vistos.
 - **Qué no funcionó:**
-  - Reels de Facebook [«¿Cuántas plataformas abres?»](https://www.facebook.com/reel/2424825538289478/) (10,377) y [«El talento también merece números»](https://www.facebook.com/reel/990593957434490/) (5,749): las publicaciones más vistas de los tres periodos (72 % de las impresiones del mes), pero con 0.3 % de interacción.
+  - Reels de Facebook [«¿Cuántas plataformas abres?»](https://www.facebook.com/reel/2424825538289478/) (10,377) y [«El talento también merece números»](https://www.facebook.com/reel/990593957434490/) (5,749): las publicaciones más vistas de los tres periodos (70 % de las impresiones del mes), pero con 0.3 % de interacción.
   - 0 comentarios en publicaciones, aunque varias cerraban con «Te leemos en comentarios».
 - **Qué cambiamos en la parrilla del mes siguiente:**
   - Repetir: documentos en LinkedIn y reels en Instagram.
