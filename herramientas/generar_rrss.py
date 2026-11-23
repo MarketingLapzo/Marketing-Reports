@@ -1121,17 +1121,24 @@ def pagina_okrs():
                 + columnas([(n + (f" (al {int(CORTE[8:])})" if c == mes_act else ""), kr1[c] if hay(c) else None) for c, n in meses_q], O["kr1_meta_mes"], O["kr1_base"], nombre="Piezas por mes")
                 + '<p class="small">' + " · ".join(f'{n}: {org[c]} orgánicas' + (f' + {O["bofu"][c]} anuncios BOFU de AI Course Builder' if c in O["bofu"] else "") + dato_nota(c) for c, n in meses_q if hay(c))
                 + '. Una pieza cuenta una vez aunque salga en varias redes. Los anuncios BOFU de noviembre se suman cuando se confirme cuántos fueron.</p>')
-    # KR2 · interacciones promedio por publicación, semana a semana
-    def prom(ps): return (sum(inter(p) for p in ps) / len(ps)) if ps else None
-    sem2 = [(et(a), prom([p for p in d.P if a.isoformat() <= p["fecha"] <= b.isoformat() and p["fecha"] >= O["inicio"]])) for a, b in semanas]
-    mes2 = {c: prom([p for p in d.P if p["fecha"][:7] == c]) for c, _ in meses_q if hay(c)}
+    # KR2 · interacciones totales del mes contra los mismos días del mes anterior
+    import calendar
+    tot_int = lambda a, b: sum(inter(p) for p in d.P if a <= p["fecha"] <= b)
+    dia = int(CORTE[8:]); y, m = int(mes_act[:4]), int(mes_act[5:])
+    pm = (y, m - 1) if m > 1 else (y - 1, 12)
+    clave_prev = f"{pm[0]}-{pm[1]:02d}"; dia_prev = min(dia, calendar.monthrange(*pm)[1])
+    act = tot_int(f"{mes_act}-01", CORTE); prev = tot_int(f"{clave_prev}-01", f"{clave_prev}-{dia_prev:02d}")
+    prev_full = tot_int(f"{clave_prev}-01", f"{clave_prev}-{calendar.monthrange(*pm)[1]:02d}")
+    crec = (100 * (act - prev) / prev) if prev else None
+    nom_act, nom_prev = MES[m - 1], MES[pm[1] - 1]
+    sem2 = [(et(a), tot_int(max(a, ini).isoformat(), b.isoformat())) for a, b in semanas]
     com_mes = {c: sum(n(p["com"]) for p in d.P if p["fecha"][:7] == c) for c, _ in meses_q if hay(c)}
-    v2 = mes2[mes_act]
-    st2 = estado("ok", "Cumplido") if v2 >= O["kr2_meta"] else (estado("mid", "Arriba de la línea base, lejos de la meta") if v2 > O["kr2_base"] else estado("bad", "En la línea base o abajo"))
-    kr2_html = (f'<div class="okr-big"><b>{v2:.1f}</b> interacciones por publicación en {MES[int(mes_act[5:])-1]} · meta {O["kr2_meta"]}</div>{barra(v2, O["kr2_meta"])}'
-                + columnas(sem2, O["kr2_meta"], O["kr2_base"], fmt=lambda v: f"{v:.1f}", nombre="Interacciones por publicación cada semana")
-                + '<p class="small">Semana a semana (lunes a domingo). Todas las redes; interacciones = likes + comentarios + compartidos. '
-                + " · ".join(f'{n}: {mes2[c]:.1f} por publicación, {com_mes[c]} comentarios' for c, n in meses_q if hay(c)) + '.</p>')
+    st2 = (estado("ok", f"{crec:+.0f} % contra {nom_prev}") if crec is not None and crec > 0 else estado("bad", f"{crec:+.0f} % contra {nom_prev}") if crec is not None else estado("mid", "Sin mes anterior"))
+    kr2_html = (f'<div class="okr-big"><b>{crec:+.0f} %</b> interacciones en {nom_act} contra los mismos días de {nom_prev}</div>'
+                f'<p class="small">Del 1 al {dia} de {nom_act}: <b>{act:,}</b> interacciones · del 1 al {dia_prev} de {nom_prev}: <b>{prev:,}</b> · {nom_prev} completo: {prev_full:,}.</p>'
+                + columnas(sem2, None, None, nombre="Interacciones totales cada semana")
+                + '<p class="small">Interacciones totales de cada semana (lunes a domingo), en todas las redes; interacciones = likes + comentarios + compartidos. Comentarios: '
+                + " · ".join(f'{n} {com_mes[c]}' for c, n in meses_q if hay(c)) + '.</p>')
     com_txt = estado("ok", "Hay comentarios este mes") if com_mes[mes_act] > 0 else estado("bad", "0 comentarios este mes")
     # KR3 · leads por semana (todo lo registrado en la hoja de leads)
     sem3 = [(et(a), sum(1 for x in d.LEADS if x[7] and a.isoformat() <= x[0] <= b.isoformat())) for a, b in semanas]
@@ -1159,7 +1166,7 @@ def pagina_okrs():
         f'<dl class="okr-dl"><div><dt>Métrica</dt><dd>{e(metrica)}</dd></div><div><dt>Línea base</dt><dd>{e(base)}</dd></div><div><dt>Meta</dt><dd>{e(meta)}</dd></div></dl>{cuerpo}</section>')
     cards = "".join([
         tarjeta("KR1", "Aumentar el volumen de piezas de contenido", st1, "Piezas publicadas al mes", "5 piezas (septiembre)", "25 o más al mes · 75 en el trimestre", kr1_html),
-        tarjeta("KR2", "Mejorar el engagement de las piezas", st2 + com_txt, "Interacciones promedio por publicación", "~5 por publicación, 0 comentarios", "~15 por publicación · comentarios > 0", kr2_html),
+        tarjeta("KR2", "Mejorar el engagement de las piezas", st2 + com_txt, "Interacciones totales contra los mismos días del mes anterior", "~5 interacciones por publicación, 0 comentarios", "Que crezcan cada mes · comentarios > 0", kr2_html),
         tarjeta("KR3", "Generar leads desde redes sociales", st3, "Leads registrados por semana", "0 (septiembre)", "1 o más por semana", kr3_html),
         tarjeta("KR4", "Establecer el reporte semanal de desempeño", st4, "% de semanas con reporte entregado", "Sin reporte semanal", "100 % desde que arrancó", kr4_html),
         tarjeta("KR5", "Implementar la edición de video automatizada", estado("ok", "Cumplido"), "Proceso implementado y en uso", "0 % (edición manual)", "100 % de las piezas", kr5_html),
