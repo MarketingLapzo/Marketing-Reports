@@ -4,6 +4,7 @@ Reportes de marketing de Lapzo publicados como páginas estáticas (GitHub Pages
 
 | Reporte | Ruta | Periodo |
 |---|---|---|
+| OKRs de contenido Q4 2026 | [`okrs/`](okrs/) | Avance de los 5 resultados clave, actualizado cada lunes |
 | Leads de redes (atendidos por Marketing) | [`leads/`](leads/) | Q4 2026, desde la hoja «Registro de leads orgánicos (redes)» · sin datos de contacto |
 | Redes sociales · reporte semanal | [`rrss/semanal/2026-11-16/`](rrss/semanal/2026-11-16/) | 16 – 22 nov 2026 (comparado con 9 – 15 nov) |
 | Redes sociales · reporte semanal | [`rrss/semanal/2026-11-10/`](rrss/semanal/2026-11-10/) | 10 – 16 nov 2026 (comparado con 3 – 9 nov) |

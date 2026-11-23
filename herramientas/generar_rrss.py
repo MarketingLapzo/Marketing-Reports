@@ -44,7 +44,7 @@ APRENDIZAJES_PLANEACION = [
 ]
 
 NOTAS = {  # notas del equipo que no salen de las fuentes de datos
-    "2026-10": "Octubre cerró con 19 piezas orgánicas. Aparte, se hicieron 5 anuncios BOFU de AI Course Builder (pagados), que no se incluyen en este reporte porque es solo de redes orgánicas.",
+    "2026-10": "Octubre cerró con 19 piezas orgánicas. Aparte, se hicieron 5 anuncios BOFU de AI Course Builder (pagados), que no se incluyen en este reporte porque es solo de redes orgánicas, y 5 piezas de TaaS que, por acuerdo con el líder, no se cuentan; se recrean en noviembre como piezas nuevas (P24 a P28).",
 }
 
 SEGUIDORES = {  # neto del mes; None = no disponible
@@ -1115,7 +1115,7 @@ def pagina_okrs():
     kr1_html = (f'<div class="okr-big"><b>{trim}</b> de {O["kr1_meta_trim"]} piezas en el trimestre</div>{barra(trim, O["kr1_meta_trim"])}'
                 + columnas([(n + (f" (al {int(CORTE[8:])})" if c == mes_act else ""), kr1[c] if hay(c) else None) for c, n in meses_q], O["kr1_meta_mes"], O["kr1_base"], nombre="Piezas por mes")
                 + '<p class="small">' + " · ".join(f'{n}: {org[c]} orgánicas' + (f' + {O["bofu"][c]} anuncios BOFU de AI Course Builder' if c in O["bofu"] else "") for c, n in meses_q if hay(c))
-                + '. Una pieza cuenta una vez aunque salga en varias redes. Los anuncios BOFU de noviembre se suman cuando se confirme cuántos fueron.</p>')
+                + '. Una pieza cuenta una vez aunque salga en varias redes. Los anuncios BOFU de noviembre se suman cuando se confirme cuántos fueron. ' + e(O['kr1_nota']) + '</p>')
     # KR2 · interacciones promedio por publicación, semana a semana
     def prom(ps): return (sum(inter(p) for p in ps) / len(ps)) if ps else None
     sem2 = [(et(a), prom([p for p in d.P if a.isoformat() <= p["fecha"] <= b.isoformat() and p["fecha"] >= O["inicio"]])) for a, b in semanas]

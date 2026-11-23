@@ -53,7 +53,7 @@ Las historias de Instagram y Facebook todavía no se incluyen (próximamente).
 
 19 piezas · 53 publicaciones · 12,636 impresiones · 3.0 % de interacción · Facebook +12 seguidores, Instagram +21.
 
-> Nota del equipo: octubre cerró con 19 piezas orgánicas. Aparte, se hicieron 5 anuncios BOFU de AI Course Builder (pagados), que no se incluyen en este reporte.
+> Nota del equipo: octubre cerró con 19 piezas orgánicas. Aparte, se hicieron 5 anuncios BOFU de AI Course Builder (pagados), que no se incluyen en este reporte, y 5 piezas de TaaS que, por acuerdo con el líder, no se cuentan; se recrean en noviembre como piezas nuevas (P24 a P28).
 
 - **Qué funcionó:**
   - Modo reflexivo: 3.5 % de interacción contra 2.4 % del educativo.
