@@ -329,7 +329,6 @@ OKR = dict(
     kr1_base=5, kr1_meta_mes=25, kr1_meta_trim=75,
     # Anuncios BOFU (pagados) que también cuentan como piezas en KR1, por mes. Octubre: nota del equipo.
     bofu={"2026-10": 5},
-    kr1_nota="En octubre también se hicieron 5 piezas de TaaS que, por acuerdo con el líder, no cuentan para este KR. Se recrean en noviembre como piezas nuevas (P24 a P28) y cuentan cuando se publiquen.",
     kr2_base=5, kr2_meta=15,
     kr3_meta_sem=1,
     kr4_inicio="2026-11-10",

@@ -44,7 +44,10 @@ APRENDIZAJES_PLANEACION = [
 ]
 
 NOTAS = {  # notas del equipo que no salen de las fuentes de datos
-    "2026-10": "Octubre cerró con 19 piezas orgánicas. Aparte, se hicieron 5 anuncios BOFU de AI Course Builder (pagados), que no se incluyen en este reporte porque es solo de redes orgánicas, y 5 piezas de TaaS que, por acuerdo con el líder, no se cuentan; se recrean en noviembre como piezas nuevas (P24 a P28).",
+    "2026-10": "Octubre cerró con 19 piezas orgánicas. Aparte, se hicieron 5 anuncios BOFU de AI Course Builder (pagados), que no se incluyen en este reporte porque es solo de redes orgánicas.",
+}
+NOTAS_DATO = {  # dato extra junto a la nota del equipo (con borde punteado)
+    "2026-10": "+5 de TaaS que no se contaron este mes",
 }
 
 SEGUIDORES = {  # neto del mes; None = no disponible
@@ -474,6 +477,8 @@ def seccion_videos(ps, periodo="del mes"):
             + '<p class="small">De Metricool: tiempo promedio visto (Instagram y Facebook), qué parte de las vistas pasa de los primeros 3 segundos y guardados (solo Instagram), y duración (TikTok). '
             'La duración de los reels de Instagram y Facebook de noviembre se leyó del archivo de video en Metricool (o es la de su TikTok cuando usan el mismo archivo); los anteriores al 9 de noviembre no tienen archivo ahí. Metricool no da la retención completa, el porcentaje que vio el video completo ni de dónde llegaron las vistas de TikTok.</p></div>')
 
+def dato_nota(c): return f' <span class="src">{e(NOTAS_DATO[c])}</span>' if c in NOTAS_DATO else ""
+
 def tabla(cab, filas):
     return f'<details><summary>Ver tabla</summary><div class="scroll"><table><thead><tr>{"".join(f"<th>{c}</th>" for c in cab)}</tr></thead><tbody>{"".join(filas)}</tbody></table></div></details>'
 
@@ -576,7 +581,7 @@ def pagina(idx):
     seg_txt = lambda r: (f' <span class="small">· {nom_prev}: {seg_de(dict(mprev, hasta_seg=min(mprev["hasta"], dia_seg())) if mprev.get("hasta") else mprev, r):+d}</span>' if mprev and seg_de(mprev, r) is not None else "")
     seg_lines = "".join(f'<div>{r} <b>+{v[0]}</b>' + seg_txt(r) + "</div>" for r, v in seg.items())
     parcial = (f'<p class="small">Comparación pareja: {MES[int(clave[5:]) - 1]} va al día {dia_corte()}, así que los meses anteriores se cuentan solo del 1 al {dia_corte()} (seguidores, del 1 al {dia_seg()}). Septiembre tiene poca actividad en esos días porque la primera publicación es del 19.</p>' if clave == CORTE[:7] else "")
-    nota_mes = f'<div class="card nota-eq"><b>Nota del equipo:</b> {e(NOTAS[clave])}</div>' if clave in NOTAS else ""
+    nota_mes = f'<div class="card nota-eq"><b>Nota del equipo:</b> {e(NOTAS[clave])}{dato_nota(clave)}</div>' if clave in NOTAS else ""
     kpis_html = f"""<div class="kpis">
 <div class="card kpi"><div class="v">{R["n"]}</div><div class="l">publicaciones</div>{delta(R["n"], RP["n"] if RP else None)}</div>
 <div class="card kpi"><div class="v">{f_int(R["imp"])}</div><div class="l">veces que se vieron nuestras publicaciones (impresiones)</div>{delta(R["imp"], RP["imp"] if RP else None)}</div>
@@ -993,7 +998,7 @@ def pagina_inicio():
             f'<p class="small">{e(m["periodo"])}</p>'
             f'<div class="mini"><div><b>{st["piezas"]}</b><span>piezas</span></div><div><b>{f_int(st["imp"])}</b><span>impresiones</span></div><div><b>{f_pct(st["er"])}</b><span>tasa</span></div></div>'
             f'<p class="small">Seguidores: {seg}</p><p class="hl-txt">{e(dest)}</p>'
-            + (f'<p class="nota-mini">{e(NOTAS[m["clave"]])}</p>' if m["clave"] in NOTAS else "")
+            + (f'<p class="nota-mini">{e(NOTAS[m["clave"]])}{dato_nota(m["clave"])}</p>' if m["clave"] in NOTAS else "")
             + '<span class="go">Ver reporte →</span></a>')
     for a, b, pa, pb in reversed(SEMANAS):
         ps = [p for p in d.P if a <= p["fecha"] <= b]
@@ -1046,7 +1051,7 @@ def pagina_aprendizajes():
         bloques.append(
             f'<section class="mes"><h2>{e(m["titulo"])} <a class="small" href="../rrss/{c}/index.html">ver reporte →</a></h2>'
             f'<p class="lead">{st["piezas"]} piezas · {st["n"]} publicaciones · {f_int(st["imp"])} impresiones · {f_pct(st["er"])} de tasa · seguidores: {seg}</p>'
-            + (f'<div class="card nota-eq"><b>Nota del equipo:</b> {e(NOTAS[c])}</div>' if c in NOTAS else "")
+            + (f'<div class="card nota-eq"><b>Nota del equipo:</b> {e(NOTAS[c])}{dato_nota(c)}</div>' if c in NOTAS else "")
             + '<div class="learn">'
             f'<div class="card"><h3>Qué funcionó</h3><ul>{li(A["funciono"], c)}</ul></div>'
             f'<div class="card"><h3>Qué no funcionó</h3><ul>{li(A["no_funciono"], c)}</ul></div>'
@@ -1114,8 +1119,8 @@ def pagina_okrs():
     st1 = estado("ok", "Cumplido este mes") if v_act >= O["kr1_meta_mes"] else estado("mid", f"Faltan {O['kr1_meta_mes'] - v_act} piezas para 25 este mes")
     kr1_html = (f'<div class="okr-big"><b>{trim}</b> de {O["kr1_meta_trim"]} piezas en el trimestre</div>{barra(trim, O["kr1_meta_trim"])}'
                 + columnas([(n + (f" (al {int(CORTE[8:])})" if c == mes_act else ""), kr1[c] if hay(c) else None) for c, n in meses_q], O["kr1_meta_mes"], O["kr1_base"], nombre="Piezas por mes")
-                + '<p class="small">' + " · ".join(f'{n}: {org[c]} orgánicas' + (f' + {O["bofu"][c]} anuncios BOFU de AI Course Builder' if c in O["bofu"] else "") for c, n in meses_q if hay(c))
-                + '. Una pieza cuenta una vez aunque salga en varias redes. Los anuncios BOFU de noviembre se suman cuando se confirme cuántos fueron. ' + e(O['kr1_nota']) + '</p>')
+                + '<p class="small">' + " · ".join(f'{n}: {org[c]} orgánicas' + (f' + {O["bofu"][c]} anuncios BOFU de AI Course Builder' if c in O["bofu"] else "") + dato_nota(c) for c, n in meses_q if hay(c))
+                + '. Una pieza cuenta una vez aunque salga en varias redes. Los anuncios BOFU de noviembre se suman cuando se confirme cuántos fueron.</p>')
     # KR2 · interacciones promedio por publicación, semana a semana
     def prom(ps): return (sum(inter(p) for p in ps) / len(ps)) if ps else None
     sem2 = [(et(a), prom([p for p in d.P if a.isoformat() <= p["fecha"] <= b.isoformat() and p["fecha"] >= O["inicio"]])) for a, b in semanas]
