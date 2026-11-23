@@ -322,3 +322,15 @@ for url, dur in [
  ("https://www.instagram.com/reel/Df2Ulj1FLvr/",23.5), ("https://www.facebook.com/reel/28606914692319621/",23.5),
  ("https://www.instagram.com/reel/DgD7fVREbJQ/",33.0), ("https://www.facebook.com/reel/2521736088316301/",33.0),
 ]: VIDEO.setdefault(url, {})["dur"] = dur
+
+# OKRs Q4 2026 de la Content & Social Media Specialist (del PDF «Mi plan de OKRs», compartido el 23 nov 2026).
+OKR = dict(
+    inicio="2026-10-01", fin="2026-12-31",
+    kr1_base=5, kr1_meta_mes=25, kr1_meta_trim=75,
+    # Anuncios BOFU (pagados) que también cuentan como piezas en KR1, por mes. Octubre: nota del equipo.
+    bofu={"2026-10": 5},
+    kr2_base=5, kr2_meta=15,
+    kr3_meta_sem=1,
+    kr4_inicio="2026-11-10",
+    kr5_pct=100, kr5_nota="Confirmado por la usuaria el 23 nov 2026: todas las piezas de video ya se editan con el proceso automatizado.",
+)

@@ -937,6 +937,7 @@ def barra_nav(raiz, activo):
     links += [(f"sem-{a}", f"Semana {int(a[8:])}–{int(b[8:])} {MES[int(b[5:7])-1][:3]}", f"rrss/semanal/{a}/index.html") for a, b, _, _ in SEMANAS]
     links += [("leads", "Leads", "leads/index.html")]
     links += [("aprendizajes", "Aprendizajes", "aprendizajes/index.html")]
+    links += [("okrs", "OKRs", "okrs/index.html")]
     items = "".join(f'<a href="{raiz}{u}"{" aria-current=page" if k == activo else ""}>{e(t)}</a>' for k, t, u in links)
     return (f'<header class="top"><div class="top-in"><a class="brand" href="{raiz}index.html">Lapzo · Reportes</a>'
             f'<nav class="menu">{items}</nav>'
@@ -1066,6 +1067,116 @@ def pagina_aprendizajes():
            if APRENDIZAJES_PLANEACION else "")
         + "".join(bloques) + '\n</main></body></html>')
 
+# ---------------------------------------------------------------- Página de OKRs
+def pagina_okrs():
+    import datetime as dt
+    O = d.OKR; estilo = _estilo_y_scripts()
+    hoy = dt.date.fromisoformat(CORTE)
+    ini = dt.date.fromisoformat(O["inicio"])
+    lunes0 = ini - dt.timedelta(ini.weekday())
+    semanas = []
+    k = lunes0
+    while k + dt.timedelta(6) <= hoy:
+        semanas.append((k, k + dt.timedelta(6))); k += dt.timedelta(7)
+    et = lambda a: (lambda x: f"{x.day} {MES[x.month-1][:3]}")(max(a, ini))
+    estado = lambda cls, txt: f'<span class="okr-st {cls}">{txt}</span>'
+    def barra(v, meta, color="var(--accent)"):
+        w = max(0, min(100, 100 * v / meta)) if meta else 0
+        return f'<div class="okr-bar"><div style="width:{w:.1f}%;background:{color}"></div></div>'
+    def columnas(items, meta=None, base=None, fmt=lambda v: f"{v:,.0f}", nombre=""):
+        W, H, ml, mb, mt, mr = 680, 190, 8, 30, 22, 92
+        mx = max([v for _, v in items if v is not None] + [meta or 0, 1]) * 1.1
+        gw = (W - ml - mr) / max(len(items), 1); bw = min(46, gw - 12)
+        Y = lambda v: H - mb - (H - mb - mt) * v / mx
+        o = [f'<svg viewBox="0 0 {W} {H}" class="chart wide" role="img" aria-label="{e(nombre)}">']
+        for ref, cls, txt in [(meta, "ref", "meta"), (base, "ref base", "línea base")]:
+            if ref is not None:
+                o.append(f'<line x1="{ml}" x2="{W-mr+6}" y1="{Y(ref):.1f}" y2="{Y(ref):.1f}" class="{cls}"/><text x="{W-mr+10}" y="{Y(ref)+4:.1f}" class="tick">{txt}: {fmt(ref)}</text>')
+        for i, (lab, v) in enumerate(items):
+            x = ml + i * gw + (gw - bw) / 2
+            if v is None:
+                o.append(f'<text x="{x+bw/2:.1f}" y="{H-mb-5}" text-anchor="middle" class="val">sin datos</text>')
+            else:
+                ok = meta is not None and v >= meta
+                o.append(f'<g data-tip="{tip(lab, fmt(v))}"><rect x="{x:.1f}" y="{Y(v):.1f}" width="{bw:.1f}" height="{H-mb-Y(v):.1f}" rx="3" style="fill:{"var(--ti)" if ok else "var(--accent)"}"/>'
+                         f'<text x="{x+bw/2:.1f}" y="{Y(v)-5:.1f}" text-anchor="middle" class="val">{fmt(v)}</text></g>')
+            o.append(f'<text x="{x+bw/2:.1f}" y="{H-10}" text-anchor="middle" class="tick">{e(lab)}</text>')
+        o.append(f'<line x1="{ml}" x2="{W-mr+6}" y1="{H-mb}" y2="{H-mb}" class="axis"/></svg>')
+        return "".join(o)
+
+    meses_q = [("2026-10", "Octubre"), ("2026-11", "Noviembre"), ("2026-12", "Diciembre")]
+    hay = lambda c: c <= CORTE[:7]
+    # KR1 · piezas al mes (piezas únicas orgánicas + anuncios BOFU)
+    org = {c: len({p["tema"] for p in d.P if p["fecha"][:7] == c and p["fecha"] >= O["inicio"]}) for c, _ in meses_q}
+    kr1 = {c: org[c] + O["bofu"].get(c, 0) for c, _ in meses_q}
+    trim = sum(kr1[c] for c, _ in meses_q if hay(c))
+    mes_act = CORTE[:7]; v_act = kr1[mes_act]
+    st1 = estado("ok", "Cumplido este mes") if v_act >= O["kr1_meta_mes"] else estado("mid", f"Faltan {O['kr1_meta_mes'] - v_act} piezas para 25 este mes")
+    kr1_html = (f'<div class="okr-big"><b>{trim}</b> de {O["kr1_meta_trim"]} piezas en el trimestre</div>{barra(trim, O["kr1_meta_trim"])}'
+                + columnas([(n + (f" (al {int(CORTE[8:])})" if c == mes_act else ""), kr1[c] if hay(c) else None) for c, n in meses_q], O["kr1_meta_mes"], O["kr1_base"], nombre="Piezas por mes")
+                + '<p class="small">' + " · ".join(f'{n}: {org[c]} orgánicas' + (f' + {O["bofu"][c]} anuncios BOFU' if c in O["bofu"] else "") for c, n in meses_q if hay(c))
+                + '. Una pieza cuenta una vez aunque salga en varias redes. Los anuncios BOFU de noviembre se suman cuando se confirme cuántos fueron.</p>')
+    # KR2 · interacciones promedio por publicación, semana a semana
+    def prom(ps): return (sum(inter(p) for p in ps) / len(ps)) if ps else None
+    sem2 = [(et(a), prom([p for p in d.P if a.isoformat() <= p["fecha"] <= b.isoformat() and p["fecha"] >= O["inicio"]])) for a, b in semanas]
+    mes2 = {c: prom([p for p in d.P if p["fecha"][:7] == c]) for c, _ in meses_q if hay(c)}
+    com_mes = {c: sum(n(p["com"]) for p in d.P if p["fecha"][:7] == c) for c, _ in meses_q if hay(c)}
+    v2 = mes2[mes_act]
+    st2 = estado("ok", "Cumplido") if v2 >= O["kr2_meta"] else (estado("mid", "Arriba de la línea base, lejos de la meta") if v2 > O["kr2_base"] else estado("bad", "En la línea base o abajo"))
+    kr2_html = (f'<div class="okr-big"><b>{v2:.1f}</b> interacciones por publicación en {MES[int(mes_act[5:])-1]} · meta {O["kr2_meta"]}</div>{barra(v2, O["kr2_meta"])}'
+                + columnas(sem2, O["kr2_meta"], O["kr2_base"], fmt=lambda v: f"{v:.1f}", nombre="Interacciones por publicación cada semana")
+                + '<p class="small">Semana a semana (lunes a domingo). Todas las redes; interacciones = likes + comentarios + compartidos. '
+                + " · ".join(f'{n}: {mes2[c]:.1f} por publicación, {com_mes[c]} comentarios' for c, n in meses_q if hay(c)) + '.</p>')
+    com_txt = estado("ok", "Hay comentarios este mes") if com_mes[mes_act] > 0 else estado("bad", "0 comentarios este mes")
+    # KR3 · leads por semana (todo lo registrado en la hoja de leads)
+    sem3 = [(et(a), sum(1 for x in d.LEADS if a.isoformat() <= x[0] <= b.isoformat())) for a, b in semanas]
+    cumple = sum(1 for _, v in sem3 if v >= O["kr3_meta_sem"])
+    tot3 = sum(1 for x in d.LEADS if x[0] >= O["inicio"])
+    st3 = estado("ok", "Todas las semanas") if cumple == len(sem3) else estado("mid", f"{cumple} de {len(sem3)} semanas con al menos 1 lead")
+    kr3_html = (f'<div class="okr-big"><b>{tot3}</b> leads en Q4 · {cumple} de {len(sem3)} semanas cumplen la meta de 1 por semana</div>{barra(cumple, len(sem3))}'
+                + columnas(sem3, O["kr3_meta_sem"], None, nombre="Leads por semana")
+                + f'<p class="small">Fuente: {e(d.LEADS_FUENTE)}, leída el {e(d.LEADS_LEIDO)}. Cuenta todo lo que registraste, haya tenido seguimiento de Ventas o no. '
+                + f'{sum(1 for x in d.LEADS if x[5] in ("Pasado a Ventas", "Reescalado a Ventas"))} ya se pasaron a Ventas. Detalle en <a href="../leads/index.html">Leads</a>.</p>')
+    # KR4 · reporte semanal entregado
+    fallas = 0
+    for (a0, b0, _, _), (a1, _, _, _) in zip(SEMANAS[:-1], SEMANAS[1:]):
+        fallas += max(0, (dt.date.fromisoformat(a1) - dt.date.fromisoformat(b0)).days - 1) // 7
+    esperadas = len(SEMANAS) + fallas; pct4 = 100 * len(SEMANAS) / esperadas if esperadas else 0
+    st4 = estado("ok", "Al 100 %") if pct4 >= 100 else estado("mid", f"{pct4:.0f} %")
+    kr4_html = (f'<div class="okr-big"><b>{len(SEMANAS)} de {esperadas}</b> semanas con reporte ({pct4:.0f} %)</div>{barra(pct4, 100)}'
+                + '<ul class="rs">' + "".join(f'<li>✓ <a href="../rrss/semanal/{a}/index.html">Semana del {fecha(a)} al {fecha(b)}</a></li>' for a, b, _, _ in SEMANAS) + '</ul>'
+                + '<p class="small">Cuenta desde que arrancó el reporte semanal (10 nov). Cada lunes se suma la semana anterior.</p>')
+    # KR5 · edición de video automatizada
+    kr5_html = (f'<div class="okr-big"><b>{O["kr5_pct"]} %</b> de las piezas de video con el proceso automatizado</div>{barra(O["kr5_pct"], 100, "var(--ti)")}'
+                f'<p class="small">{e(O["kr5_nota"])}</p>')
+    tarjeta = lambda kr, tit, st, metrica, base, meta, cuerpo: (
+        f'<section class="card okr"><div class="okr-h"><span class="okr-kr">{kr}</span><h3>{e(tit)}</h3>{st}</div>'
+        f'<dl class="okr-dl"><div><dt>Métrica</dt><dd>{e(metrica)}</dd></div><div><dt>Línea base</dt><dd>{e(base)}</dd></div><div><dt>Meta</dt><dd>{e(meta)}</dd></div></dl>{cuerpo}</section>')
+    cards = "".join([
+        tarjeta("KR1", "Aumentar el volumen de piezas de contenido", st1, "Piezas publicadas al mes", "5 piezas (septiembre)", "25 o más al mes · 75 en el trimestre", kr1_html),
+        tarjeta("KR2", "Mejorar el engagement de las piezas", st2 + com_txt, "Interacciones promedio por publicación", "~5 por publicación, 0 comentarios", "~15 por publicación · comentarios > 0", kr2_html),
+        tarjeta("KR3", "Generar leads desde redes sociales", st3, "Leads registrados por semana", "0 (septiembre)", "1 o más por semana", kr3_html),
+        tarjeta("KR4", "Establecer el reporte semanal de desempeño", st4, "% de semanas con reporte entregado", "Sin reporte semanal", "100 % desde que arrancó", kr4_html),
+        tarjeta("KR5", "Implementar la edición de video automatizada", estado("ok", "Cumplido"), "Proceso implementado y en uso", "0 % (edición manual)", "100 % de las piezas", kr5_html),
+    ])
+    css = ('<style>.okr{margin-bottom:14px} .okr-h{display:flex;flex-wrap:wrap;align-items:center;gap:8px 10px;margin-bottom:10px} .okr-h h3{margin:0;flex:1 1 260px} '
+           '.okr-kr{font-size:12px;font-weight:700;color:#fff;background:var(--accent);border-radius:6px;padding:2px 8px} '
+           '.okr-st{font-size:12.5px;font-weight:600;border-radius:999px;padding:2px 10px;border:1px solid} .okr-st.ok{color:var(--ti)} .okr-st.mid{color:var(--tr)} .okr-st.bad{color:var(--td)} '
+           '.okr-dl{grid-template-columns:repeat(3,1fr);margin-bottom:12px} @media (max-width:640px){.okr-dl{grid-template-columns:1fr}} '
+           '.okr-big{font-size:15px;margin:6px 0} .okr-big b{font-size:26px;margin-right:4px} '
+           '.okr-bar{height:10px;background:var(--grid);border-radius:5px;overflow:hidden;margin:4px 0 12px} .okr-bar div{height:100%;border-radius:5px} '
+           '.chart .ref.base{stroke-dasharray:2 4}</style>')
+    return (
+        '<!doctype html>\n<html lang="es-MX"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">\n'
+        f'<title>Lapzo · OKRs de contenido Q4 2026</title>\n{estilo}{css}</head><body>{barra_nav("../", "okrs")}<main>\n'
+        '<div class="eyebrow">Lapzo · Mi plan de OKRs · Q4 2026</div>\n<h1>Escala tu producción de contenido sin perder calidad</h1>\n'
+        '<p class="lead">Pasa de 5 a 25+ piezas mensuales, mejora el engagement, genera leads desde redes sociales y establece tu medición semanal y tus procesos con IA, de octubre a diciembre.</p>\n'
+        f'<p class="small">Avance al {fecha(CORTE)} {CORTE[:4]} · se actualiza cada lunes con el reporte semanal.</p>\n'
+        f'{cards}\n</main>\n<div id="tip" role="tooltip"></div>\n<script>\n(function(){{var t=document.getElementById("tip");\n'
+        'document.addEventListener("pointermove",function(ev){var el=ev.target.closest("[data-tip]");if(!el){t.style.opacity=0;return}'
+        't.textContent=el.getAttribute("data-tip");t.style.opacity=1;var x=ev.clientX+14,y=ev.clientY+14;if(x+t.offsetWidth>innerWidth-8)x=ev.clientX-t.offsetWidth-14;'
+        'if(y+t.offsetHeight>innerHeight-8)y=ev.clientY-t.offsetHeight-14;t.style.left=x+"px";t.style.top=y+"px"});})();\n</script>\n</body></html>')
+
 # ---------------------------------------------------------------- Página de leads
 def pagina_leads():
     from collections import Counter, OrderedDict
@@ -1183,7 +1294,10 @@ if __name__ == "__main__":
     os.makedirs(os.path.join(RAIZ, "leads"), exist_ok=True)
     with open(os.path.join(RAIZ, "leads", "index.html"), "w", encoding="utf-8") as f:
         f.write(pagina_leads())
-    print("ok portada, aprendizajes y leads")
+    os.makedirs(os.path.join(RAIZ, "okrs"), exist_ok=True)
+    with open(os.path.join(RAIZ, "okrs", "index.html"), "w", encoding="utf-8") as f:
+        f.write(pagina_okrs())
+    print("ok portada, aprendizajes, leads y OKRs")
     for a, b, pa, pb in SEMANAS:
         carpeta = os.path.join(RAIZ, "rrss", "semanal", a)
         os.makedirs(carpeta, exist_ok=True)
