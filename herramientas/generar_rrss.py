@@ -96,7 +96,7 @@ APRENDIZAJES = {
   "funciono": [
    "<b>LinkedIn · documento:</b> [[N9|LinkedIn|la guía de incorporación (onboarding)]] tuvo 3.3 % de interacción; en noviembre solo la superó [[N13|LinkedIn|el post de AI Course Builder del 20 nov]] (4.7 %).",
    "<b>Instagram:</b> reels con 7.5 % y carruseles con 6.4 % de interacción.",
-   "<b>Seguidores en Facebook:</b> +47 en 21 días, contra +12 en todo octubre. Los días con más seguidores nuevos (+13 el 7 nov y +10 el 10 nov) son los mismos días de los dos reels de Facebook con más reproducciones.",
+   "<b>Seguidores en Facebook:</b> +47 en 21 días, contra +2 en los mismos días de octubre (+12 en todo el mes). Los días con más seguidores nuevos (+13 el 7 nov y +10 el 10 nov) son los mismos días de los dos reels de Facebook con más reproducciones.",
   ],
   "no_funciono": [
    "<b>Facebook · reels con alcance alto, poca interacción:</b> [[N7|Facebook|«¿Cuántas plataformas abres?»]] (10,377) y [[N6|Facebook|«El talento también merece números»]] (5,749) fueron las publicaciones más vistas de los tres periodos y suman el 72 % de las impresiones del mes, pero tuvieron 0.3 % de interacción.",
@@ -404,12 +404,39 @@ def barras_mes(meses, valor, etiqueta):
     out.append(f'<line x1="{ml}" x2="{W}" y1="{H-mb}" y2="{H-mb}" class="axis"/></svg>')
     return "".join(out)
 
+# ---------------------------------------------------------------- Comparación pareja con el mes en curso
+# Mientras un mes va a medias, los meses anteriores se cuentan solo hasta el mismo día (del 1 al día del corte).
+def dia_corte(): return int(CORTE[8:])
+def dia_seg():
+    """Último día del mes en curso con datos de seguidores de Facebook e Instagram."""
+    k = [x for x in d.FB_TOTAL if x[:7] == CORTE[:7]] + [x for x in d.IG_DIA if x[:7] == CORTE[:7]]
+    return min(int(max(k)[8:]), dia_corte()) if k else dia_corte()
+def recortar(m, hasta):
+    """Copia de un mes que solo cuenta del 1 al día `hasta`."""
+    return dict(m, hasta=hasta, hasta_seg=min(hasta, dia_seg()), titulo=m["titulo"].replace(" 2026", "") + f" 2026 (1–{hasta})")
+def del_mes(p, m):
+    return p["fecha"][:7] == m["clave"] and (not m.get("hasta") or int(p["fecha"][8:]) <= m["hasta"])
+def seg_de(m, r):
+    """Seguidores netos de un mes (o de sus primeros días, si viene recortado). None = no disponible."""
+    if not m.get("hasta_seg"):
+        return (SEGUIDORES[m["clave"]].get(r) or (None,))[0]
+    a, b = f'{m["clave"]}-01', f'{m["clave"]}-{m["hasta_seg"]:02d}'
+    fb, ig = seg_rango(a, b)
+    if r == "Facebook": return sum(fb.values()) if fb else None
+    if r == "Instagram": return sum(ig.values()) if ig else None
+    return None
+def meses_parejos(hasta_idx):
+    """Meses hasta `hasta_idx`; si el último va a medias, los anteriores se recortan al mismo día."""
+    ms = MESES[: hasta_idx + 1]
+    if ms[-1]["clave"] != CORTE[:7]: return ms
+    return [recortar(m, dia_corte()) for m in ms[:-1]] + [dict(ms[-1], hasta_seg=None)]
+
 def tabla(cab, filas):
     return f'<details><summary>Ver tabla</summary><div class="scroll"><table><thead><tr>{"".join(f"<th>{c}</th>" for c in cab)}</tr></thead><tbody>{"".join(filas)}</tbody></table></div></details>'
 
 def pagina(idx):
     import calendar
-    M = MESES[idx]; clave = M["clave"]; previos = MESES[: idx + 1]
+    M = MESES[idx]; clave = M["clave"]; previos = meses_parejos(idx)
     ps = [p for p in d.P if p["fecha"][:7] == clave]
     calcular_destacados(ps)
     R = resumen(ps); sin = [p for p in ps if p["url"] not in ATIPICOS]
@@ -421,17 +448,17 @@ def pagina(idx):
     for r in REDES:
         celdas = []
         for m in previos:
-            q = [p for p in d.P if p["fecha"][:7] == m["clave"] and p["red"] == r]
-            s = resumen(q); sg = SEGUIDORES[m["clave"]].get(r)
-            celdas.append(f'<td>{s["n"]}</td><td>{f_int(s["imp"])}</td><td>{f_pct(s["er"])}</td><td>{f_int(s["med"])}</td><td>{("+" + str(sg[0])) if sg else "no disp."}</td>')
+            q = [p for p in d.P if del_mes(p, m) and p["red"] == r]
+            s = resumen(q); sg = seg_de(m, r)
+            celdas.append(f'<td>{s["n"]}</td><td>{f_int(s["imp"])}</td><td>{f_pct(s["er"])}</td><td>{f_int(s["med"])}</td><td>{f"{sg:+d}" if sg is not None else "no disp."}</td>')
         filas.append(f'<tr><th scope="row">{r}</th>{"".join(celdas)}</tr>')
     cab1 = "".join(f'<th colspan="5" class="grp">{e(m["titulo"])}</th>' for m in previos)
     cab2 = "<th>Pub.</th><th>Impr.</th><th>Tasa</th><th>Mediana</th><th>Seguidores</th>" * len(previos)
     evol_tabla = f'<details><summary>Ver tabla de evolución</summary><div class="scroll"><table class="evo"><thead><tr><th></th>{cab1}</tr><tr><th>Red</th>{cab2}</tr></thead><tbody>{"".join(filas)}</tbody></table></div></details>'
-    imp_mes = lambda m, r: sum(n(p["imp"]) for p in d.P if p["fecha"][:7] == m["clave"] and p["red"] == r and p["url"] not in ATIPICOS)
-    er_mes = lambda m, r: tasa([p for p in d.P if p["fecha"][:7] == m["clave"] and p["red"] == r and p["url"] not in ATIPICOS])
-    med_mes = lambda m, r: resumen([p for p in d.P if p["fecha"][:7] == m["clave"] and p["red"] == r])["med"]
-    seg_mes = lambda m, r: (SEGUIDORES[m["clave"]].get(r) or (None,))[0]
+    imp_mes = lambda m, r: sum(n(p["imp"]) for p in d.P if del_mes(p, m) and p["red"] == r and p["url"] not in ATIPICOS)
+    er_mes = lambda m, r: tasa([p for p in d.P if del_mes(p, m) and p["red"] == r and p["url"] not in ATIPICOS])
+    med_mes = lambda m, r: resumen([p for p in d.P if del_mes(p, m) and p["red"] == r])["med"]
+    seg_mes = seg_de
     fmt1 = lambda v: f"{v:.1f}"
 
     def barras_mes_pct(meses):
@@ -490,9 +517,10 @@ def pagina(idx):
     top_filas = [f'<tr><td>{fecha(p["fecha"])}</td><td class="l">{p["red"]}</td><td class="l">{p["formato"]}</td><td class="t">{e(d.TEMAS[p["tema"]][0])}{dest_badges(p)}</td><td>{f_int(p["imp"])}</td><td>{f_int(p["likes"])}</td><td>{f_int(p["com"])}</td><td>{f_int(p["sh"])}</td><td>{f_pct(tasa([p]))}</td><td><a href="{e(p["url"])}" target="_blank" rel="noopener">Ver</a></td></tr>' for p in top_imp]
 
     cal_html, cal_dias, cal_tot = calendario_mes(ps, clave)
-    prev = [p for p in d.P if idx > 0 and p["fecha"][:7] == MESES[idx - 1]["clave"]]
+    mprev = previos[-2] if idx > 0 else None
+    prev = [p for p in d.P if mprev and del_mes(p, mprev)]
     RP = resumen(prev) if prev else None
-    nom_prev = MESES[idx - 1]["titulo"].split(" ")[0].lower() if idx > 0 else ""
+    nom_prev = (MESES[idx - 1]["titulo"].split(" ")[0].lower() + (f" (1–{mprev['hasta']})" if mprev.get("hasta") else "")) if idx > 0 else ""
     def delta(a, b, pct=False):
         if b is None: return '<div class="dl neu">Primer mes con datos</div>'
         dv = a - b
@@ -502,9 +530,9 @@ def pagina(idx):
         flecha = "▲" if dv > 0 else "▼" if dv < 0 else "="
         return f'<div class="dl {cls}">{flecha} {txt} vs {nom_prev}</div>'
     l_, c_, s_ = desglose(ps)
-    seg_prev = SEGUIDORES[MESES[idx - 1]["clave"]] if idx > 0 else {}
-    seg_lines = "".join(f'<div>{r} <b>+{v[0]}</b>' + (f' <span class="small">· en {nom_prev} fueron +{seg_prev[r][0]}</span>' if r in seg_prev else "") + "</div>" for r, v in seg.items())
-    parcial = '<p class="small">Noviembre va al día 22, así que la comparación con octubre todavía no es pareja.</p>' if clave == CORTE[:7] else ""
+    seg_txt = lambda r: (f' <span class="small">· {nom_prev}: {seg_de(dict(mprev, hasta_seg=min(mprev["hasta"], dia_seg())) if mprev.get("hasta") else mprev, r):+d}</span>' if mprev and seg_de(mprev, r) is not None else "")
+    seg_lines = "".join(f'<div>{r} <b>+{v[0]}</b>' + seg_txt(r) + "</div>" for r, v in seg.items())
+    parcial = (f'<p class="small">Comparación pareja: {MES[int(clave[5:]) - 1]} va al día {dia_corte()}, así que los meses anteriores se cuentan solo del 1 al {dia_corte()} (seguidores, del 1 al {dia_seg()}). Septiembre tiene poca actividad en esos días porque la primera publicación es del 19.</p>' if clave == CORTE[:7] else "")
     nota_mes = f'<div class="card nota-eq"><b>Nota del equipo:</b> {e(NOTAS[clave])}</div>' if clave in NOTAS else ""
     kpis_html = f"""<div class="kpis">
 <div class="card kpi"><div class="v">{R["n"]}</div><div class="l">publicaciones</div>{delta(R["n"], RP["n"] if RP else None)}</div>
@@ -615,7 +643,7 @@ section.mes{{margin-bottom:28px}} .nota-sutil{{margin-top:10px;max-width:80ch}} 
 {tabla(["Fecha", "Red", "Formato", "Tema (top 10 por impresiones)", "Impr.", "Likes", "Coment.", "Compart.", "Tasa", ""], top_filas)}</div>
 
 <h2>Evolución mes a mes</h2>
-<p class="lead">Cómo cambia cada red desde septiembre.</p>
+<p class="lead">Cómo cambia cada red desde septiembre.{f" Para comparar parejo, cada mes se cuenta del 1 al {dia_corte()}." if clave == CORTE[:7] else ""}</p>
 <div class="charts">
 <div class="card"><h3>Impresiones</h3>{leyenda()}{barras_mes(previos, imp_mes, "Impresiones por mes y red")}</div>
 <div class="card"><h3>Tasa de interacción (%)</h3>{leyenda()}{barras_mes_pct(previos)}</div>
@@ -889,17 +917,20 @@ def stats_mes(clave):
 def pagina_inicio():
     estilo = _estilo_y_scripts()
     ult = MESES[-1]; ant = MESES[-2]
-    S, SA = stats_mes(ult["clave"]), stats_mes(ant["clave"])
-    na = ant["titulo"].split(" ")[0]
+    S = stats_mes(ult["clave"])
+    mant = meses_parejos(len(MESES) - 1)[-2]
+    psa = [p for p in d.P if del_mes(p, mant)]
+    SA = resumen(psa); SA["piezas"] = len({p["tema"] for p in psa})
+    na = ant["titulo"].split(" ")[0] + (f" (1–{mant['hasta']})" if mant.get("hasta") else " completo")
     l_, c_, s_ = S["desg"]
     ref = lambda txt: f'<div class="dl neu">{txt}</div>'
-    seg_lines = "".join(f'<div>{r} <b>+{v[0]}</b> <span class="small">· {ant["titulo"].split(" ")[0].lower()} completo: +{SA["seg"][r][0]}</span></div>' for r, v in S["seg"].items())
+    seg_lines = "".join(f'<div>{r} <b>+{v[0]}</b> <span class="small">· {na.lower()}: {seg_de(mant, r):+d}</span></div>' for r, v in S["seg"].items())
     kpis = (
         '<div class="kpis">'
-        f'<div class="card kpi"><div class="v">{S["piezas"]}</div><div class="l">piezas únicas ({S["n"]} publicaciones contando cada red)</div>{ref(f"{na} completo: {SA['piezas']} piezas")}</div>'
-        f'<div class="card kpi"><div class="v">{f_int(S["imp"])}</div><div class="l">veces que se vieron nuestras publicaciones</div>{ref(f"{na} completo: {f_int(SA['imp'])}")}</div>'
+        f'<div class="card kpi"><div class="v">{S["piezas"]}</div><div class="l">piezas únicas ({S["n"]} publicaciones contando cada red)</div>{ref(f"{na}: {SA['piezas']} piezas")}</div>'
+        f'<div class="card kpi"><div class="v">{f_int(S["imp"])}</div><div class="l">veces que se vieron nuestras publicaciones</div>{ref(f"{na}: {f_int(SA['imp'])}")}</div>'
         f'<div class="card kpi wide2"><div class="v">{f_int(S["int"])}</div><div class="l">reacciones</div>'
-        f'<div class="brk"><span><b>♥ {f_int(l_)}</b> likes</span><span><b>💬 {f_int(c_)}</b> comentarios</span><span><b>↗ {f_int(s_)}</b> compartidos</span></div>{ref(f"{na} completo: {f_int(SA['int'])}")}</div>'
+        f'<div class="brk"><span><b>♥ {f_int(l_)}</b> likes</span><span><b>💬 {f_int(c_)}</b> comentarios</span><span><b>↗ {f_int(s_)}</b> compartidos</span></div>{ref(f"{na}: {f_int(SA['int'])}")}</div>'
         f'<div class="card kpi half"><div class="v">{(S["er"] or 0):.1f} <span class="u">de cada 100</span></div><div class="l">personas que vieron una publicación reaccionaron</div>{ref(f"{na}: {(SA['er'] or 0):.1f} de cada 100")}</div>'
         f'<div class="card kpi half"><div class="v2">{seg_lines}</div><div class="l">seguidores nuevos (LinkedIn y TikTok: no disponible)</div></div>'
         '</div>')
@@ -932,8 +963,9 @@ def pagina_inicio():
     tarjetas.append('<a class="card rep" href="aprendizajes/index.html"><span class="tag t-r">Para la parrilla</span><h3>Aprendizajes e hipótesis</h3>'
                     '<p class="small">Qué repetir, qué ajustar y qué dejar de hacer, mes por mes, y las hipótesis por comprobar.</p><span class="go">Ver aprendizajes →</span></a>')
 
-    imp_mes = lambda m, r: sum(n(p["imp"]) for p in d.P if p["fecha"][:7] == m["clave"] and p["red"] == r)
-    seg_mes = lambda m, r: (SEGUIDORES[m["clave"]].get(r) or (None,))[0]
+    imp_mes = lambda m, r: sum(n(p["imp"]) for p in d.P if del_mes(p, m) and p["red"] == r)
+    seg_mes = seg_de
+    parejos = meses_parejos(len(MESES) - 1)
     return (
         '<!doctype html>\n<html lang="es-MX"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">\n'
         f'<title>Reportes de redes Lapzo</title>\n{estilo}</head><body>{barra_nav("", "inicio")}<main>\n'
@@ -943,8 +975,8 @@ def pagina_inicio():
         '<h2>Reportes</h2>\n'
         f'<div class="reps">{"".join(tarjetas)}</div>\n'
         '<h2>Evolución</h2>\n<div class="charts">'
-        f'<div class="card"><h3>Impresiones por mes</h3>{leyenda()}{barras_mes(MESES, imp_mes, "Impresiones por mes y red")}</div>'
-        f'<div class="card"><h3>Seguidores nuevos por mes</h3>{leyenda()}{barras_mes(MESES, seg_mes, "Seguidores nuevos por mes y red")}<p class="small">n/d: LinkedIn y TikTok no tienen el dato.</p></div>'
+        f'<div class="card"><h3>Impresiones por mes</h3>{leyenda()}{barras_mes(parejos, imp_mes, "Impresiones por mes y red")}</div>'
+        f'<div class="card"><h3>Seguidores nuevos por mes</h3>{leyenda()}{barras_mes(parejos, seg_mes, "Seguidores nuevos por mes y red")}<p class="small">n/d: LinkedIn y TikTok no tienen el dato.</p></div>'
         '</div>\n</main>\n'
         '<div id="tip" role="tooltip"></div>\n<script>\n(function(){var t=document.getElementById("tip");\n'
         'document.addEventListener("pointermove",function(ev){var el=ev.target.closest("[data-tip]");if(!el){t.style.opacity=0;return}'
