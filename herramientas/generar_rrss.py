@@ -14,7 +14,7 @@ COLOR = {"LinkedIn": "var(--c-li)", "Instagram": "var(--c-ig)", "Facebook": "var
 FORMA = {"LinkedIn": "cuadro", "Instagram": "circulo", "Facebook": "rombo", "TikTok": "triangulo"}
 MES = ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"]
 EXTRAIDO = "23 de noviembre de 2026"
-CORTE = "2026-11-22"  # último día con datos
+CORTE = "2026-11-23"  # último día con datos
 
 ATIPICOS = set()  # ya no se separa ninguna publicación
 
@@ -22,7 +22,7 @@ MESES = [
     {"clave": "2026-09", "titulo": "Septiembre 2026", "periodo": "1 – 30 sep 2026",
      "nota_periodo": "La primera publicación que registran Metricool y HubSpot es del 19 de septiembre, así que el mes tiene 12 días de actividad."},
     {"clave": "2026-10", "titulo": "Octubre 2026", "periodo": "1 – 31 oct 2026", "nota_periodo": ""},
-    {"clave": "2026-11", "titulo": "Noviembre 2026 (parcial)", "periodo": "1 – 22 nov 2026",
+    {"clave": "2026-11", "titulo": "Noviembre 2026 (parcial)", "periodo": "1 – 23 nov 2026",
      "nota_periodo": "Mes en curso: este reporte se reemplaza con el de noviembre completo a partir del 1 de diciembre."},
 ]
 
@@ -124,7 +124,7 @@ HIPOTESIS = {
    "hipotesis": "Un inicio con una pregunta o una situación reconocible hace que la gente se quede los primeros segundos, y eso le da a Facebook la señal para mostrarlo a más personas. Ojo: son solo 6 reels y el del 17 nov no siguió el patrón, así que la pregunta inicial sola no basta y puede ser casualidad.",
    "comprobar": "En diciembre, hacer reels con el mismo tipo de inicio (pregunta sobre un problema cotidiano) y otros que abran con una afirmación o con el producto, y comparar sus reproducciones."},
   {"titulo": "Mucho alcance, pero nadie conversa",
-   "vemos": "Noviembre lleva 0 comentarios en 37 publicaciones, aunque varias cerraban con «Te leemos en comentarios». Los dos reels más vistos sumaron más de 16,000 reproducciones y 53 reacciones.",
+   "vemos": "Noviembre lleva 0 comentarios en 38 publicaciones, aunque varias cerraban con «Te leemos en comentarios». Los dos reels más vistos sumaron más de 16,000 reproducciones y 53 reacciones.",
    "hipotesis": "Una invitación general a comentar no da una razón concreta para responder. Y la gente nueva que llega por los reels todavía no tiene confianza para comentar.",
    "comprobar": "Cerrar con preguntas concretas y fáciles de contestar (por ejemplo, de opción A o B) y contar los comentarios por publicación en diciembre."},
   {"titulo": "Instagram conecta, pero no está llegando a gente nueva",

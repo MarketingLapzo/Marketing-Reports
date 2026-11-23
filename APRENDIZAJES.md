@@ -27,9 +27,9 @@ Las historias de Instagram y Facebook todavía no se incluyen (próximamente).
 - **Al pedir datos por mensaje directo:** en viñetas y solo lo necesario (correo empresarial, teléfono y nombre de la empresa), con el aviso de privacidad correcto: lapzo.com/avisodeprivacidad (no lapzo.co).
 - **Casi todos los contactos vienen de anuncios.** 9 de 10 llegaron por un anuncio de Facebook. Anotar en la hoja el anuncio de origen (hay 3 pendientes) permite saber cuál trae más leads.
 
-## 2026-11 (parcial, 1–22 nov; actualizado el 23 nov)
+## 2026-11 (parcial, 1–23 nov; actualizado el 23 nov)
 
-37 publicaciones · 22,966 impresiones · 1.2 % de interacción · Facebook +47 seguidores, Instagram +23 (al 21 nov).
+38 publicaciones · 23,017 impresiones · 1.2 % de interacción · Facebook +47 seguidores, Instagram +23 (al 21 nov).
 
 - **Qué funcionó:**
   - LinkedIn · documento (Experta en talento, educativo): [la guía de incorporación](https://www.linkedin.com/feed/update/urn:li:ugcPost:7526689422331822080) tuvo 3.3 % de interacción; en noviembre solo la superó el post de AI Course Builder del 20 nov (4.7 %).
@@ -45,7 +45,7 @@ Las historias de Instagram y Facebook todavía no se incluyen (próximamente).
 - **Hipótesis para comprobar en diciembre:**
   1. **Facebook está mostrando los reels a gente que no nos sigue.** Los reels del 7 y 10 nov tuvieron de 2 a 4 veces más reproducciones que seguidores tiene la página, y el mismo reel en Instagram y TikTok no despegó. Comprobar: al menos un reel por semana en Facebook y revisar en Meta Business Suite el alcance de no seguidores.
   2. **Los reels que abren con un problema del día a día rinden más.** Los dos que despegaron empiezan con una pregunta reconocible para RH; los del 12 y 15 nov, con una afirmación o con el producto. Pero el del 17 nov también abre con una pregunta y en seis días se quedó en 192: la pregunta inicial sola no basta. Comprobar: comparar reels con los dos tipos de inicio.
-  3. **Sin una pregunta concreta, nadie comenta.** 0 comentarios en 37 publicaciones. Comprobar: cerrar con preguntas fáciles de contestar y contar comentarios.
+  3. **Sin una pregunta concreta, nadie comenta.** 0 comentarios en 38 publicaciones. Comprobar: cerrar con preguntas fáciles de contestar y contar comentarios.
   4. **Instagram conecta pero no llega a gente nueva.** Mejor tasa (7.1 %), pero la publicación típica bajó de 282 a 140 y a 77 personas. Comprobar: cerrar noviembre completo y probar en Instagram el inicio que funcionó en Facebook.
   5. **En LinkedIn, los documentos rinden más que los posts** (3.3 % contra 2.6 %, con un solo documento; el post de AI Course Builder del 20 nov llegó a 4.7 %). Comprobar: publicar al menos 2 documentos en diciembre.
 

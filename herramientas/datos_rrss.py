@@ -1,4 +1,4 @@
-# Datos extraídos el 23 nov 2026 (publicaciones hasta el 22 nov; seguidores hasta el 21 nov). LinkedIn: HubSpot Social. Instagram, Facebook, TikTok: Metricool (marca go_lapzo).
+# Datos extraídos el 23 nov 2026 (publicaciones hasta el 23 nov a las 12:15; seguidores hasta el 21 nov). LinkedIn: HubSpot Social. Instagram, Facebook, TikTok: Metricool (marca go_lapzo).
 # Las cifras de cada publicación son acumuladas al día de extracción.
 # None = la fuente no da ese dato ("no disponible").
 
@@ -41,6 +41,7 @@ TEMAS = {
  "N12": ("Por qué tu equipo no termina los cursos", "Experta en talento", "Educativa"),
  "N13": ("Tu empresa documenta lo que sabe (AI Course Builder)", "Innovadora", "Comercial"),
  "N14": ("La mejor encuesta es la que sí mandas", "Experta en talento", "Educativa"),
+ "N15": ("El mundo Lapzi · El barco (el objetivo que nadie ve)", "Experta en talento", "Reflexiva"),
  "HIST": ("Historia (sin texto en la fuente)", "Sin clasificar", "—"),
  "HISTFB": ("Historia de Facebook (sin texto en la fuente)", "Sin clasificar", "—"),
 }
@@ -161,6 +162,7 @@ for f, vid, t, imp, l, c, s in [
 def add_hs(*a):
     add(*a); P[-1]["fuente"] = "HubSpot"
 for f, red, fmt, t, imp, l, c, sh, url in [
+ ("2026-11-23","Facebook","Reel","N15",51,0,0,0,"https://www.facebook.com/reel/2424995978032402/"),  # Metricool aún no lo tenía a las 12:15
  ("2026-11-22","Instagram","Reel","N14",78,4,0,6,"https://www.instagram.com/reel/DgD7fVREbJQ/"),
  ("2026-11-19","TikTok","Video","N11",462,33,0,0,"https://www.tiktok.com/@go_lapzo/video/7709920922492357908"),  # Metricool se quedó en 66 reproducciones
  ("2026-11-22","TikTok","Video","N14",0,0,0,0,"https://www.tiktok.com/@go_lapzo/video/7711025537925319988"),
