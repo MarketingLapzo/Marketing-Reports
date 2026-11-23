@@ -28,7 +28,7 @@ MESES = [
 
 # Aprendizajes de la atención de mensajes y leads de redes (no salen de las métricas).
 APRENDIZAJES_ATENCION = [
- ("18 nov 2026", "<b>Contacto no es lo mismo que lead.</b> Un contacto es alguien que escribe; se vuelve lead cuando ya tenemos sus datos (correo empresarial, teléfono y empresa) y se pasa a Ventas. En Q4 van 10 contactos y 4 leads."),
+ ("18 nov 2026", "<b>Contacto no es lo mismo que lead.</b> Un contacto es alguien que escribe; se vuelve lead cuando ya tenemos su teléfono o su correo (o ambos). En Q4 van 10 contactos y 4 leads."),
  ("18 nov 2026", "<b>Si Ventas tarda, el prospecto se queja en público.</b> Un lead de AI Course Builder esperó 16 días su acceso y lo escribió en los comentarios. Al pasar un lead, hay que acordar con Ventas quién lo contacta y por qué medio, y decírselo al prospecto."),
  ("18 nov 2026", "<b>En público, no repetir la misma respuesta.</b> Si ya se dijo «te escribimos por privado para dar seguimiento», la siguiente respuesta debe decir el paso concreto (por ejemplo, que Ventas lo va a llamar)."),
  ("18 nov 2026", "<b>Los mensajes de la página pueden caer en «Solicitudes de mensajes».</b> Si alguien pregunta en público dónde le escribimos, se le dice que fue por Messenger y que revise esa carpeta."),
@@ -1008,7 +1008,7 @@ def pagina_inicio():
             f'<p class="small">Comparada con la semana del {fecha(pa)} al {fecha(pb)}</p>'
             f'<div class="mini"><div><b>{len({p["tema"] for p in ps})}</b><span>piezas</span></div><div><b>{f_int(R["imp"])}</b><span>impresiones</span></div><div><b>{f_pct(R["er"])}</b><span>tasa</span></div></div>'
             f'<p class="small">Seguidores: Facebook {sum(fb.values()):+d} · Instagram {sum(ig.values()):+d}</p><span class="go">Ver reporte →</span></a>')
-    n_l = len(d.LEADS); n_v = sum(1 for x in d.LEADS if x[5] in ("Pasado a Ventas", "Reescalado a Ventas"))
+    n_l = len(d.LEADS); n_v = sum(1 for x in d.LEADS if x[7])
     tarjetas.append(f'<a class="card rep" href="leads/index.html"><span class="tag t-down">Leads</span><h3>Leads de redes</h3>'
                     f'<p class="small">Personas que escribieron por redes y cuántas se convirtieron en lead (Q4 2026).</p>'
                     f'<div class="mini"><div><b>{n_l}</b><span>contactos</span></div><div><b>{n_v}</b><span>leads</span></div><div><b>{n_l-n_v}</b><span>por convertir</span></div></div>'
@@ -1134,14 +1134,14 @@ def pagina_okrs():
                 + " · ".join(f'{n}: {mes2[c]:.1f} por publicación, {com_mes[c]} comentarios' for c, n in meses_q if hay(c)) + '.</p>')
     com_txt = estado("ok", "Hay comentarios este mes") if com_mes[mes_act] > 0 else estado("bad", "0 comentarios este mes")
     # KR3 · leads por semana (todo lo registrado en la hoja de leads)
-    sem3 = [(et(a), sum(1 for x in d.LEADS if a.isoformat() <= x[0] <= b.isoformat())) for a, b in semanas]
+    sem3 = [(et(a), sum(1 for x in d.LEADS if x[7] and a.isoformat() <= x[0] <= b.isoformat())) for a, b in semanas]
     cumple = sum(1 for _, v in sem3 if v >= O["kr3_meta_sem"])
-    tot3 = sum(1 for x in d.LEADS if x[0] >= O["inicio"])
+    tot3 = sum(1 for x in d.LEADS if x[7] and x[0] >= O["inicio"])
     st3 = estado("ok", "Todas las semanas") if cumple == len(sem3) else estado("mid", f"{cumple} de {len(sem3)} semanas con al menos 1 lead")
     kr3_html = (f'<div class="okr-big"><b>{tot3}</b> leads en Q4 · {cumple} de {len(sem3)} semanas cumplen la meta de 1 por semana</div>{barra(cumple, len(sem3))}'
                 + columnas(sem3, O["kr3_meta_sem"], None, nombre="Leads por semana")
-                + f'<p class="small">Fuente: {e(d.LEADS_FUENTE)}, leída el {e(d.LEADS_LEIDO)}. Cuenta todo lo que registraste, haya tenido seguimiento de Ventas o no. '
-                + f'{sum(1 for x in d.LEADS if x[5] in ("Pasado a Ventas", "Reescalado a Ventas"))} ya se pasaron a Ventas. Detalle en <a href="../leads/index.html">Leads</a>.</p>')
+                + f'<p class="small">Fuente: {e(d.LEADS_FUENTE)}, leída el {e(d.LEADS_LEIDO)}. Cuenta como lead cada contacto del que ya tienes teléfono o correo (o ambos), haya tenido seguimiento de Ventas o no. '
+                + f'{sum(1 for x in d.LEADS if not x[7])} contactos más todavía no dan sus datos. Detalle en <a href="../leads/index.html">Leads</a>.</p>')
     # KR4 · reporte semanal entregado
     fallas = 0
     for (a0, b0, _, _), (a1, _, _, _) in zip(SEMANAS[:-1], SEMANAS[1:]):
@@ -1191,11 +1191,11 @@ def pagina_leads():
         if "universidad corporativa" in pz: return "Anuncio de universidad corporativa"
         if "Elearning" in pz: return "Anuncio Elearning"
         return "Mensaje directo sin anuncio"
-    L = [dict(fecha=f, red=r, origen=o, pieza=pz, grupo=grupo(pz), interes=i, estado=es, a=a) for f, r, o, pz, i, es, a in d.LEADS]
+    L = [dict(fecha=f, red=r, origen=o, pieza=pz, grupo=grupo(pz), interes=i, estado=es, a=a, lead=ld) for f, r, o, pz, i, es, a, ld in d.LEADS]
     tot = len(L)
     en_ventas = ("Pasado a Ventas", "Reescalado a Ventas")
-    pasados = [x for x in L if x["estado"] in en_ventas]
-    pend = [x for x in L if x["estado"] not in en_ventas]
+    pasados = [x for x in L if x["lead"]]
+    pend = [x for x in L if not x["lead"]]
     anuncio = [x for x in L if x["origen"] == "Anuncio"]
     md = [x for x in L if x["origen"] != "Anuncio"]
     meses = OrderedDict()
@@ -1207,7 +1207,7 @@ def pagina_leads():
         '<div class="kpis">'
         f'<div class="card kpi"><div class="v">{tot}</div><div class="l">contactos: personas que escribieron por redes</div>'
         f'<div class="dl neu">{" · ".join(f"{k}: {v}" for k, v in meses.items())}</div></div>'
-        f'<div class="card kpi"><div class="v">{len(pasados)}</div><div class="l">leads: ya tenemos sus datos y se pasaron a Ventas</div>'
+        f'<div class="card kpi"><div class="v">{len(pasados)}</div><div class="l">leads: ya tenemos su teléfono o su correo</div>'
         f'<div class="dl neu">{round(100*len(pasados)/tot)} % de los contactos se convirtió en lead' + (f' · {reesc} reescalado' if reesc else '') + '</div></div>'
         f'<div class="card kpi"><div class="v">{len(pend)}</div><div class="l">contactos por convertir en lead</div><div class="dl neu">faltan sus datos, su respuesta o un seguimiento</div></div>'
         f'<div class="card kpi"><div class="v">{len(anuncio)} <span class="u">de {tot}</span></div><div class="l">contactos que llegaron por un anuncio</div><div class="dl neu">{len(md)} por mensaje directo sin anuncio</div></div>'
@@ -1227,7 +1227,7 @@ def pagina_leads():
     filas = "".join(
         f'<tr><td>{fecha(x["fecha"])}</td><td class="l">{x["red"]}</td><td class="l">{e(x["origen"])}</td><td class="t">{e(x["pieza"])}</td>'
         f'<td class="l">{e(x["interes"])}</td><td class="l"><span class="est {clase_est.get(x["estado"], "neu")}">{e(x["estado"])}</span></td>'
-        f'<td class="l">{"✓ Lead" if x["estado"] in en_ventas else "Aún no"}</td><td class="l">{e(x["a"]) or "—"}</td></tr>'
+        f'<td class="l">{"✓ Lead" if x["lead"] else "Aún no"}</td><td class="l">{e(x["a"]) or "—"}</td></tr>'
         for x in sorted(L, key=lambda x: (x["fecha"], x["estado"])))
     tabla_l = ('<div class="scroll"><table><thead><tr><th>Fecha</th><th class="l">Red</th><th class="l">Cómo llegó</th><th class="l">Pieza o anuncio de origen</th>'
                '<th class="l">Interés</th><th class="l">Estado</th><th class="l">¿Es lead?</th><th class="l">Pasado a</th></tr></thead>'
@@ -1248,7 +1248,7 @@ def pagina_leads():
         f'<title>Leads de redes Lapzo</title>\n{estilo}</head><body>{barra_nav("../", "leads")}<main>\n'
         '<div class="eyebrow">Lapzo · Redes sociales · leads</div>\n<h1>Leads de redes</h1>\n'
         f'<p class="lead">Personas que escribieron por redes y que Marketing atendió y registró · Q4 2026 · leído el {d.LEADS_LEIDO}</p>\n'
-        '<p class="small">Un <b>contacto</b> es alguien que escribió. Se vuelve <b>lead</b> cuando ya recopilamos sus datos y se pasa a Ventas.</p>\n'
+        '<p class="small">Un <b>contacto</b> es alguien que escribió. Se vuelve <b>lead</b> cuando ya tenemos su teléfono o su correo (o ambos), haya tenido seguimiento de Ventas o no.</p>\n'
         f'{kpis}\n'
         '<h2>Lectura rápida</h2>\n'
         f'<div class="card"><ul class="rs">{"".join(f"<li>{x}</li>" for x in lect)}</ul></div>\n'

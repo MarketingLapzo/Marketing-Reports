@@ -20,7 +20,7 @@ Las historias de Instagram y Facebook todavía no se incluyen (próximamente).
 
 ## Atención de mensajes y leads (18 nov 2026)
 
-- **Contacto no es lo mismo que lead.** Un contacto es alguien que escribe; se vuelve lead cuando ya tenemos sus datos (correo empresarial, teléfono y empresa) y se pasa a Ventas. En Q4 van 10 contactos y 4 leads.
+- **Contacto no es lo mismo que lead.** Un contacto es alguien que escribe; se vuelve lead cuando ya tenemos su teléfono o su correo (o ambos), haya tenido seguimiento o no. En Q4 van 10 contactos y 4 leads.
 - **Si Ventas tarda, el prospecto se queja en público.** Un lead de AI Course Builder esperó 16 días su acceso y lo escribió en los comentarios. Al pasar un lead, acordar con Ventas quién lo contacta y por qué medio, y decírselo al prospecto.
 - **En público, no repetir la misma respuesta.** Si ya se dijo «te escribimos por privado para dar seguimiento», la siguiente debe decir el paso concreto (por ejemplo, que Ventas lo va a llamar).
 - **Los mensajes de la página pueden caer en «Solicitudes de mensajes».** Si alguien pregunta en público dónde le escribimos, decirle que fue por Messenger y que revise esa carpeta.

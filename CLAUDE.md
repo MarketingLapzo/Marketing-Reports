@@ -56,7 +56,7 @@ La pestaña OKRs muestra el avance del plan de OKRs Q4 2026 de la usuaria. Se re
 
 - **KR1 · Piezas al mes** (meta 25+/mes, 75 en el trimestre; línea base 5): una pieza cuenta una vez aunque salga en varias redes. Los anuncios BOFU se suman por mes en `OKR["bofu"]` (octubre: 5 de AI Course Builder). Las 5 piezas de TaaS de octubre no cuentan y se muestran como dato punteado («+5 de TaaS que no se contaron este mes»); las nuevas de TaaS (P24 a P28) cuentan cuando se publiquen.
 - **KR2 · Interacciones por publicación** (meta ~15 y comentarios > 0; línea base ~5): promedio de todas las redes, semana a semana. Lo que importa es que vaya subiendo.
-- **KR3 · Leads** (meta 1+/semana): cuenta todo lo registrado en la hoja «Registro de leads orgánicos (redes)», haya tenido seguimiento de Ventas o no.
+- **KR3 · Leads** (meta 1+/semana): cuenta como lead cada contacto de la hoja «Registro de leads orgánicos (redes)» que ya tiene teléfono o correo (o ambos), haya tenido seguimiento de Ventas o no. Sin teléfono ni correo sigue siendo contacto.
 - **KR4 · Reporte semanal** (meta 100 %): cada semana con reporte guardado en `rrss/semanal/` cuenta, desde el 10 de noviembre de 2026.
 - **KR5 · Edición de video automatizada**: cumplido al 100 % (confirmado el 23 de noviembre de 2026). Solo cambia si la usuaria dice otra cosa.
 - Cada lunes, con «Corre la semana», se actualiza la pestaña y en el resumen se pregunta si hubo anuncios BOFU nuevos para sumarlos.
