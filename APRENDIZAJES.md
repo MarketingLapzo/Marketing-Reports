@@ -29,7 +29,7 @@ Las historias de Instagram y Facebook todavía no se incluyen (próximamente).
 
 ## 2026-11 (parcial, 1–22 nov; actualizado el 23 nov)
 
-37 publicaciones · 22,553 impresiones · 1.1 % de interacción · Facebook +47 seguidores, Instagram +23 (al 21 nov).
+37 publicaciones · 22,570 impresiones · 1.1 % de interacción · Facebook +47 seguidores, Instagram +23 (al 21 nov).
 
 - **Qué funcionó:**
   - LinkedIn · documento (Experta en talento, educativo): [la guía de incorporación](https://www.linkedin.com/feed/update/urn:li:ugcPost:7526689422331822080) tuvo 3.3 % de interacción; en noviembre solo la superó el post de AI Course Builder del 20 nov (4.7 %).

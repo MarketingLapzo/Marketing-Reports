@@ -431,6 +431,51 @@ def meses_parejos(hasta_idx):
     if ms[-1]["clave"] != CORTE[:7]: return ms
     return [recortar(m, dia_corte()) for m in ms[:-1]] + [dict(ms[-1], hasta_seg=None)]
 
+# ---------------------------------------------------------------- Sección de videos
+def es_video(p): return p["formato"] in ("Reel", "Video")
+def seccion_videos(ps, periodo="del mes"):
+    import math
+    vs = sorted([p for p in ps if es_video(p)], key=lambda p: -n(p["imp"]))
+    if not vs: return ""
+    V = lambda p, k: d.VIDEO.get(p["url"], {}).get(k)
+    # Gráfica: reproducciones (escala logarítmica) contra segundos promedio vistos
+    pts = [p for p in vs if V(p, "prom") is not None and n(p["imp"]) > 0]
+    graf = ""
+    if pts:
+        W, H, ml, mr, mt, mb = 680, 300, 46, 16, 14, 40
+        xs = [math.log10(n(p["imp"])) for p in pts]; x0, x1 = math.floor(min(xs)), math.ceil(max(xs))
+        if x1 == x0: x1 += 1
+        y1 = max(2, math.ceil(max(V(p, "prom") for p in pts) / 2) * 2)
+        X = lambda v: ml + (W - ml - mr) * (math.log10(v) - x0) / (x1 - x0)
+        Y = lambda v: H - mb - (H - mt - mb) * v / y1
+        o = [f'<svg viewBox="0 0 {W} {H}" class="chart wide" role="img" aria-label="Reproducciones contra tiempo promedio visto">']
+        for k in range(x0, x1 + 1):
+            o.append(f'<line x1="{X(10**k):.1f}" x2="{X(10**k):.1f}" y1="{mt}" y2="{H-mb}" class="grid"/><text x="{X(10**k):.1f}" y="{H-mb+16}" text-anchor="middle" class="tick">{10**k:,}</text>')
+        for v in range(0, y1 + 1, 2):
+            o.append(f'<line x1="{ml}" x2="{W-mr}" y1="{Y(v):.1f}" y2="{Y(v):.1f}" class="grid"/><text x="{ml-6}" y="{Y(v)+4:.1f}" text-anchor="end" class="tick">{v} s</text>')
+        o.append(f'<text x="{(ml+W-mr)/2:.1f}" y="{H-4}" text-anchor="middle" class="tick">Reproducciones (escala que crece de 10 en 10)</text>')
+        for p in pts:
+            t = tip(d.TEMAS[p["tema"]][0], f'{p["red"]} · {fecha(p["fecha"])}', f'{f_int(p["imp"])} reproducciones · {V(p, "prom"):.1f} s vistos en promedio', "Clic para abrir")
+            o.append(f'<a href="{e(p["url"])}" target="_blank" rel="noopener"><g data-tip="{t}">{marca(p["red"], X(n(p["imp"])), Y(V(p, "prom")), 6)}</g></a>')
+        o.append(f'<line x1="{ml}" x2="{W-mr}" y1="{H-mb}" y2="{H-mb}" class="axis"/></svg>')
+        graf = (f'<div class="card"><h3>¿Llegan lejos y retienen?</h3>{leyenda(["Instagram", "Facebook"])}{"".join(o)}'
+                '<p class="small">Cada punto es un reel. Más a la derecha: más reproducciones. Más arriba: la gente se quedó más segundos viéndolo. TikTok no aparece porque Metricool no da su tiempo visto.</p></div>')
+    f1 = lambda v, fmt: "—" if v is None else fmt(v)
+    filas = []
+    for p in vs:
+        filas.append(f'<tr><td class="l"><span class="chip" style="background:{COLOR[p["red"]]}">{INICIAL[p["red"]]}</span></td><td>{fecha(p["fecha"])}</td>'
+                     f'<td class="t"><a href="{e(p["url"])}" target="_blank" rel="noopener">{e(d.TEMAS[p["tema"]][0])}</a>{fuente_tag(p)}</td>'
+                     f'<td>{f_int(p["imp"])}</td><td>{f_pct(tasa([p]))}</td>'
+                     f'<td>{f1(V(p, "prom"), lambda v: f"{v:.1f} s")}</td><td>{f1(V(p, "quedan3"), lambda v: f"{v:.1f} %")}</td>'
+                     f'<td>{f1(V(p, "guard"), lambda v: f"{v:,}")}</td><td>{f1(V(p, "dur"), lambda v: f"{v} s")}</td></tr>')
+    cab = ["Red", "Fecha", "Pieza", "Reproducciones", "Tasa", "Tiempo promedio visto", "Se quedan más de 3 s", "Guardados", "Duración"]
+    tabla_v = (f'<div class="scroll"><table class="ptab"><thead><tr>{"".join(f'<th class="l">{c}</th>' if c in ("Red", "Pieza") else f"<th>{c}</th>" for c in cab)}</tr></thead><tbody>{"".join(filas)}</tbody></table></div>')
+    return (f'<h2>Videos</h2>\n<p class="lead">Los reels de Instagram y Facebook y los videos de TikTok {periodo}, de más a menos reproducciones.</p>\n'
+            f'{graf}\n{tabla_v}\n'
+            '<p class="small">Un guion (—) significa que Metricool no da ese dato para esa red: <b>tiempo promedio visto</b> solo en Instagram y Facebook; '
+            '<b>se quedan más de 3 s</b> (qué parte de las vistas pasó de los primeros 3 segundos) y <b>guardados</b> solo en Instagram; <b>duración</b> solo en TikTok. '
+            'Metricool no da para nuestras cuentas la retención completa, el porcentaje que vio el video completo ni de dónde llegaron las vistas de TikTok.</p>')
+
 def tabla(cab, filas):
     return f'<details><summary>Ver tabla</summary><div class="scroll"><table><thead><tr>{"".join(f"<th>{c}</th>" for c in cab)}</tr></thead><tbody>{"".join(filas)}</tbody></table></div></details>'
 
@@ -641,6 +686,8 @@ section.mes{{margin-bottom:28px}} .nota-sutil{{margin-top:10px;max-width:80ch}} 
 <p class="lead">Likes + comentarios + compartidos. El color indica la red.</p>
 <div class="card">{leyenda()}{barras_h(top_items, fmt=lambda v: f"{v:,.0f}")}
 {tabla(["Fecha", "Red", "Formato", "Tema (top 10 por impresiones)", "Impr.", "Likes", "Coment.", "Compart.", "Tasa", ""], top_filas)}</div>
+
+{seccion_videos(ps, "del mes")}
 
 <h2>Evolución mes a mes</h2>
 <p class="lead">Cómo cambia cada red desde septiembre.{f" Para comparar parejo, cada mes se cuenta del 1 al {dia_corte()}." if clave == CORTE[:7] else ""}</p>
@@ -874,6 +921,7 @@ def pagina_semana(a, b, pa, pb):
         '<p class="lead">Cada bloque es una pieza: arriba su total y debajo cómo le fue en cada red. Haz clic en el nombre o en la red para abrir la publicación.</p>\n'
         f'{tabla_publicaciones(ps)}\n'
         '<p class="small">Etiquetas: <span class="tag t-v">★ Top vistas</span> <span class="tag t-i">★ Top interacciones</span> <span class="tag t-r">★ Top tasa</span> marcan las 3 publicaciones de la semana que más destacaron en cada medida.</p>\n'
+        + seccion_videos(ps, "de la semana") + '\n'
         '<h2>Cada red esta semana</h2>\n'
         f'<div class="nets">{"".join(tarjetas)}</div>\n'
         '<h2>Cómo se calculan estas cifras</h2>\n'

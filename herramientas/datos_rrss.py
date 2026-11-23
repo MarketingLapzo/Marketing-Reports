@@ -126,7 +126,7 @@ for f, pid, fmt, t, imp, l, c, s in [
 # Facebook · reels (impresiones = reproducciones; Metricool no da comentarios ni compartidos de reels)
 # comentarios y compartidos: Metricool no los da para reels de Facebook; se completan con HubSpot.
 for f, rid, t, imp, l, c, sh in [
- ("2026-11-22","2521736088316301","N14",233,1,0,0),
+ ("2026-11-22","2521736088316301","N14",250,1,0,0),
  ("2026-11-17","28606914692319621","N11",192,1,0,0),
  ("2026-11-15","1853456759298291","N10",290,2,0,0),
  ("2026-11-12","1770762847367790","N8",565,1,0,0),
@@ -292,3 +292,23 @@ LEADS = [
  ("2026-11-17", "Facebook", "Anuncio", "Anuncio de AI Course Builder", "AI Course Builder", "Esperando datos", ""),
  ("2026-11-17", "Facebook", "Anuncio", "Anuncio de AI Course Builder (otro diseño)", "AI Course Builder", "Pendiente de seguimiento", ""),
 ]
+
+# Datos de video (Metricool, extraídos el 23 nov 2026). Clave: enlace de la publicación.
+# prom = tiempo promedio visto (s); quedan3 = % de vistas que pasan de los 3 primeros segundos (Instagram);
+# guard = guardados (Instagram); dur = duración del video en s (TikTok). Lo que la red no da, no se pone.
+VIDEO = {}
+for code, prom, q3, g in [
+ ("Df2Ulj1FLvr",3.401,6.1,0), ("DfqIlNID-xu",5.612,15.7,1), ("Dfpq6FADxuv",7.909,35.3,0), ("DfkWDK8DV7Z",10.694,19.5,0),
+ ("Dfcj3vzjTeV",5.045,27.7,0), ("DfA4KbwP94t",7.652,23.3,2), ("DfAQdroFf8f",9.363,21.4,0), ("De3Cay1AbCM",7.192,20.6,3),
+ ("DevNwUTMv6I",8.624,27.7,3), ("DeiixqTPvXo",11.405,29.6,2), ("DePkMrQxbkc",5.778,25.3,3), ("DduT_CtsIG8",4.617,23.2,3),
+]: VIDEO["https://www.instagram.com/reel/"+code+"/"] = dict(prom=prom, quedan3=q3, guard=g)
+for rid, prom in [
+ ("2521736088316301",2), ("28606914692319621",3), ("1853456759298291",3), ("1770762847367790",5), ("2424825538289478",4),
+ ("990593957434490",4), ("1742927086807213",2), ("1649745909896037",4), ("1799093927847494",2), ("1134557822371263",3),
+ ("2529511920904184",5), ("2719688528428910",3), ("2107238866571121",3),
+]: VIDEO["https://www.facebook.com/reel/"+rid+"/"] = dict(prom=prom)
+for vid, dur in [
+ ("7709920922492357908",23), ("7707400839622708501",21), ("7707349358710295816",23), ("7706582004640402708",32),
+ ("7706225961062157588",31), ("7701743114481929493",33), ("7701741158275353876",37), ("7701466327608823060",37),
+ ("7701460908668669205",17), ("7698450686626794772",36), ("7694741663297621268",17), ("7689512251581091092",19),
+]: VIDEO["https://www.tiktok.com/@go_lapzo/video/"+vid] = dict(dur=dur)
