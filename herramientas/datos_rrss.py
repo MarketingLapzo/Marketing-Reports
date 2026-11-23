@@ -1,4 +1,4 @@
-# Datos extraídos el 19 nov 2026 (publicaciones hasta el 18 nov; seguidores hasta el 17 nov). LinkedIn: HubSpot Social. Instagram, Facebook, TikTok: Metricool (marca go_lapzo).
+# Datos extraídos el 23 nov 2026 (publicaciones hasta el 22 nov; seguidores hasta el 21 nov). LinkedIn: HubSpot Social. Instagram, Facebook, TikTok: Metricool (marca go_lapzo).
 # Las cifras de cada publicación son acumuladas al día de extracción.
 # None = la fuente no da ese dato ("no disponible").
 
@@ -39,6 +39,8 @@ TEMAS = {
  "N10": ("AI Course Builder", "Innovadora", "Comercial"),
  "N11": ("Conocimiento compartido (quien sabe cómo se hace)", "Experta en talento", "Reflexiva"),
  "N12": ("Por qué tu equipo no termina los cursos", "Experta en talento", "Educativa"),
+ "N13": ("Tu empresa documenta lo que sabe (AI Course Builder)", "Innovadora", "Comercial"),
+ "N14": ("La mejor encuesta es la que sí mandas", "Experta en talento", "Educativa"),
  "HIST": ("Historia (sin texto en la fuente)", "Sin clasificar", "—"),
  "HISTFB": ("Historia de Facebook (sin texto en la fuente)", "Sin clasificar", "—"),
 }
@@ -50,10 +52,11 @@ def add(fecha, red, formato, tema, imp, likes, com, sh, url): P.append(dict(fech
 # Instagram · publicaciones del feed (impresiones = Views; compartidos: Metricool solo los da en algunas)
 IG = "https://www.instagram.com/p/"
 for f, code, fmt, t, imp, l, c, s in [
- ("2026-11-09","Dfh1UskoDfT","Carrusel","N5",92,5,0,None),
- ("2026-11-05","DfYL81JFEeK","Carrusel","N5",74,5,0,None),
- ("2026-11-05","DfX82R8IBWR","Carrusel","N4",76,4,0,None),
- ("2026-11-04","DfTVYbdmwpY","Carrusel","N3",63,5,0,None),
+ ("2026-11-19","Df5wBNiiHwI","Carrusel","N12",42,4,0,None),
+ ("2026-11-09","Dfh1UskoDfT","Carrusel","N5",99,5,0,None),
+ ("2026-11-05","DfYL81JFEeK","Carrusel","N5",77,5,0,None),
+ ("2026-11-05","DfX82R8IBWR","Carrusel","N4",78,4,0,None),
+ ("2026-11-04","DfTVYbdmwpY","Carrusel","N3",65,5,0,None),
  ("2026-10-31","DfKsnm5inps","Carrusel","O19",108,4,0,None),
  ("2026-10-28","DfC9VtWAhJR","Carrusel","O14",103,3,0,None),
  ("2026-10-28","DfCu7xMGwos","Imagen","O17",55,5,0,None),
@@ -70,11 +73,11 @@ for f, code, fmt, t, imp, l, c, s in [
 
 # Instagram · reels (impresiones = Views)
 for f, code, t, imp, l, c, s in [
- ("2026-11-17","Df2Ulj1FLvr","N11",54,1,0,0),
- ("2026-11-12","DfqIlNID-xu","N10",148,8,0,1),
- ("2026-11-12","Dfpq6FADxuv","N8",71,4,0,0),
- ("2026-11-10","DfkWDK8DV7Z","N7",122,9,0,0),
- ("2026-11-07","Dfcj3vzjTeV","N6",70,6,0,0),
+ ("2026-11-17","Df2Ulj1FLvr","N11",60,2,0,0),
+ ("2026-11-12","DfqIlNID-xu","N10",153,8,0,1),
+ ("2026-11-12","Dfpq6FADxuv","N8",73,6,0,0),
+ ("2026-11-10","DfkWDK8DV7Z","N7",123,9,0,0),
+ ("2026-11-07","Dfcj3vzjTeV","N6",72,6,0,0),
  ("2026-10-27","DfA4KbwP94t","O16",109,6,0,0),
  ("2026-10-27","DfAQdroFf8f","O15",104,7,0,1),
  ("2026-10-24","De3Cay1AbCM","O4",203,11,0,8),
@@ -98,10 +101,11 @@ for f, sid, imp, rep in [
 # Facebook · publicaciones (impresiones totales; todas orgánicas: pagadas = 0)
 FB = "https://facebook.com/1659210192576329/posts/"
 for f, pid, fmt, t, imp, l, c, s in [
- ("2026-11-09","1666734045157277","Álbum","N5",61,0,0,0),
- ("2026-11-05","1662444362252912","Álbum","N5",65,1,0,1),
- ("2026-11-05","1662366418927373","Álbum","N4",61,1,0,1),
- ("2026-11-04","1660338059130209","Álbum","N3",121,3,0,1),
+ ("2026-11-19","1676746467489368","Álbum","N12",19,0,0,0),
+ ("2026-11-09","1666734045157277","Álbum","N5",73,0,0,0),
+ ("2026-11-05","1662444362252912","Álbum","N5",68,1,0,1),
+ ("2026-11-05","1662366418927373","Álbum","N4",65,1,0,1),
+ ("2026-11-04","1660338059130209","Álbum","N3",125,3,0,1),
  ("2026-10-31","1656986249465390","Álbum","O19",109,1,0,0),
  ("2026-10-28","1653953933101955","Álbum","O14",97,1,0,0),
  ("2026-10-28","1653852399778775","Imagen","O17",91,1,0,1),
@@ -122,11 +126,12 @@ for f, pid, fmt, t, imp, l, c, s in [
 # Facebook · reels (impresiones = reproducciones; Metricool no da comentarios ni compartidos de reels)
 # comentarios y compartidos: Metricool no los da para reels de Facebook; se completan con HubSpot.
 for f, rid, t, imp, l, c, sh in [
- ("2026-11-17","28606914692319621","N11",184,1,0,0),
- ("2026-11-15","1853456759298291","N10",275,2,0,0),
- ("2026-11-12","1770762847367790","N8",556,1,0,0),
- ("2026-11-10","2424825538289478","N7",10372,31,0,0),
- ("2026-11-07","990593957434490","N6",5746,21,0,1),
+ ("2026-11-22","2521736088316301","N14",233,1,0,0),
+ ("2026-11-17","28606914692319621","N11",192,1,0,0),
+ ("2026-11-15","1853456759298291","N10",290,2,0,0),
+ ("2026-11-12","1770762847367790","N8",565,1,0,0),
+ ("2026-11-10","2424825538289478","N7",10377,31,0,0),
+ ("2026-11-07","990593957434490","N6",5749,21,0,1),
  ("2026-10-27","1742927086807213","O16",309,1,0,0),
  ("2026-10-27","1649745909896037","O15",81,0,0,0),
  ("2026-10-24","1799093927847494","O4",236,2,0,0),
@@ -139,10 +144,11 @@ for f, rid, t, imp, l, c, sh in [
 
 # TikTok · videos (impresiones = Views)
 for f, vid, t, imp, l, c, s in [
- ("2026-11-12","7707400839622708501","N10",1,0,0,0),
- ("2026-11-12","7707349358710295816","N8",83,1,0,0),
- ("2026-11-10","7706582004640402708","N7",157,2,0,0),
- ("2026-11-09","7706225961062157588","N6",184,8,0,0),
+ ("2026-11-19","7709920922492357908","N11",66,9,0,0),
+ ("2026-11-12","7707400839622708501","N10",535,14,0,1),
+ ("2026-11-12","7707349358710295816","N8",464,11,0,0),
+ ("2026-11-10","7706582004640402708","N7",180,2,0,0),
+ ("2026-11-09","7706225961062157588","N6",189,8,0,0),
  ("2026-10-28","7701743114481929493","O15",599,13,0,0),
  ("2026-10-28","7701741158275353876","O4",169,7,0,0),
  ("2026-10-27","7701466327608823060","O4",215,7,0,11),
@@ -156,6 +162,8 @@ for f, vid, t, imp, l, c, s in [
 def add_hs(*a):
     add(*a); P[-1]["fuente"] = "HubSpot"
 for f, red, fmt, t, imp, l, c, sh, url in [
+ ("2026-11-22","Instagram","Reel","N14",72,4,0,6,"https://www.instagram.com/reel/DgD7fVREbJQ/"),
+ ("2026-11-22","TikTok","Video","N14",0,0,0,0,"https://www.tiktok.com/@go_lapzo/video/7711025537925319988"),
  ("2026-10-28","Facebook","Publicación","O17",21,1,0,0,"https://www.facebook.com/613311597166199/posts/1653199913177357"),
  ("2026-10-26","Facebook","Publicación","O10",4,0,0,0,"https://www.facebook.com/613311597166199/posts/1651319543365394"),
  ("2026-10-15","Facebook","Publicación","O8",5,0,0,0,"https://www.facebook.com/613311597166199/posts/1641453464352002"),
@@ -181,16 +189,17 @@ for f, sid in [
 # LinkedIn · HubSpot (HubSpot no distingue formato ni da clics)
 LI = "https://www.linkedin.com/feed/update/urn:li:"
 for f, urn, fmt, t, imp, l, c, s in [
- ("2026-11-17","ugcPost:7526773977382338560","Post","N12",258,6,0,0),
- ("2026-11-13","ugcPost:7526721887725453312","Post","N10",191,4,0,0),
- ("2026-11-12","ugcPost:7526708442032410624","Post","N8",280,9,0,0),
- ("2026-11-12","ugcPost:7526689422331822080","Documento","N9",230,7,0,1),
- ("2026-11-09","ugcPost:7525606405127446528","Post","N5",282,3,0,0),
+ ("2026-11-20","share:7529572846990233600","Post","N13",170,8,0,0),
+ ("2026-11-17","ugcPost:7526773977382338560","Post","N12",321,7,0,0),
+ ("2026-11-13","ugcPost:7526721887725453312","Post","N10",205,5,0,0),
+ ("2026-11-12","ugcPost:7526708442032410624","Post","N8",293,9,0,0),
+ ("2026-11-12","ugcPost:7526689422331822080","Documento","N9",246,7,0,1),
+ ("2026-11-09","ugcPost:7525606405127446528","Post","N5",304,5,0,1),
  ("2026-11-09","ugcPost:7525587134225780736","Post","N5",38,1,0,0),
  ("2026-11-05","ugcPost:7524216742357663745","Post","N5",112,2,0,2),
- ("2026-11-05","ugcPost:7524214147534868480","Post","N4",300,6,0,0),
- ("2026-11-03","share:7523416823611158528","Post","N2",320,6,0,1),
- ("2026-11-02","share:7523065861415350273","Post","N1",252,8,0,0),
+ ("2026-11-05","ugcPost:7524214147534868480","Post","N4",314,7,0,0),
+ ("2026-11-03","share:7523416823611158528","Post","N2",331,6,0,1),
+ ("2026-11-02","share:7523065861415350273","Post","N1",258,8,0,0),
  ("2026-10-28","share:7521238796965707776","Post","O17",448,11,0,2),
  ("2026-10-28","share:7521220528045711360","Post","O18",380,12,0,3),
  ("2026-10-27","ugcPost:7520880599151194112","Post","O15",287,5,0,1),
@@ -224,7 +233,8 @@ FB_TOTAL = {
  "2026-10-31": 2447,
  "2026-11-01": 2447, "2026-11-02": 2450, "2026-11-03": 2454, "2026-11-04": 2454, "2026-11-05": 2456, "2026-11-06": 2456,
  "2026-11-07": 2469, "2026-11-08": 2470, "2026-11-09": 2473, "2026-11-10": 2483, "2026-11-11": 2488, "2026-11-12": 2490,
- "2026-11-13": 2493, "2026-11-14": 2493, "2026-11-15": 2494, "2026-11-16": 2494, "2026-11-17": 2495,
+ "2026-11-13": 2493, "2026-11-14": 2492, "2026-11-15": 2492, "2026-11-16": 2492, "2026-11-17": 2495,
+ "2026-11-18": 2495, "2026-11-19": 2495, "2026-11-20": 2494, "2026-11-21": 2494,
 }
 # Instagram: (ganados, perdidos) por día.
 IG_DIA = {
@@ -242,6 +252,7 @@ IG_DIA = {
  "2026-11-01": (1,0), "2026-11-02": (4,0), "2026-11-03": (2,1), "2026-11-04": (4,0), "2026-11-05": (2,2), "2026-11-06": (1,0),
  "2026-11-07": (1,0), "2026-11-08": (0,0), "2026-11-09": (0,0), "2026-11-10": (0,0), "2026-11-11": (4,0), "2026-11-12": (3,0),
  "2026-11-13": (0,0), "2026-11-14": (1,0), "2026-11-15": (1,1), "2026-11-16": (3,0), "2026-11-17": (0,0),
+ "2026-11-18": (1,0), "2026-11-19": (1,2), "2026-11-20": (0,0), "2026-11-21": (0,0),
 }
 
 # Publicaciones que se borraron y se volvieron a subir (revisado con el equipo el 17 nov 2026).
@@ -259,7 +270,7 @@ BORRADAS = {
 }
 
 # Leads de redes atendidos por Marketing. Fuente: hoja «Registro de leads orgánicos (redes)», pestaña Q4 2026
-# (leída el 19 nov 2026). Sin nombres, correos ni teléfonos: esos datos se quedan en la hoja.
+# (leída el 23 nov 2026). Sin nombres, correos ni teléfonos: esos datos se quedan en la hoja.
 # (fecha, red, origen, pieza o anuncio de origen, interés, estado, pasado a)
 # Leads que necesitan atención: (fecha del lead, texto). Sin datos de contacto.
 LEADS_URGENTES = [
@@ -268,7 +279,7 @@ LEADS_URGENTES = [
   "El 18 nov comentó en público «¡Sigo esperando mi acceso!». Se reescaló a Ricardo Garza (leads), que está en contacto con Fernando Núñez (líder de ventas)."),
 ]
 LEADS_FUENTE = "Registro de leads orgánicos (redes) · pestaña Q4 2026"
-LEADS_LEIDO = "19 de noviembre de 2026"
+LEADS_LEIDO = "23 de noviembre de 2026"
 LEADS = [
  ("2026-10-13", "Facebook", "Mensaje directo", "Mensaje directo (sin anuncio)", "Información general", "Pasado a Ventas", "Julio"),
  ("2026-11-02", "Facebook", "Anuncio", "Mensaje directo a un anuncio (Facebook)", "AI Course Builder", "Reescalado a Ventas", "Ricardo Garza → Fernando Núñez"),
