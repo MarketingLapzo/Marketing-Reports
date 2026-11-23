@@ -479,6 +479,19 @@ def seccion_videos(ps, periodo="del mes"):
 
 def dato_nota(c): return f' <span class="src">{e(NOTAS_DATO[c])}</span>' if c in NOTAS_DATO else ""
 
+def tabla_piezas(ps):
+    g = {}
+    for p in ps: g.setdefault(p["tema"], []).append(p)
+    filas = []
+    for t, v in sorted(g.items(), key=lambda kv: min(p["fecha"] for p in kv[1])):
+        redes = "".join(f'<span class="chip" style="background:{COLOR[r]};margin-right:3px">{INICIAL[r]}</span>' for r in REDES if any(p["red"] == r for p in v))
+        filas.append(f'<tr><td>{fecha(min(p["fecha"] for p in v))}</td><td class="t">{e(d.TEMAS[t][0])}</td><td class="l">{redes}</td><td>{len(v)}</td>'
+                     f'<td>{f_int(sum(n(p["imp"]) for p in v))}</td><td>{f_int(sum(inter(p) for p in v))}</td><td>{f_pct(tasa(v))}</td></tr>')
+    cab = ["Primera vez", "Pieza", "Redes", "Publicaciones", "Impresiones", "Interacciones", "Tasa"]
+    th = "".join(f'<th class="l">{c}</th>' if c in ("Pieza", "Redes") else f"<th>{c}</th>" for c in cab)
+    return (f'<div class="scroll"><table class="ptab"><thead><tr>{th}</tr></thead>'
+            f'<tbody>{"".join(filas)}</tbody></table></div><p class="small">{len(g)} piezas únicas en {len(ps)} publicaciones.</p>')
+
 def tabla(cab, filas):
     return f'<details><summary>Ver tabla</summary><div class="scroll"><table><thead><tr>{"".join(f"<th>{c}</th>" for c in cab)}</tr></thead><tbody>{"".join(filas)}</tbody></table></div></details>'
 
@@ -583,9 +596,10 @@ def pagina(idx):
     parcial = (f'<p class="small">Comparación pareja: {MES[int(clave[5:]) - 1]} va al día {dia_corte()}, así que los meses anteriores se cuentan solo del 1 al {dia_corte()} (seguidores, del 1 al {dia_seg()}). Septiembre tiene poca actividad en esos días porque la primera publicación es del 19.</p>' if clave == CORTE[:7] else "")
     nota_mes = f'<div class="card nota-eq"><b>Nota del equipo:</b> {e(NOTAS[clave])}{dato_nota(clave)}</div>' if clave in NOTAS else ""
     kpis_html = f"""<div class="kpis">
-<div class="card kpi"><div class="v">{R["n"]}</div><div class="l">publicaciones</div>{delta(R["n"], RP["n"] if RP else None)}</div>
+<div class="card kpi"><div class="v">{len({p["tema"] for p in ps})}</div><div class="l">piezas únicas (cada diseño cuenta una vez)</div>{delta(len({p["tema"] for p in ps}), len({p["tema"] for p in prev}) if RP else None)}</div>
+<div class="card kpi"><div class="v">{R["n"]}</div><div class="l">publicaciones (cada red cuenta por separado)</div>{delta(R["n"], RP["n"] if RP else None)}</div>
 <div class="card kpi"><div class="v">{f_int(R["imp"])}</div><div class="l">veces que se vieron nuestras publicaciones (impresiones)</div>{delta(R["imp"], RP["imp"] if RP else None)}</div>
-<div class="card kpi wide2"><div class="v">{f_int(R["int"])}</div><div class="l">reacciones (interacciones)</div>
+<div class="card kpi"><div class="v">{f_int(R["int"])}</div><div class="l">reacciones (interacciones)</div>
 <div class="brk"><span><b>♥ {f_int(l_)}</b> {"like" if l_ == 1 else "likes"}</span><span><b>💬 {f_int(c_)}</b> {"comentario" if c_ == 1 else "comentarios"}</span><span><b>↗ {f_int(s_)}</b> {"compartido" if s_ == 1 else "compartidos"}</span></div>{delta(R["int"], RP["int"] if RP else None)}</div>
 <div class="card kpi half"><div class="v">{(R["er"] or 0):.1f} <span class="u">de cada 100</span></div><div class="l">personas que vieron una publicación reaccionaron (tasa de interacción)</div>{delta(R["er"] or 0, RP["er"] if RP else None, pct=True)}</div>
 <div class="card kpi half"><div class="v2">{seg_lines}</div><div class="l">seguidores nuevos (LinkedIn y TikTok: no disponible)</div></div>
@@ -676,6 +690,10 @@ section.mes{{margin-bottom:28px}} .nota-sutil{{margin-top:10px;max-width:80ch}} 
 
 {kpis_html}
 {atip_kpi}
+
+<h2>Piezas únicas</h2>
+<p class="lead">Cada diseño una sola vez, con las redes donde salió. Las cifras suman todas sus redes.</p>
+{tabla_piezas(ps)}
 
 <h2>Cómo le fue a cada publicación</h2>
 <p class="lead">♥ likes · 💬 comentarios · ↗ compartidos. Un guion (—) significa que la red no da ese dato. Cada bloque es una pieza: arriba su total y debajo cómo le fue en cada red donde se publicó. Filtra por red, cambia el orden y haz clic en la red para abrir la publicación.</p>
