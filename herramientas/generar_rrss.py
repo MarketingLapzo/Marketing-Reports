@@ -493,6 +493,13 @@ def tabla_piezas(ps):
     return (f'<div class="scroll"><table class="ptab"><thead><tr>{th}</tr></thead>'
             f'<tbody>{"".join(filas)}</tbody></table></div><p class="small">{len(g)} piezas únicas en {len(ps)} publicaciones.</p>')
 
+def expl_tasa(R, RP):
+    """Si la tasa baja mientras las interacciones suben, explicar que es porque las impresiones crecieron más."""
+    if not RP or not RP["imp"] or not RP["int"] or (R["er"] or 0) >= (RP["er"] or 0) or R["int"] <= RP["int"]: return ""
+    ci = 100 * (R["int"] - RP["int"]) / RP["int"]; cm = 100 * (R["imp"] - RP["imp"]) / RP["imp"]
+    return (f'<div class="small" style="margin-top:6px">No es una baja de interacciones: crecieron {ci:+.0f} %. '
+            f'La tasa baja porque las impresiones crecieron más ({cm:+.0f} %), sobre todo por los reels de Facebook que vio gente nueva.</div>')
+
 def tabla(cab, filas):
     return f'<details><summary>Ver tabla</summary><div class="scroll"><table><thead><tr>{"".join(f"<th>{c}</th>" for c in cab)}</tr></thead><tbody>{"".join(filas)}</tbody></table></div></details>'
 
@@ -587,7 +594,7 @@ def pagina(idx):
         if b is None: return '<div class="dl neu">Primer mes con datos</div>'
         dv = a - b
         if pct: txt = f"{dv:+.1f} puntos"
-        else: txt = f"{dv:+,.0f}"
+        else: txt = f"{dv:+,.0f}" + (f" ({100 * dv / b:+.0f} %)" if b else "")
         cls = "up" if dv > 0 else "down" if dv < 0 else "neu"
         flecha = "▲" if dv > 0 else "▼" if dv < 0 else "="
         return f'<div class="dl {cls}">{flecha} {txt} vs {nom_prev}</div>'
@@ -603,7 +610,7 @@ def pagina(idx):
 <div class="card kpi"><div class="v">{f_int(R["imp"])}</div><div class="l">veces que se vieron nuestras publicaciones (impresiones)</div>{delta(R["imp"], RP["imp"] if RP else None)}</div>
 <div class="card kpi"><div class="v">{f_int(R["int"])}</div><div class="l">reacciones (interacciones)</div>
 <div class="brk"><span><b>♥ {f_int(l_)}</b> {"like" if l_ == 1 else "likes"}</span><span><b>💬 {f_int(c_)}</b> {"comentario" if c_ == 1 else "comentarios"}</span><span><b>↗ {f_int(s_)}</b> {"compartido" if s_ == 1 else "compartidos"}</span></div>{delta(R["int"], RP["int"] if RP else None)}</div>
-<div class="card kpi half"><div class="v">{(R["er"] or 0):.1f} <span class="u">de cada 100</span></div><div class="l">personas que vieron una publicación reaccionaron (tasa de interacción)</div>{delta(R["er"] or 0, RP["er"] if RP else None, pct=True)}</div>
+<div class="card kpi half"><div class="v">{(R["er"] or 0):.1f} <span class="u">de cada 100</span></div><div class="l">personas que vieron una publicación reaccionaron (tasa de interacción)</div>{delta(R["er"] or 0, RP["er"] if RP else None, pct=True)}{expl_tasa(R, RP)}</div>
 <div class="card kpi half"><div class="v2">{seg_lines}</div><div class="l">seguidores nuevos (LinkedIn y TikTok: no disponible)</div></div>
 </div>{parcial}{nota_mes}"""
     dias_json, dia_inicial = datos_dias(ps, clave)
@@ -826,7 +833,7 @@ def pagina_semana(a, b, pa, pb):
         dv = x - y
         cls = "up" if dv > 0 else "down" if dv < 0 else "neu"
         fl = "▲" if dv > 0 else "▼" if dv < 0 else "="
-        txt = f"{dv:+.1f} puntos" if pct else f"{dv:+,.0f}"
+        txt = f"{dv:+.1f} puntos" if pct else f"{dv:+,.0f}" + (f" ({100 * dv / y:+.0f} %)" if y else "")
         return f'<div class="dl {cls}">{fl} {txt} vs semana anterior</div>'
 
     l_, c_, s_ = desglose(ps)
@@ -997,14 +1004,15 @@ def pagina_inicio():
     na = ant["titulo"].split(" ")[0] + (f" (1–{mant['hasta']})" if mant.get("hasta") else " completo")
     l_, c_, s_ = S["desg"]
     ref = lambda txt: f'<div class="dl neu">{txt}</div>'
+    crec = lambda a, b: f" · {100 * (a - b) / b:+.0f} %" if b else ""
     na_seg = ant["titulo"].split(" ")[0] + (f" (1–{mant['hasta_seg']})" if mant.get("hasta") else " completo")
     seg_lines = "".join(f'<div>{r} <b>+{v[0]}</b> <span class="small">· {na_seg.lower()}: {seg_de(mant, r):+d}</span></div>' for r, v in S["seg"].items())
     kpis = (
         '<div class="kpis">'
-        f'<div class="card kpi"><div class="v">{S["piezas"]}</div><div class="l">piezas únicas ({S["n"]} publicaciones contando cada red)</div>{ref(f"{na}: {SA['piezas']} piezas")}</div>'
-        f'<div class="card kpi"><div class="v">{f_int(S["imp"])}</div><div class="l">veces que se vieron nuestras publicaciones</div>{ref(f"{na}: {f_int(SA['imp'])}")}</div>'
+        f'<div class="card kpi"><div class="v">{S["piezas"]}</div><div class="l">piezas únicas ({S["n"]} publicaciones contando cada red)</div>{ref(f"{na}: {SA['piezas']} piezas{crec(S['piezas'], SA['piezas'])}")}</div>'
+        f'<div class="card kpi"><div class="v">{f_int(S["imp"])}</div><div class="l">veces que se vieron nuestras publicaciones</div>{ref(f"{na}: {f_int(SA['imp'])}{crec(S['imp'], SA['imp'])}")}</div>'
         f'<div class="card kpi wide2"><div class="v">{f_int(S["int"])}</div><div class="l">reacciones</div>'
-        f'<div class="brk"><span><b>♥ {f_int(l_)}</b> likes</span><span><b>💬 {f_int(c_)}</b> comentarios</span><span><b>↗ {f_int(s_)}</b> compartidos</span></div>{ref(f"{na}: {f_int(SA['int'])}")}</div>'
+        f'<div class="brk"><span><b>♥ {f_int(l_)}</b> likes</span><span><b>💬 {f_int(c_)}</b> comentarios</span><span><b>↗ {f_int(s_)}</b> compartidos</span></div>{ref(f"{na}: {f_int(SA['int'])}{crec(S['int'], SA['int'])}")}</div>'
         f'<div class="card kpi half"><div class="v">{(S["er"] or 0):.1f} <span class="u">de cada 100</span></div><div class="l">personas que vieron una publicación reaccionaron</div>{ref(f"{na}: {(SA['er'] or 0):.1f} de cada 100")}</div>'
         f'<div class="card kpi half"><div class="v2">{seg_lines}</div><div class="l">seguidores nuevos (LinkedIn y TikTok: no disponible)</div></div>'
         '</div>')
