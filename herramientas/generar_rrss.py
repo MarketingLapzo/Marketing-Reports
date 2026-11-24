@@ -592,12 +592,12 @@ def pagina(idx):
     prev = [p for p in d.P if mprev and del_mes(p, mprev)]
     RP = resumen(prev) if prev else None
     nom_prev = (MESES[idx - 1]["titulo"].split(" ")[0].lower() + (f" (1–{mprev['hasta']})" if mprev.get("hasta") else "")) if idx > 0 else ""
-    def delta(a, b, pct=False):
+    def delta(a, b, pct=False, neutro=False):
         if b is None: return '<div class="dl neu">Primer mes con datos</div>'
         dv = a - b
         if pct: txt = f"{dv:+.1f} puntos"
         else: txt = f"{dv:+,.0f}" + (f" ({100 * dv / b:+.0f} %)" if b else "")
-        cls = "up" if dv > 0 else "down" if dv < 0 else "neu"
+        cls = "neu" if neutro else ("up" if dv > 0 else "down" if dv < 0 else "neu")
         flecha = "▲" if dv > 0 else "▼" if dv < 0 else "="
         return f'<div class="dl {cls}">{flecha} {txt} vs {nom_prev}</div>'
     l_, c_, s_ = desglose(ps)
@@ -612,7 +612,7 @@ def pagina(idx):
 <div class="card kpi"><div class="v">{f_int(R["imp"])}</div><div class="l">veces que se vieron nuestras publicaciones (impresiones)</div>{delta(R["imp"], RP["imp"] if RP else None)}</div>
 <div class="card kpi"><div class="v">{f_int(R["int"])}</div><div class="l">reacciones (interacciones)</div>
 <div class="brk"><span><b>♥ {f_int(l_)}</b> {"like" if l_ == 1 else "likes"}</span><span><b>💬 {f_int(c_)}</b> {"comentario" if c_ == 1 else "comentarios"}</span><span><b>↗ {f_int(s_)}</b> {"compartido" if s_ == 1 else "compartidos"}</span></div>{delta(R["int"], RP["int"] if RP else None)}</div>
-<div class="card kpi half"><div class="v">{(R["er"] or 0):.1f} <span class="u">de cada 100</span></div><div class="l">personas que vieron una publicación reaccionaron (tasa de interacción)</div>{delta(R["er"] or 0, RP["er"] if RP else None, pct=True)}{expl_tasa(R, RP)}</div>
+<div class="card kpi half"><div class="v">{(R["er"] or 0):.1f} <span class="u">de cada 100</span></div><div class="l">personas que vieron una publicación reaccionaron (tasa de interacción)</div>{delta(R["er"] or 0, RP["er"] if RP else None, pct=True, neutro=bool(expl_tasa(R, RP)))}{expl_tasa(R, RP)}</div>
 <div class="card kpi half"><div class="v2">{seg_lines}</div><div class="l">seguidores nuevos (LinkedIn y TikTok: no disponible)</div></div>
 </div>{parcial}{nota_mes}"""
     dias_json, dia_inicial = datos_dias(ps, clave)
