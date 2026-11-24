@@ -13,8 +13,8 @@ REDES = ["LinkedIn", "Instagram", "Facebook", "TikTok"]
 COLOR = {"LinkedIn": "var(--c-li)", "Instagram": "var(--c-ig)", "Facebook": "var(--c-fb)", "TikTok": "var(--c-tt)"}
 FORMA = {"LinkedIn": "cuadro", "Instagram": "circulo", "Facebook": "rombo", "TikTok": "triangulo"}
 MES = ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"]
-EXTRAIDO = "23 de noviembre de 2026"
-CORTE = "2026-11-23"  # último día con datos
+EXTRAIDO = "24 de noviembre de 2026"
+CORTE = "2026-11-24"  # último día con datos
 
 ATIPICOS = set()  # ya no se separa ninguna publicación
 
@@ -22,7 +22,7 @@ MESES = [
     {"clave": "2026-09", "titulo": "Septiembre 2026", "periodo": "1 – 30 sep 2026",
      "nota_periodo": "La primera publicación que registran Metricool y HubSpot es del 19 de septiembre, así que el mes tiene 12 días de actividad."},
     {"clave": "2026-10", "titulo": "Octubre 2026", "periodo": "1 – 31 oct 2026", "nota_periodo": ""},
-    {"clave": "2026-11", "titulo": "Noviembre 2026 (parcial)", "periodo": "1 – 23 nov 2026",
+    {"clave": "2026-11", "titulo": "Noviembre 2026 (parcial)", "periodo": "1 – 24 nov 2026",
      "nota_periodo": "Mes en curso: este reporte se reemplaza con el de noviembre completo a partir del 1 de diciembre."},
 ]
 
@@ -97,18 +97,18 @@ APRENDIZAJES = {
  },
  "2026-11": {
   "funciono": [
-   "<b>LinkedIn · documento:</b> [[N9|LinkedIn|la guía de incorporación (onboarding)]] tuvo 3.3 % de interacción; en noviembre solo la superó [[N13|LinkedIn|el post de AI Course Builder del 20 nov]] (4.7 %).",
-   "<b>Instagram:</b> reels con 7.5 % y carruseles con 6.4 % de interacción.",
+   "<b>LinkedIn · documento:</b> [[N9|LinkedIn|la guía de incorporación (onboarding)]] tuvo 3.3 % de interacción; en noviembre la superaron [[N13|LinkedIn|el post de AI Course Builder del 20 nov]] (4.8 %) y [[N16|LinkedIn|el de TaaS del 24 nov]] (5.1 %, con pocas horas y 39 impresiones).",
+   "<b>Instagram:</b> reels con 7.6 % y carruseles con 6.4 % de interacción.",
    "<b>Seguidores en Facebook:</b> +47 en 21 días, contra +2 en los mismos días de octubre (+12 en todo el mes). Los días con más seguidores nuevos (+13 el 7 nov y +10 el 10 nov) son los mismos días de los dos reels de Facebook con más reproducciones.",
   ],
   "no_funciono": [
-   "<b>Facebook · reels con alcance alto, poca interacción:</b> [[N7|Facebook|«¿Cuántas plataformas abres?»]] (10,377) y [[N6|Facebook|«El talento también merece números»]] (5,749) fueron las publicaciones más vistas de los tres periodos y suman el 70 % de las impresiones del mes, pero tuvieron 0.3 % de interacción.",
+   "<b>Facebook · reels con alcance alto, poca interacción:</b> [[N7|Facebook|«¿Cuántas plataformas abres?»]] (10,378) y [[N6|Facebook|«El talento también merece números»]] (5,749) fueron las publicaciones más vistas de los tres periodos y suman el 68 % de las impresiones del mes, pero tuvieron 0.3 % de interacción.",
    "<b>Comentarios:</b> 0 en publicaciones, aunque varias cerraban con «Te leemos en comentarios».",
   ],
   "parrilla": [
    "<b>Repetir:</b> documentos en LinkedIn y reels en Instagram.",
    "<b>Ajustar:</b> repetir en Facebook la fórmula de los reels [[N6|Facebook|del 7]] y [[N7|Facebook|del 10 de noviembre]] (alcance) y cerrarlos con una pregunta para que la gente reaccione. Cambiar el cierre que pide comentarios por una pregunta más concreta.",
-   "<b>Dejar de hacer:</b> cerrar con «Te leemos en comentarios» sin una pregunta concreta: hubo 0 comentarios.",
+   "<b>Dejar de hacer:</b> cerrar con «Te leemos en comentarios» sin una pregunta concreta: en el mes solo hubo 1 comentario, y llegó en una pieza que pedía comentar una palabra (ENCUESTA).",
   ],
  },
 }
@@ -116,23 +116,23 @@ APRENDIZAJES = {
 HIPOTESIS = {
  "2026-11": [
   {"titulo": "Facebook empezó a mostrar los reels a gente que no nos sigue",
-   "vemos": "Los reels de Facebook pasaron de 81 a 311 reproducciones en septiembre y octubre a [[N7|Facebook|10,377]] y [[N6|Facebook|5,749]]. Son de 2 a 4 veces más que los 2,447 seguidores de la página. El mismo reel en Instagram tuvo [[N7|Instagram|123]] y en TikTok [[N7|TikTok|180]]. Los días de esos reels (7 y 10 nov) fueron los de más seguidores nuevos en Facebook (+13 y +10).",
+   "vemos": "Los reels de Facebook pasaron de 81 a 311 reproducciones en septiembre y octubre a [[N7|Facebook|10,378]] y [[N6|Facebook|5,749]]. Son de 2 a 4 veces más que los 2,447 seguidores de la página. El mismo reel en Instagram tuvo [[N7|Instagram|123]] y en TikTok [[N7|TikTok|180]]. Los días de esos reels (7 y 10 nov) fueron los de más seguidores nuevos en Facebook (+13 y +10).",
    "hipotesis": "El salto no viene solo del contenido, porque la misma pieza no despegó en otras redes. Lo más probable es que Facebook la recomendó a personas fuera de la página: eso explica que la vieran miles, que sumara seguidores y que casi nadie reaccionara (0.3 %), porque es gente que todavía no conoce a Lapzo.",
    "comprobar": "Publicar al menos un reel por semana en Facebook en diciembre y ver si alguno vuelve a pasar de 1,000 reproducciones. En Meta Business Suite, revisar qué parte del alcance de esos reels fue de personas que no siguen la página (Metricool no da ese dato)."},
   {"titulo": "Los reels que despegaron abren con un problema del día a día",
-   "vemos": "Los dos que despegaron empiezan con una situación que vive cualquier persona de RH: [[N7|Facebook|«¿Cuántas plataformas necesitas abrir para completar un solo proceso de RH?»]] y [[N6|Facebook|«Las empresas miden sus ventas… ¿qué tan claro tienen cómo está creciendo su gente?»]]. Los reels del 12 y 15 nov se quedaron en [[N8|Facebook|565]] y [[N10|Facebook|290]]: uno abre con una afirmación sobre el sueldo y el otro presenta un producto (AI Course Builder). Pero el del 17 nov ([[N11|Facebook|192]]) también abre con una pregunta («¿Quién en tu equipo es la única persona que sabe cómo se hace algo?») y en seis días no despegó. El del 22 nov ([[N14|Facebook|233]]) abre con una afirmación y lleva un día.",
-   "hipotesis": "Un inicio con una pregunta o una situación reconocible hace que la gente se quede los primeros segundos, y eso le da a Facebook la señal para mostrarlo a más personas. Ojo: son solo 6 reels y el del 17 nov no siguió el patrón, así que la pregunta inicial sola no basta y puede ser casualidad.",
+   "vemos": "Los dos que despegaron empiezan con una situación que vive cualquier persona de RH: [[N7|Facebook|«¿Cuántas plataformas necesitas abrir para completar un solo proceso de RH?»]] y [[N6|Facebook|«Las empresas miden sus ventas… ¿qué tan claro tienen cómo está creciendo su gente?»]]. Los reels del 12 y 15 nov se quedaron en [[N8|Facebook|565]] y [[N10|Facebook|290]]: uno abre con una afirmación sobre el sueldo y el otro presenta un producto (AI Course Builder). Pero el del 17 nov ([[N11|Facebook|192]]) también abre con una pregunta («¿Quién en tu equipo es la única persona que sabe cómo se hace algo?») y en seis días no despegó. Los del 22 y 23 nov ([[N14|Facebook|254]] y [[N15|Facebook|204]]) abren con una afirmación y llevan uno o dos días.",
+   "hipotesis": "Un inicio con una pregunta o una situación reconocible hace que la gente se quede los primeros segundos, y eso le da a Facebook la señal para mostrarlo a más personas. Ojo: son solo 7 reels y el del 17 nov no siguió el patrón, así que la pregunta inicial sola no basta y puede ser casualidad.",
    "comprobar": "En diciembre, hacer reels con el mismo tipo de inicio (pregunta sobre un problema cotidiano) y otros que abran con una afirmación o con el producto, y comparar sus reproducciones."},
   {"titulo": "Mucho alcance, pero nadie conversa",
-   "vemos": "Noviembre lleva 0 comentarios en 38 publicaciones, aunque varias cerraban con «Te leemos en comentarios». Los dos reels más vistos sumaron más de 16,000 reproducciones y 53 reacciones.",
+   "vemos": "Noviembre lleva 1 comentario en 41 publicaciones, aunque varias cerraban con «Te leemos en comentarios». El único llegó en [[N14|TikTok|el TikTok de «La mejor encuesta…»]] (22 nov), que pedía comentar ENCUESTA para recibir una plantilla. Los dos reels más vistos sumaron más de 16,000 reproducciones y 53 reacciones.",
    "hipotesis": "Una invitación general a comentar no da una razón concreta para responder. Y la gente nueva que llega por los reels todavía no tiene confianza para comentar.",
    "comprobar": "Cerrar con preguntas concretas y fáciles de contestar (por ejemplo, de opción A o B) y contar los comentarios por publicación en diciembre."},
   {"titulo": "Instagram conecta, pero no está llegando a gente nueva",
-   "vemos": "Instagram tiene la mejor tasa de interacción (7.1 %), pero la publicación típica llega cada vez a menos personas: 282 en septiembre, 140 en octubre y 77 en lo que va de noviembre. La cuenta suma 23 seguidores en el mes (656 en total).",
+   "vemos": "Instagram tiene la mejor tasa de interacción (7.2 %), pero la publicación típica llega cada vez a menos personas. A la misma fecha de cada mes (del 1 al 24): 203 en septiembre, 193 en octubre y 78 en noviembre. La cuenta suma 23 seguidores en el mes (656 en total).",
    "hipotesis": "Quien ve el contenido es sobre todo gente que ya sigue la cuenta y reacciona bien, pero Instagram no lo está mostrando fuera de ella. Parte de la baja de noviembre puede ser que las publicaciones recientes todavía están sumando vistas.",
    "comprobar": "Cerrar noviembre completo antes de concluir. En diciembre, probar en Instagram el tipo de inicio que funcionó en los reels de Facebook y comparar el alcance."},
   {"titulo": "En LinkedIn, el documento rindió más que los posts",
-   "vemos": "La [[N9|LinkedIn|guía de incorporación]] en formato documento tuvo 3.3 % de interacción, contra 2.6 % de los posts (el post de AI Course Builder del 20 nov llegó a 4.7 %). La publicación típica de LinkedIn bajó de 646 impresiones en septiembre a 474 en octubre y 293 en noviembre.",
+   "vemos": "La [[N9|LinkedIn|guía de incorporación]] en formato documento tuvo 3.3 % de interacción, contra 2.7 % de los posts (el post de AI Course Builder del 20 nov llegó a 4.8 %). A la misma fecha de cada mes (del 1 al 24), la publicación típica de LinkedIn bajó de 646 impresiones en septiembre a 566 en octubre y 277 en noviembre.",
    "hipotesis": "Los documentos invitan a deslizar y guardar, y eso puede darles más interacción. Pero es un solo documento, así que todavía no es una regla.",
    "comprobar": "Publicar al menos 2 documentos en LinkedIn en diciembre y comparar su tasa con la de los posts."},
  ],
@@ -412,8 +412,9 @@ def barras_mes(meses, valor, etiqueta):
 def dia_corte(): return int(CORTE[8:])
 def dia_seg():
     """Último día del mes en curso con datos de seguidores de Facebook e Instagram."""
-    k = [x for x in d.FB_TOTAL if x[:7] == CORTE[:7]] + [x for x in d.IG_DIA if x[:7] == CORTE[:7]]
-    return min(int(max(k)[8:]), dia_corte()) if k else dia_corte()
+    fb = [x for x in d.FB_TOTAL if x[:7] == CORTE[:7]]; ig = [x for x in d.IG_DIA if x[:7] == CORTE[:7]]
+    if not fb or not ig: return dia_corte()
+    return min(int(max(fb)[8:]), int(max(ig)[8:]), dia_corte())  # el último día que tienen las dos redes
 def recortar(m, hasta):
     """Copia de un mes que solo cuenta del 1 al día `hasta`."""
     return dict(m, hasta=hasta, hasta_seg=min(hasta, dia_seg()), titulo=m["titulo"].replace(" 2026", "") + f" 2026 (1–{hasta})")
@@ -591,7 +592,8 @@ def pagina(idx):
         flecha = "▲" if dv > 0 else "▼" if dv < 0 else "="
         return f'<div class="dl {cls}">{flecha} {txt} vs {nom_prev}</div>'
     l_, c_, s_ = desglose(ps)
-    seg_txt = lambda r: (f' <span class="small">· {nom_prev}: {seg_de(dict(mprev, hasta_seg=min(mprev["hasta"], dia_seg())) if mprev.get("hasta") else mprev, r):+d}</span>' if mprev and seg_de(mprev, r) is not None else "")
+    nom_prev_seg = (MESES[idx - 1]["titulo"].split(" ")[0].lower() + (f" (1–{mprev['hasta_seg']})" if mprev.get("hasta") else "")) if idx > 0 else ""
+    seg_txt = lambda r: (f' <span class="small">· {nom_prev_seg}: {seg_de(mprev, r):+d}</span>' if mprev and seg_de(mprev, r) is not None else "")
     seg_lines = "".join(f'<div>{r} <b>+{v[0]}</b>' + seg_txt(r) + "</div>" for r, v in seg.items())
     parcial = (f'<p class="small">Comparación pareja: {MES[int(clave[5:]) - 1]} va al día {dia_corte()}, así que los meses anteriores se cuentan solo del 1 al {dia_corte()} (seguidores, del 1 al {dia_seg()}). Septiembre tiene poca actividad en esos días porque la primera publicación es del 19.</p>' if clave == CORTE[:7] else "")
     nota_mes = f'<div class="card nota-eq"><b>Nota del equipo:</b> {e(NOTAS[clave])}{dato_nota(clave)}</div>' if clave in NOTAS else ""
@@ -723,7 +725,7 @@ section.mes{{margin-bottom:28px}} .nota-sutil{{margin-top:10px;max-width:80ch}} 
 
 <h2>Seguidores día por día</h2>
 <p class="lead">Seguidores ganados menos perdidos en cada día. <b>Haz clic en cualquier día</b> (aquí o en el calendario) para ver qué se publicó ese día.</p>
-<div class="card">{seguidores_dia(clave)}<p class="small">LinkedIn y TikTok no tienen el dato. Instagram y Facebook llegan al 21 nov.</p>
+<div class="card">{seguidores_dia(clave)}<p class="small">LinkedIn y TikTok no tienen el dato. Facebook llega al 22 nov e Instagram al 21 nov.</p>
 <div id="dia" class="dia" aria-live="polite"></div></div>
 
 <h2>Cada red este mes</h2>
@@ -794,7 +796,7 @@ SEMANAS = [("2026-11-10", "2026-11-16", "2026-11-03", "2026-11-09"), ("2026-11-1
 AVISOS_SEMANA = {
  "2026-11-16": [
   "<b>Cifra de HubSpot en TikTok:</b> para el video de «Conocimiento compartido» (19 nov), Metricool se quedó en 66 reproducciones y 9 likes, sin actualizarse. Se usa la de HubSpot: 462 reproducciones y 33 likes.",
-  "<b>Ojo con «La mejor encuesta es la que sí mandas» (22 nov):</b> salió el domingo y Metricool aún no tiene sus cifras de Instagram ni de TikTok. Instagram se completó con HubSpot; el TikTok aparece con 0 porque ninguna de las dos fuentes lo ha actualizado.",
+  "<b>«La mejor encuesta es la que sí mandas» (22 nov), de HubSpot:</b> Metricool todavía no tiene sus cifras de Instagram ni de TikTok, así que se usan las de HubSpot. Su TikTok trae el primer comentario de noviembre.",
  ],
 }
 
@@ -995,7 +997,8 @@ def pagina_inicio():
     na = ant["titulo"].split(" ")[0] + (f" (1–{mant['hasta']})" if mant.get("hasta") else " completo")
     l_, c_, s_ = S["desg"]
     ref = lambda txt: f'<div class="dl neu">{txt}</div>'
-    seg_lines = "".join(f'<div>{r} <b>+{v[0]}</b> <span class="small">· {na.lower()}: {seg_de(mant, r):+d}</span></div>' for r, v in S["seg"].items())
+    na_seg = ant["titulo"].split(" ")[0] + (f" (1–{mant['hasta_seg']})" if mant.get("hasta") else " completo")
+    seg_lines = "".join(f'<div>{r} <b>+{v[0]}</b> <span class="small">· {na_seg.lower()}: {seg_de(mant, r):+d}</span></div>' for r, v in S["seg"].items())
     kpis = (
         '<div class="kpis">'
         f'<div class="card kpi"><div class="v">{S["piezas"]}</div><div class="l">piezas únicas ({S["n"]} publicaciones contando cada red)</div>{ref(f"{na}: {SA['piezas']} piezas")}</div>'
@@ -1135,7 +1138,12 @@ def pagina_okrs():
     trim = sum(kr1[c] for c, _ in meses_q if hay(c))
     mes_act = CORTE[:7]; v_act = kr1[mes_act]
     st1 = estado("ok", "Cumplido este mes") if v_act >= O["kr1_meta_mes"] else estado("mid", f"Faltan {O['kr1_meta_mes'] - v_act} piezas para 25 este mes")
-    kr1_html = (f'<div class="okr-big"><b>{trim}</b> de {O["kr1_meta_trim"]} piezas en el trimestre</div>{barra(trim, O["kr1_meta_trim"])}'
+    dia1 = int(CORTE[8:])
+    org_dia = lambda c: len({p["tema"] for p in d.P if p["fecha"][:7] == c and p["fecha"] >= O["inicio"] and int(p["fecha"][8:]) <= dia1})
+    previos1 = [(c, nm) for c, nm in meses_q if c < mes_act]
+    pareja = (f'<p class="small"><b>A la misma fecha (del 1 al {dia1}):</b> {MES[int(mes_act[5:])-1]} {org_dia(mes_act)} piezas orgánicas · '
+              + " · ".join(f'{nm.lower()} {org_dia(c)}' for c, nm in previos1) + '. Los anuncios BOFU se suman por mes completo.</p>') if previos1 else ""
+    kr1_html = (f'<div class="okr-big"><b>{trim}</b> de {O["kr1_meta_trim"]} piezas en el trimestre</div>{barra(trim, O["kr1_meta_trim"])}{pareja}'
                 + columnas([(n + (f" (al {int(CORTE[8:])})" if c == mes_act else ""), kr1[c] if hay(c) else None) for c, n in meses_q], O["kr1_meta_mes"], O["kr1_base"], nombre="Piezas por mes")
                 + '<p class="small">' + " · ".join(f'{n}: {org[c]} orgánicas' + (f' + {O["bofu"][c]} anuncios BOFU de AI Course Builder' if c in O["bofu"] else "") + dato_nota(c) for c, n in meses_q if hay(c))
                 + '. Una pieza cuenta una vez aunque salga en varias redes. Los anuncios BOFU de noviembre se suman cuando se confirme cuántos fueron.</p>')
