@@ -496,9 +496,11 @@ def tabla_piezas(ps):
 def expl_tasa(R, RP):
     """Si la tasa baja mientras las interacciones suben, explicar que es porque las impresiones crecieron más."""
     if not RP or not RP["imp"] or not RP["int"] or (R["er"] or 0) >= (RP["er"] or 0) or R["int"] <= RP["int"]: return ""
-    ci = 100 * (R["int"] - RP["int"]) / RP["int"]; cm = 100 * (R["imp"] - RP["imp"]) / RP["imp"]
-    return (f'<div class="small" style="margin-top:6px">No es una baja de interacciones: crecieron {ci:+.0f} %. '
-            f'La tasa baja porque las impresiones crecieron más ({cm:+.0f} %), sobre todo por los reels de Facebook que vio gente nueva.</div>')
+    veces = R["imp"] / RP["imp"]
+    cuanto = "casi el triple de" if 2.5 <= veces < 3 else ("el triple de" if 3 <= veces < 3.5 else (f"{veces:.1f} veces más" if veces >= 3.5 else "más"))
+    return (f'<div class="small" style="margin-top:6px">Reaccionó más gente que antes ({f_int(R["int"])} contra {f_int(RP["int"])}), '
+            f'pero nos vio {cuanto} personas ({f_int(R["imp"])} contra {f_int(RP["imp"])}), sobre todo por reels de Facebook que llegaron a gente que todavía no nos sigue. '
+            'Por eso el porcentaje baja aunque las reacciones suban.</div>')
 
 def tabla(cab, filas):
     return f'<details><summary>Ver tabla</summary><div class="scroll"><table><thead><tr>{"".join(f"<th>{c}</th>" for c in cab)}</tr></thead><tbody>{"".join(filas)}</tbody></table></div></details>'
