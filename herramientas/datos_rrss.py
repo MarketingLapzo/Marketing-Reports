@@ -286,7 +286,7 @@ LEADS_URGENTES = [
   "El 18 nov comentó en público «¡Sigo esperando mi acceso!». Se reescaló a Ricardo Garza (leads), que está en contacto con Fernando Núñez (líder de ventas)."),
 ]
 LEADS_FUENTE = "Registro de leads orgánicos (redes) · pestaña Q4 2026"
-LEADS_LEIDO = "23 de noviembre de 2026"
+LEADS_LEIDO = "25 de noviembre de 2026"
 LEADS = [
  ("2026-10-13", "Facebook", "Mensaje directo", "Mensaje directo (sin anuncio)", "Información general", "Pasado a Ventas", "Julio", True),
  ("2026-11-02", "Facebook", "Anuncio", "Mensaje directo a un anuncio (Facebook)", "AI Course Builder", "Reescalado a Ventas", "Ricardo Garza → Fernando Núñez", True),
@@ -297,7 +297,14 @@ LEADS = [
  ("2026-11-17", "Facebook", "Anuncio", "Anuncio de universidad corporativa", "Por aclarar (hosting)", "Esperando respuesta", "", False),
  ("2026-11-17", "Facebook", "Anuncio", "Anuncio de AI Course Builder", "AI Course Builder", "Esperando datos", "", False),
  ("2026-11-17", "Facebook", "Anuncio", "Anuncio de AI Course Builder", "AI Course Builder", "Esperando datos", "", False),
- ("2026-11-17", "Facebook", "Anuncio", "Anuncio de AI Course Builder (otro diseño)", "AI Course Builder", "Pendiente de seguimiento", "", False),
+ ("2026-11-17", "Facebook", "Anuncio", "Anuncio de AI Course Builder (otro diseño)", "AI Course Builder", "Pasado a Ventas", "Julio", True),
+ ("2026-11-17", "Facebook", "Anuncio", "Anuncio de AI Course Builder (por mensaje directo)", "AI Course Builder", "Esperando datos", "", False),
+ ("2026-11-18", "Facebook", "Anuncio", "Anuncio de AI Course Builder (versión «Crea tu avatar»)", "AI Course Builder", "Esperando datos", "", False),
+ ("2026-11-19", "Facebook", "Anuncio", "Anuncio de universidad corporativa", "Universidad corporativa (CyA)", "Esperando datos", "", False),
+ ("2026-11-23", "Facebook", "Anuncio", "Anuncio de AI Course Builder (por mensaje directo)", "AI Course Builder", "Esperando datos", "", False),
+ ("2026-11-24", "Facebook", "Mensaje directo", "Mensaje directo (sin anuncio)", "Plataforma para los cursos que ofrece a sus clientes", "Pasado a Ventas", "Julio", True),
+ ("2026-11-25", "Facebook", "Anuncio", "Anuncio de universidad corporativa (por mensaje directo)", "Universidad corporativa (CyA)", "Pasado a Ventas", "Julio", True),
+ ("2026-11-25", "Facebook", "Anuncio", "Anuncio de AI Course Builder (por mensaje directo)", "AI Course Builder", "Pasado a Ventas", "Julio", True),
 ]
 
 # Datos de video (Metricool, extraídos el 23 nov 2026). Clave: enlace de la publicación.
@@ -335,7 +342,12 @@ OKR = dict(
     inicio="2026-10-01", fin="2026-12-31",
     kr1_base=5, kr1_meta_mes=25, kr1_meta_trim=75,
     # Anuncios BOFU (pagados) que también cuentan como piezas en KR1, por mes. Octubre: nota del equipo.
-    bofu={"2026-10": 5},
+    bofu={"2026-10": 5, "2026-11": 5},
+    bofu_txt={"2026-10": "anuncios BOFU de AI Course Builder", "2026-11": "anuncios BOFU de TaaS (P24 a P28, solo pagados)"},
+    # Conteo manual de piezas orgánicas únicas (hoja de planeación), cuando manda sobre lo que hay en P.
+    # Noviembre, al 25: 19 piezas de noviembre + P1 (31 oct), que la usuaria pidió contar esta vez en noviembre.
+    kr1_org={"2026-11": 20},
+    kr1_nota={"2026-11": "conteo de la hoja de planeación al 25 nov; incluye P1 (31 oct) y P31 Webinar (también anuncio, cuenta una vez)"},
     kr2_base=5, kr2_meta=15,
     kr3_meta_sem=1,
     kr4_inicio="2026-11-10",

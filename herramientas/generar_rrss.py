@@ -1144,6 +1144,7 @@ def pagina_okrs():
     hay = lambda c: c <= CORTE[:7]
     # KR1 · piezas al mes (piezas únicas orgánicas + anuncios BOFU)
     org = {c: len({p["tema"] for p in d.P if p["fecha"][:7] == c and p["fecha"] >= O["inicio"]}) for c, _ in meses_q}
+    org.update(O.get("kr1_org", {}))
     kr1 = {c: org[c] + O["bofu"].get(c, 0) for c, _ in meses_q}
     trim = sum(kr1[c] for c, _ in meses_q if hay(c))
     mes_act = CORTE[:7]; v_act = kr1[mes_act]
@@ -1155,8 +1156,8 @@ def pagina_okrs():
               + " · ".join(f'{nm.lower()} {org_dia(c)}' for c, nm in previos1) + '. Los anuncios BOFU se suman por mes completo.</p>') if previos1 else ""
     kr1_html = (f'<div class="okr-big"><b>{trim}</b> de {O["kr1_meta_trim"]} piezas en el trimestre</div>{barra(trim, O["kr1_meta_trim"])}{pareja}'
                 + columnas([(n + (f" (al {int(CORTE[8:])})" if c == mes_act else ""), kr1[c] if hay(c) else None) for c, n in meses_q], O["kr1_meta_mes"], O["kr1_base"], nombre="Piezas por mes")
-                + '<p class="small">' + " · ".join(f'{n}: {org[c]} orgánicas' + (f' + {O["bofu"][c]} anuncios BOFU de AI Course Builder' if c in O["bofu"] else "") + dato_nota(c) for c, n in meses_q if hay(c))
-                + '. Una pieza cuenta una vez aunque salga en varias redes. Los anuncios BOFU de noviembre se suman cuando se confirme cuántos fueron.</p>')
+                + '<p class="small">' + " · ".join(f'{n}: {org[c]} orgánicas' + (f' + {O["bofu"][c]} {O.get("bofu_txt", {}).get(c, "anuncios BOFU")}' if c in O["bofu"] else "") + (f' ({O["kr1_nota"][c]})' if c in O.get("kr1_nota", {}) else "") + dato_nota(c) for c, n in meses_q if hay(c))
+                + '. Una pieza cuenta una vez aunque salga en varias redes.</p>')
     # KR2 · interacciones totales del mes contra los mismos días del mes anterior
     import calendar
     tot_int = lambda a, b: sum(inter(p) for p in d.P if a <= p["fecha"] <= b)
