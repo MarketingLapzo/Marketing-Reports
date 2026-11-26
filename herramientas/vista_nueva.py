@@ -13,8 +13,8 @@ MES = ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto",
 # Textos que escribe el equipo (no salen de los datos). Si falta un mes, el reporte arma uno con los datos.
 RESUMEN = {
     "2026-11": dict(
-        funciono="Reels de Instagram (7.6 % de interacción) y carruseles de Instagram (6.4 %). Sin contar Facebook, la interacción subió a 3.9 % (octubre: 3.6 %).",
-        alcance="Reels de Facebook: 74 % de las impresiones del mes, pero solo 0.3 de cada 100 vistas terminó en like o compartido, y ningún comentario.",
+        funciono="Reels de Instagram (7.6 % de interacción) y carruseles de Instagram (6.3 %). Sin contar Facebook, la interacción subió a 3.9 % (octubre: 3.6 %).",
+        alcance="Reels de Facebook: 75 % de las impresiones del mes, pero solo 0.3 de cada 100 vistas terminó en like o compartido, y ningún comentario.",
         cambiamos="Pasar a reel los estáticos que dependen del copy. Sumar webinars y sesiones en vivo como formato de reconocimiento.",
         repetir="Reels de Instagram, carruseles educativos y webinars o sesiones en vivo.",
         ajustar="Estáticos que dependen del copy: pasarlos a reel. Los que comunican desde la imagen se quedan.",

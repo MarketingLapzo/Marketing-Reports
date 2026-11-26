@@ -273,6 +273,10 @@ BORRADAS = {
  "https://www.instagram.com/reel/DfAzXiOAJB6/",
  "https://www.linkedin.com/feed/update/urn:li:ugcPost:7524216742357663745",
  "https://www.linkedin.com/feed/update/urn:li:ugcPost:7525587134225780736",
+ # P11 se publicó dos veces en Instagram y Facebook (5 y 9 nov). Por decisión de la usuaria (26 nov 2026)
+ # cuenta solo la del 9 de noviembre; las del 5 no se suman en los reportes.
+ "https://www.instagram.com/p/DfYL81JFEeK/",
+ "https://facebook.com/1659210192576329/posts/1662444362252912",
 }
 
 # Leads de redes atendidos por Marketing. Fuente: hoja «Registro de leads orgánicos (redes)», pestaña Q4 2026
