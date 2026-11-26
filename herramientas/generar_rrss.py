@@ -14,8 +14,8 @@ REDES = ["LinkedIn", "Instagram", "Facebook", "TikTok"]
 COLOR = {"LinkedIn": "var(--c-li)", "Instagram": "var(--c-ig)", "Facebook": "var(--c-fb)", "TikTok": "var(--c-tt)"}
 FORMA = {"LinkedIn": "cuadro", "Instagram": "circulo", "Facebook": "rombo", "TikTok": "triangulo"}
 MES = ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"]
-EXTRAIDO = "24 de noviembre de 2026"
-CORTE = "2026-11-24"  # último día con datos
+EXTRAIDO = "26 de noviembre de 2026"
+CORTE = "2026-11-26"  # último día con datos
 
 ATIPICOS = set()  # ya no se separa ninguna publicación
 
@@ -23,7 +23,7 @@ MESES = [
     {"clave": "2026-09", "titulo": "Septiembre 2026", "periodo": "1 – 30 sep 2026",
      "nota_periodo": "La primera publicación que registran Metricool y HubSpot es del 19 de septiembre, así que el mes tiene 12 días de actividad."},
     {"clave": "2026-10", "titulo": "Octubre 2026", "periodo": "1 – 31 oct 2026", "nota_periodo": ""},
-    {"clave": "2026-11", "titulo": "Noviembre 2026 (parcial)", "periodo": "1 – 24 nov 2026",
+    {"clave": "2026-11", "titulo": "Noviembre 2026 (parcial)", "periodo": "1 – 26 nov 2026",
      "nota_periodo": "Mes en curso: este reporte se reemplaza con el de noviembre completo a partir del 1 de diciembre."},
 ]
 
@@ -54,7 +54,7 @@ NOTAS_DATO = {  # dato extra junto a la nota del equipo (con borde punteado)
 SEGUIDORES = {  # neto del mes; None = no disponible
     "2026-09": {"Facebook": (26, "2,409 → 2,435"), "Instagram": (26, "29 ganados, 3 perdidos")},
     "2026-10": {"Facebook": (12, "2,435 → 2,447"), "Instagram": (21, "28 ganados, 7 perdidos")},
-    "2026-11": {"Facebook": (47, "2,447 → 2,494 al 21 nov"), "Instagram": (23, "29 ganados, 6 perdidos, al 21 nov · 656 seguidores")},
+    "2026-11": {"Facebook": (48, "2,447 → 2,495 al 25 nov"), "Instagram": (28, "34 ganados, 6 perdidos, al 25 nov · 662 seguidores")},
 }
 
 APRENDIZAJES = {
@@ -800,9 +800,15 @@ pick('{dia_inicial}');document.addEventListener('pointerleave',function(){{t.sty
 </body></html>'''
 
 # ---------------------------------------------------------------- Reporte semanal
-SEMANAS = [("2026-11-10", "2026-11-16", "2026-11-03", "2026-11-09"), ("2026-11-16", "2026-11-22", "2026-11-09", "2026-11-15")]
+SEMANAS = [("2026-11-10", "2026-11-16", "2026-11-03", "2026-11-09"), ("2026-11-16", "2026-11-22", "2026-11-09", "2026-11-15"),
+           ("2026-11-23", "2026-11-29", "2026-11-16", "2026-11-19")]  # semana en curso: corte al 26, comparada con los mismos días (16 al 19)
 # Avisos de cada semana sobre datos que las fuentes todavía no actualizan (clave: lunes de la semana).
 AVISOS_SEMANA = {
+ "2026-11-23": [
+  "<b>Semana en curso, corte al jueves 26 nov:</b> se compara con los mismos días de la semana anterior (lunes 16 a jueves 19). El lunes 30 se reemplaza con la semana completa. P20 (27 nov), P22 en LinkedIn (27 nov) y P29 (28 nov) entran en el siguiente corte.",
+  "<b>De HubSpot:</b> P19 en Instagram (Metricool todavía no lo tiene), P19 en Facebook y P21 en Instagram (Metricool se quedó en 5 y 7 impresiones; HubSpot da 11 y 20) y P30 en TikTok (salió el 25 a las 3:57 pm; Metricool todavía no lo tiene).",
+  "<b>No se cuenta como pieza:</b> el video de Santiago con AI Course Builder en LinkedIn (24 nov, 122 impresiones y 1 reacción en HubSpot). Es un repost y no está en la hoja de planeación.",
+ ],
  "2026-11-16": [
   "<b>Cifra de HubSpot en TikTok:</b> para el video de «Conocimiento compartido» (19 nov), Metricool se quedó en 66 reproducciones y 9 likes, sin actualizarse. Se usa la de HubSpot: 462 reproducciones y 33 likes.",
   "<b>«La mejor encuesta es la que sí mandas» (22 nov), de HubSpot:</b> Metricool todavía no tiene sus cifras de Instagram ni de TikTok, así que se usan las de HubSpot. Su TikTok trae el primer comentario de noviembre.",
@@ -829,6 +835,8 @@ def pagina_semana(a, b, pa, pb):
     R, RP = resumen(ps), resumen(prev)
     fb, ig = seg_rango(a, b)
     fbp, igp = seg_rango(pa, pb)
+    # Mismos días en los dos lados: si la semana va a medias, la anterior se corta al mismo número de días.
+    fbp = dict(sorted(fbp.items())[:len(fb)]); igp = dict(sorted(igp.items())[:len(ig)])
     dias = _dias_rango(a, b)
 
     def delta(x, y, pct=False):
@@ -943,7 +951,7 @@ def pagina_semana(a, b, pa, pb):
         f'<title>Redes Lapzo · {titulo}</title>\n{estilo}</head><body>{barra_nav("../../../", "sem-" + a)}<main>\n'
         '<div class="eyebrow">Lapzo · Redes sociales orgánicas · reporte semanal</div>\n'
         f'<h1>{titulo}</h1>\n'
-        f'<p class="lead">Lunes {fecha(a)} a domingo {fecha(b)} · comparado con la semana del {fecha(pa)} al {fecha(pb)} · datos extraídos el {EXTRAIDO}</p>\n'
+        f'<p class="lead">Lunes {fecha(a)} a domingo {fecha(b)}{" (corte al " + fecha(CORTE) + ")" if b > CORTE else ""} · comparado con la semana del {fecha(pa)} al {fecha(pb)} · datos extraídos el {EXTRAIDO}</p>\n'
         f'{vista_nueva.semanal(a, b, pa, pb, CORTE)}\n'
         '<h2 style="margin-top:48px">Más detalle</h2>\n'
         '<h2>Resumen de la semana</h2>\n'

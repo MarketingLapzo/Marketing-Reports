@@ -27,6 +27,14 @@ NOTA_PIEZA = {
     ("2026-11-16", "N14"): "En Instagram, 6 de sus 10 interacciones fueron compartidos: la plantilla se comparte. Solo llevaba 2 días al corte.",
     ("2026-11-16", "N12"): "LinkedIn le dio el alcance; Instagram, la mejor tasa con muy pocas impresiones.",
     ("2026-11-16", "N13"): "El mejor de la semana en LinkedIn por tasa (4.8 %), con 1 compartido.",
+    ("2026-11-23", "N21"): "La pieza de la semana: LinkedIn le dio 617 impresiones y 25 de sus 35 interacciones, con 7 compartidos y el único comentario. En Instagram, 8.2 %.",
+    ("2026-11-23", "N15"): "Instagram dio la reacción (9 likes, 7.6 %) y Facebook el alcance (218) con 1 like. En TikTok, 164 vistas.",
+    ("2026-11-23", "N20"): "Facebook le dio el alcance (218) e Instagram la reacción (5 likes en 66). El TikTok salió el 25 por la tarde y casi no tiene datos al corte.",
+    ("2026-11-23", "N16"): "LinkedIn le dio el alcance (168 impresiones). En Instagram y Facebook salió el 26, con pocas horas al corte.",
+    ("2026-11-23", "N17"): "Salió el 26: en pocas horas, 102 impresiones y 4.9 % en LinkedIn. Todavía sin comentarios.",
+    ("2026-11-23", "N18"): "Pieza BOFU que también salió como post en LinkedIn el 26 por la tarde: 94 impresiones y 4 reacciones en pocas horas.",
+    ("2026-11-23", "N19"): "Poco alcance en las tres redes (59 impresiones en total). Pide comentar DEMO y todavía no tiene comentarios.",
+    ("2026-11-23", "N13"): "Ya había salido en LinkedIn el 20 nov; esta semana se sumaron Instagram y Facebook como estático, con 47 impresiones entre las dos.",
 }
 
 def n(v): return v or 0
@@ -287,11 +295,15 @@ def mensual(M, previos, del_mes, corte):
 def semanal(a, b, pa, pb, corte):
     ps = sin_hist([p for p in d.P if a <= p["fecha"] <= b]); pp = sin_hist([p for p in d.P if pa <= p["fecha"] <= pb])
     I, T = suma(ps); IP, TP = suma(pp); er, erp = tasa(ps), tasa(pp)
-    temas = sorted({p["tema"] for p in ps}, key=lambda t: pieza(t)[0] or t)
+    num = lambda t: int(pieza(t)[0][1:]) if pieza(t)[0] else 999
+    temas = sorted({p["tema"] for p in ps}, key=lambda t: (num(t), t))
+    nuevas = [t for t in temas if min(p["fecha"] for p in d.P if p["tema"] == t) >= a]
+    viejas = [t for t in temas if t not in nuevas]
     pfb = [p for p in ps if p["red"] != "Facebook"]; ppfb = [p for p in pp if p["red"] != "Facebook"]
     out = [LEYENDA]
     out.append('<section style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px">'
-        + kpi(str(len(temas)), "piezas nuevas", e(", ".join(pieza(t)[0] or d.TEMAS.get(t, (t,))[0] for t in temas)))
+        + kpi(str(len(temas)), "piezas" if viejas else "piezas nuevas", e(", ".join(pieza(t)[0] or d.TEMAS.get(t, (t,))[0] for t in temas)),
+              (f'<span style="font-size:13px;color:#5A5770">{len(nuevas)} nuevas; ' + e(", ".join(pieza(t)[0] or t for t in viejas)) + ' ya había salido antes en otra red</span>') if viejas else "")
         + kpi(fi(I), "impresiones", f"semana anterior: {fi(IP)}", cambio(I, IP))
         + kpi(fi(T), "interacciones", f"semana anterior: {fi(TP)}", cambio(T, TP))
         + kpi(fp(er), "tasa de interacción", f"semana anterior: {fp(erp)}", cambio(er, erp, True)) + '</section>')

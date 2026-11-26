@@ -1,4 +1,4 @@
-# Datos extraídos el 24 nov 2026 a las 11:30 (publicaciones hasta el 24 nov; seguidores hasta el 22 nov). LinkedIn: HubSpot Social. Instagram, Facebook, TikTok: Metricool (marca go_lapzo).
+# Datos extraídos el 26 nov 2026 (publicaciones de noviembre hasta el 26 nov, actualizadas ese día; seguidores hasta el 25 nov; antes de noviembre, cifras del 24 nov). LinkedIn: HubSpot Social. Instagram, Facebook, TikTok: Metricool (marca go_lapzo).
 # Las cifras de cada publicación son acumuladas al día de extracción.
 # None = la fuente no da ese dato ("no disponible").
 
@@ -43,6 +43,11 @@ TEMAS = {
  "N14": ("La mejor encuesta es la que sí mandas", "Experta en talento", "Educativa"),
  "N15": ("El mundo Lapzi · El barco (el objetivo que nadie ve)", "Experta en talento", "Reflexiva"),
  "N16": ("Una capacitación no empieza cuando se produce el primer curso (TaaS)", "Experta en talento", "Educativa"),
+ "N17": ("La capacitación no termina cuando acaba el curso", "Experta en talento", "Educativa"),
+ "N18": ("Más de 100,000 colaboradores (Somos Lapzo)", "Confiable", "Comercial"),
+ "N19": ("Expediente en un solo lugar (Gestión de personal)", "Innovadora", "Comercial"),
+ "N20": ("El intercambio (reel navideño)", "Experta en talento", "Reflexiva"),
+ "N21": ("Webinar · Registro de jornada 2027", "Confiable", "Educativa"),
  "HIST": ("Historia (sin texto en la fuente)", "Sin clasificar", "—"),
  "HISTFB": ("Historia de Facebook (sin texto en la fuente)", "Sin clasificar", "—"),
 }
@@ -54,11 +59,13 @@ def add(fecha, red, formato, tema, imp, likes, com, sh, url): P.append(dict(fech
 # Instagram · publicaciones del feed (impresiones = Views; compartidos: Metricool solo los da en algunas)
 IG = "https://www.instagram.com/p/"
 for f, code, fmt, t, imp, l, c, s in [
- ("2026-11-19","Df5wBNiiHwI","Carrusel","N12",42,4,0,None),
- ("2026-11-09","Dfh1UskoDfT","Carrusel","N5",99,5,0,None),
+ ("2026-11-25","DgLeEHRtxyO","Imagen","N21",110,9,0,None),
+ ("2026-11-25","DgJM_vkFZW8","Imagen","N13",30,2,0,None),
+ ("2026-11-19","Df5wBNiiHwI","Carrusel","N12",47,4,0,None),
+ ("2026-11-09","Dfh1UskoDfT","Carrusel","N5",103,5,0,None),
  ("2026-11-05","DfYL81JFEeK","Carrusel","N5",77,5,0,None),
- ("2026-11-05","DfX82R8IBWR","Carrusel","N4",78,4,0,None),
- ("2026-11-04","DfTVYbdmwpY","Carrusel","N3",65,5,0,None),
+ ("2026-11-05","DfX82R8IBWR","Carrusel","N4",81,4,0,None),
+ ("2026-11-04","DfTVYbdmwpY","Carrusel","N3",68,5,0,None),
  ("2026-10-31","DfKsnm5inps","Carrusel","O19",108,4,0,None),
  ("2026-10-28","DfC9VtWAhJR","Carrusel","O14",103,3,0,None),
  ("2026-10-28","DfCu7xMGwos","Imagen","O17",55,5,0,None),
@@ -75,11 +82,14 @@ for f, code, fmt, t, imp, l, c, s in [
 
 # Instagram · reels (impresiones = Views)
 for f, code, t, imp, l, c, s in [
- ("2026-11-17","Df2Ulj1FLvr","N11",60,2,0,0),
- ("2026-11-12","DfqIlNID-xu","N10",153,8,0,1),
- ("2026-11-12","Dfpq6FADxuv","N8",73,6,0,0),
+ ("2026-11-25","DgK0t5xMOiJ","N20",66,5,0,0),
+ ("2026-11-24","DgGoG5plZRN","N15",118,9,0,0),
+ ("2026-11-22","DgD7fVREbJQ","N14",90,4,0,6),
+ ("2026-11-17","Df2Ulj1FLvr","N11",65,3,0,0),
+ ("2026-11-12","DfqIlNID-xu","N10",161,8,0,1),
+ ("2026-11-12","Dfpq6FADxuv","N8",76,6,0,0),
  ("2026-11-10","DfkWDK8DV7Z","N7",123,9,0,0),
- ("2026-11-07","Dfcj3vzjTeV","N6",72,6,0,0),
+ ("2026-11-07","Dfcj3vzjTeV","N6",75,6,0,0),
  ("2026-10-27","DfA4KbwP94t","O16",109,6,0,0),
  ("2026-10-27","DfAQdroFf8f","O15",104,7,0,1),
  ("2026-10-24","De3Cay1AbCM","O4",203,11,0,8),
@@ -103,11 +113,14 @@ for f, sid, imp, rep in [
 # Facebook · publicaciones (impresiones totales; todas orgánicas: pagadas = 0)
 FB = "https://facebook.com/1659210192576329/posts/"
 for f, pid, fmt, t, imp, l, c, s in [
- ("2026-11-19","1676746467489368","Álbum","N12",20,0,0,0),
- ("2026-11-09","1666734045157277","Álbum","N5",73,0,0,0),
- ("2026-11-05","1662444362252912","Álbum","N5",68,1,0,1),
- ("2026-11-05","1662366418927373","Álbum","N4",65,1,0,1),
- ("2026-11-04","1660338059130209","Álbum","N3",125,3,0,1),
+ ("2026-11-25","1684105186753496","Imagen","N21",27,1,0,0),
+ ("2026-11-25","1683953696768645","Imagen","N19",9,2,0,0),
+ ("2026-11-24","1682804390216909","Imagen","N13",17,0,0,0),
+ ("2026-11-19","1676746467489368","Álbum","N12",29,0,0,0),
+ ("2026-11-09","1666734045157277","Álbum","N5",78,0,0,0),
+ ("2026-11-05","1662444362252912","Álbum","N5",75,1,0,1),
+ ("2026-11-05","1662366418927373","Álbum","N4",68,1,0,1),
+ ("2026-11-04","1660338059130209","Álbum","N3",128,3,0,1),
  ("2026-10-31","1656986249465390","Álbum","O19",109,1,0,0),
  ("2026-10-28","1653953933101955","Álbum","O14",97,1,0,0),
  ("2026-10-28","1653852399778775","Imagen","O17",91,1,0,1),
@@ -128,13 +141,14 @@ for f, pid, fmt, t, imp, l, c, s in [
 # Facebook · reels (impresiones = reproducciones; Metricool no da comentarios ni compartidos de reels)
 # comentarios y compartidos: Metricool no los da para reels de Facebook; se completan con HubSpot.
 for f, rid, t, imp, l, c, sh in [
- ("2026-11-23","2424995978032402","N15",204,1,0,0),
- ("2026-11-22","2521736088316301","N14",254,2,0,0),
- ("2026-11-17","28606914692319621","N11",192,1,0,0),
- ("2026-11-15","1853456759298291","N10",290,2,0,0),
- ("2026-11-12","1770762847367790","N8",565,1,0,0),
- ("2026-11-10","2424825538289478","N7",10378,31,0,0),
- ("2026-11-07","990593957434490","N6",5749,21,0,1),
+ ("2026-11-25","1121040894326523","N20",218,2,0,0),
+ ("2026-11-23","2424995978032402","N15",218,1,0,0),
+ ("2026-11-22","2521736088316301","N14",265,2,0,0),
+ ("2026-11-17","28606914692319621","N11",198,1,0,0),
+ ("2026-11-15","1853456759298291","N10",297,3,0,0),
+ ("2026-11-12","1770762847367790","N8",569,1,0,0),
+ ("2026-11-10","2424825538289478","N7",10387,31,0,0),
+ ("2026-11-07","990593957434490","N6",5753,21,0,1),
  ("2026-10-27","1742927086807213","O16",309,1,0,0),
  ("2026-10-27","1649745909896037","O15",81,0,0,0),
  ("2026-10-24","1799093927847494","O4",236,2,0,0),
@@ -147,10 +161,13 @@ for f, rid, t, imp, l, c, sh in [
 
 # TikTok · videos (impresiones = Views)
 for f, vid, t, imp, l, c, s in [
- ("2026-11-12","7707400839622708501","N10",535,14,0,1),
- ("2026-11-12","7707349358710295816","N8",464,11,0,0),
- ("2026-11-10","7706582004640402708","N7",180,2,0,0),
- ("2026-11-09","7706225961062157588","N6",189,8,0,0),
+ ("2026-11-24","7711521814203288840","N15",164,4,0,0),
+ ("2026-11-22","7711025537925319988","N14",365,11,1,0),
+ ("2026-11-19","7709920922492357908","N11",466,33,0,0),
+ ("2026-11-12","7707400839622708501","N10",544,14,0,1),
+ ("2026-11-12","7707349358710295816","N8",470,11,0,0),
+ ("2026-11-10","7706582004640402708","N7",183,2,0,0),
+ ("2026-11-09","7706225961062157588","N6",191,8,0,0),
  ("2026-10-28","7701743114481929493","O15",599,13,0,0),
  ("2026-10-28","7701741158275353876","O4",169,7,0,0),
  ("2026-10-27","7701466327608823060","O4",215,7,0,11),
@@ -164,11 +181,10 @@ for f, vid, t, imp, l, c, s in [
 def add_hs(*a):
     add(*a); P[-1]["fuente"] = "HubSpot"
 for f, red, fmt, t, imp, l, c, sh, url in [
- ("2026-11-22","Instagram","Reel","N14",80,4,0,6,"https://www.instagram.com/reel/DgD7fVREbJQ/"),
- ("2026-11-19","TikTok","Video","N11",464,33,0,0,"https://www.tiktok.com/@go_lapzo/video/7709920922492357908"),  # Metricool se quedó en 66 reproducciones
- ("2026-11-22","TikTok","Video","N14",325,10,1,0,"https://www.tiktok.com/@go_lapzo/video/7711025537925319988"),  # Metricool todavía no lo tiene
- ("2026-11-24","Instagram","Reel","N15",107,9,0,0,"https://www.instagram.com/reel/DgGoG5plZRN/"),  # salió el 23 a las 6 pm (24 en hora UTC); Metricool todavía no lo tiene
- ("2026-11-24","TikTok","Video","N15",0,0,0,0,"https://www.tiktok.com/@go_lapzo/video/7711521814203288840"),  # salió el 23 a las 6 pm; ninguna fuente tiene cifras todavía
+ ("2026-11-26","Instagram","Carrusel","N16",28,2,0,None,"https://www.instagram.com/p/DgNpRz-DA85/"),  # Metricool todavía no lo tiene
+ ("2026-11-26","Facebook","Álbum","N16",11,0,0,0,"https://www.facebook.com/613311597166199/posts/1685027119994636"),  # Metricool se quedó en 5
+ ("2026-11-26","Instagram","Imagen","N19",20,0,0,None,"https://www.instagram.com/p/DgNk1_zGRtZ/"),  # Metricool se quedó en 7
+ ("2026-11-25","TikTok","Video","N20",4,0,0,0,"https://www.tiktok.com/@go_lapzo/video/7712231562615557377"),  # salió el 25 a las 3:57 pm; Metricool todavía no lo tiene
  ("2026-10-28","Facebook","Publicación","O17",21,1,0,0,"https://www.facebook.com/613311597166199/posts/1653199913177357"),
  ("2026-10-26","Facebook","Publicación","O10",4,0,0,0,"https://www.facebook.com/613311597166199/posts/1651319543365394"),
  ("2026-10-15","Facebook","Publicación","O8",5,0,0,0,"https://www.facebook.com/613311597166199/posts/1641453464352002"),
@@ -194,18 +210,22 @@ for f, sid in [
 # LinkedIn · HubSpot (HubSpot no distingue formato ni da clics)
 LI = "https://www.linkedin.com/feed/update/urn:li:"
 for f, urn, fmt, t, imp, l, c, s in [
- ("2026-11-24","ugcPost:7529643762944221184","Post","N16",39,2,0,0),
- ("2026-11-20","share:7529572846990233600","Post","N13",227,10,0,1),
- ("2026-11-17","ugcPost:7526773977382338560","Post","N12",338,7,0,0),
- ("2026-11-13","ugcPost:7526721887725453312","Post","N10",207,5,0,0),
- ("2026-11-12","ugcPost:7526708442032410624","Post","N8",296,9,0,0),
- ("2026-11-12","ugcPost:7526689422331822080","Documento","N9",246,7,0,1),
- ("2026-11-09","ugcPost:7525606405127446528","Post","N5",310,5,0,1),
+ ("2026-11-26","share:7531773218106351616","Post","N18",94,4,0,0),
+ ("2026-11-26","share:7529636783366553600","Post","N17",102,5,0,0),
+ ("2026-11-25","ugcPost:7531433511535153152","Post","N21",617,17,1,7),
+ ("2026-11-25","share:7531091196069412865","Post","N19",30,1,0,0),
+ ("2026-11-24","ugcPost:7529643762944221184","Post","N16",168,4,0,0),
+ ("2026-11-20","share:7529572846990233600","Post","N13",262,10,0,1),
+ ("2026-11-17","ugcPost:7526773977382338560","Post","N12",358,8,0,0),
+ ("2026-11-13","ugcPost:7526721887725453312","Post","N10",217,5,0,0),
+ ("2026-11-12","ugcPost:7526708442032410624","Post","N8",306,9,0,0),
+ ("2026-11-12","ugcPost:7526689422331822080","Documento","N9",262,7,0,1),
+ ("2026-11-09","ugcPost:7525606405127446528","Post","N5",317,6,0,1),
  ("2026-11-09","ugcPost:7525587134225780736","Post","N5",38,1,0,0),
  ("2026-11-05","ugcPost:7524216742357663745","Post","N5",112,2,0,2),
- ("2026-11-05","ugcPost:7524214147534868480","Post","N4",316,7,0,0),
- ("2026-11-03","share:7523416823611158528","Post","N2",333,6,0,1),
- ("2026-11-02","share:7523065861415350273","Post","N1",258,8,0,0),
+ ("2026-11-05","ugcPost:7524214147534868480","Post","N4",322,7,0,0),
+ ("2026-11-03","share:7523416823611158528","Post","N2",340,6,0,1),
+ ("2026-11-02","share:7523065861415350273","Post","N1",261,8,0,0),
  ("2026-10-28","share:7521238796965707776","Post","O17",448,11,0,2),
  ("2026-10-28","share:7521220528045711360","Post","O18",380,12,0,3),
  ("2026-10-27","ugcPost:7520880599151194112","Post","O15",287,5,0,1),
@@ -240,7 +260,8 @@ FB_TOTAL = {
  "2026-11-01": 2447, "2026-11-02": 2450, "2026-11-03": 2454, "2026-11-04": 2454, "2026-11-05": 2456, "2026-11-06": 2456,
  "2026-11-07": 2469, "2026-11-08": 2470, "2026-11-09": 2473, "2026-11-10": 2483, "2026-11-11": 2488, "2026-11-12": 2490,
  "2026-11-13": 2493, "2026-11-14": 2492, "2026-11-15": 2492, "2026-11-16": 2492, "2026-11-17": 2492,
- "2026-11-18": 2495, "2026-11-19": 2495, "2026-11-20": 2494, "2026-11-21": 2494, "2026-11-22": 2493,
+ "2026-11-18": 2492, "2026-11-19": 2493, "2026-11-20": 2493, "2026-11-21": 2494, "2026-11-22": 2493,
+ "2026-11-23": 2493, "2026-11-24": 2495, "2026-11-25": 2495,
 }
 # Instagram: (ganados, perdidos) por día.
 IG_DIA = {
@@ -258,7 +279,8 @@ IG_DIA = {
  "2026-11-01": (1,0), "2026-11-02": (4,0), "2026-11-03": (2,1), "2026-11-04": (4,0), "2026-11-05": (2,2), "2026-11-06": (1,0),
  "2026-11-07": (1,0), "2026-11-08": (0,0), "2026-11-09": (0,0), "2026-11-10": (0,0), "2026-11-11": (4,0), "2026-11-12": (3,0),
  "2026-11-13": (0,0), "2026-11-14": (1,0), "2026-11-15": (1,1), "2026-11-16": (3,0), "2026-11-17": (0,0),
- "2026-11-18": (1,0), "2026-11-19": (1,2), "2026-11-20": (0,0), "2026-11-21": (0,0),
+ "2026-11-18": (1,0), "2026-11-19": (1,2), "2026-11-20": (0,0), "2026-11-21": (0,0), "2026-11-22": (0,0), "2026-11-23": (0,0),
+ "2026-11-24": (3,0), "2026-11-25": (2,0),
 }
 
 # Publicaciones que se borraron y se volvieron a subir (revisado con el equipo el 17 nov 2026).
@@ -297,7 +319,7 @@ LEADS_LEIDO = "25 de noviembre de 2026"
 # anota «Carrusel». Opciones: Estático, Estático + copy, Carrusel, Reel, Evento de LinkedIn.
 FORMATO_REAL = {}
 for temas, red, fmt in [
-    (["S1", "S2", "O13", "O17", "O18", "N1", "N2", "N13"], "LinkedIn", "Estático + copy"),
+    (["S1", "S2", "O13", "O17", "O18", "N1", "N2", "N13", "N17", "N18", "N19"], "LinkedIn", "Estático + copy"),
     (["O3", "O4", "O5", "O7", "O8", "O10", "O14", "N4", "N5", "N9", "N12", "N16"], "LinkedIn", "Carrusel"),
     (["O9", "O15", "N8", "N10"], "LinkedIn", "Reel"),
     (["O17"], "Instagram", "Estático + copy"), (["O17"], "Facebook", "Estático + copy"),
@@ -315,6 +337,8 @@ PIEZA = {
     "N11": ("P13", "Conocimiento compartido"), "N12": ("P15", "Que tu equipo no termine los cursos no siempre es falta de interés"),
     "N13": ("P17", "Tu empresa documenta lo que sabe"), "N14": ("P22", "La mejor encuesta es la que sí mandas"),
     "N15": ("P18", "El mundo Lapzi · El barco"), "N16": ("P19", "Una capacitación no empieza cuando se produce el primer curso"),
+    "N17": ("P8", "La capacitación no termina cuando acaba el curso"), "N18": ("P5", "Más de 100,000 colaboradores"),
+    "N19": ("P21", "Expediente en un solo lugar"), "N20": ("P30", "El intercambio"), "N21": ("P31", "Webinar · Registro de jornada 2027"),
 }
 
 LEADS = [
@@ -375,11 +399,19 @@ OKR = dict(
     bofu={"2026-10": 5, "2026-11": 5},
     bofu_txt={"2026-10": "anuncios BOFU de AI Course Builder", "2026-11": "anuncios BOFU de TaaS (P24 a P28, solo pagados)"},
     # Conteo manual de piezas orgánicas únicas (hoja de planeación), cuando manda sobre lo que hay en P.
-    # Noviembre, al 26: 20 piezas de noviembre (P1 del 31 oct se queda en octubre, decidido por la usuaria el 26 nov).
-    kr1_org={"2026-11": 20},
-    kr1_nota={"2026-11": "conteo de la hoja de planeación al 26 nov; P31 Webinar cuenta una vez aunque también sea anuncio"},
+    # Noviembre, al 26: 21 piezas de noviembre (P1 del 31 oct se queda en octubre, decidido por la usuaria el 26 nov).
+    kr1_org={"2026-11": 21},
+    kr1_nota={"2026-11": "conteo de la hoja de planeación al 26 nov (con P5 en LinkedIn, 26 nov); P31 Webinar y P5 cuentan una vez aunque también sean anuncio"},
     kr2_base=5, kr2_meta=15,
     kr3_meta_sem=1,
     kr4_inicio="2026-11-10",
     kr5_pct=100, kr5_nota="Confirmado por la usuaria el 23 nov 2026: todas las piezas de video ya se editan con el proceso automatizado.",
 )
+
+# Video: reels nuevos o actualizados (Metricool, 26 nov 2026).
+for code, prom, q3, g in [("DgK0t5xMOiJ",4.555,13.2,0), ("DgGoG5plZRN",9.404,47.5,0), ("DgD7fVREbJQ",7.136,23.2,1), ("Df2Ulj1FLvr",3.467,9.4,0)]:
+    VIDEO.setdefault("https://www.instagram.com/reel/"+code+"/", {}).update(prom=prom, quedan3=q3, guard=g)
+for rid, prom in [("1121040894326523",3), ("2424995978032402",2), ("2521736088316301",3), ("28606914692319621",3)]:
+    VIDEO.setdefault("https://www.facebook.com/reel/"+rid+"/", {}).update(prom=prom)
+for vid, dur in [("7711521814203288840",42), ("7711025537925319988",33)]:
+    VIDEO.setdefault("https://www.tiktok.com/@go_lapzo/video/"+vid, {}).update(dur=dur)
