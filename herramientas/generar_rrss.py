@@ -1009,9 +1009,13 @@ def pagina_inicio():
     crec = lambda a, b: f" · {100 * (a - b) / b:+.0f} %" if b else ""
     na_seg = ant["titulo"].split(" ")[0] + (f" (1–{mant['hasta_seg']})" if mant.get("hasta") else " completo")
     seg_lines = "".join(f'<div>{r} <b>+{v[0]}</b> <span class="small">· {na_seg.lower()}: {seg_de(mant, r):+d}</span></div>' for r, v in S["seg"].items())
+    O1 = d.OKR; cl = ult["clave"]
+    org_p = O1.get("kr1_org", {}).get(cl, S["piezas"]); bofu_p = O1.get("bofu", {}).get(cl, 0); tot_p = org_p + bofu_p
+    bofu_t = (" de " + O1.get("bofu_txt", {}).get(cl, "").replace("anuncios BOFU de ", "").split(" (")[0]) if bofu_p and O1.get("bofu_txt", {}).get(cl) else ""
     kpis = (
         '<div class="kpis">'
-        f'<div class="card kpi"><div class="v">{S["piezas"]}</div><div class="l">piezas únicas ({S["n"]} publicaciones contando cada red)</div>{ref(f"{na}: {SA['piezas']} piezas{crec(S['piezas'], SA['piezas'])}")}</div>'
+        f'<div class="card kpi"><div class="v">{tot_p} <span class="u">piezas</span></div><div class="l">{org_p} publicadas (únicas) + {bofu_p} anuncios BOFU{bofu_t}</div>'
+        f'<div class="brk"><span>{S["n"]} publicaciones contando cada red (datos de redes al {int(CORTE[8:])})</span><span>Meta del mes: {O1["kr1_meta_mes"]} {"✅" if tot_p >= O1["kr1_meta_mes"] else ""}</span></div>{ref(f"{na}: {SA['piezas']} piezas únicas")}</div>'
         f'<div class="card kpi"><div class="v">{f_int(S["imp"])}</div><div class="l">veces que se vieron nuestras publicaciones</div>{ref(f"{na}: {f_int(SA['imp'])}{crec(S['imp'], SA['imp'])}")}</div>'
         f'<div class="card kpi wide2"><div class="v">{f_int(S["int"])}</div><div class="l">reacciones</div>'
         f'<div class="brk"><span><b>♥ {f_int(l_)}</b> likes</span><span><b>💬 {f_int(c_)}</b> comentarios</span><span><b>↗ {f_int(s_)}</b> compartidos</span></div>{ref(f"{na}: {f_int(SA['int'])}{crec(S['int'], SA['int'])}")}</div>'
