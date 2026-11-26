@@ -25,6 +25,22 @@ explícale todo en español, sin jerga técnica, y encárgate tú de Git.
 - Lo aprendido de cada mes: `APRENDIZAJES.md` (lo más reciente arriba)
 - Cada reporte nuevo se agrega a la tabla del `README.md`.
 
+## Cómo se escribe el reporte (acordado el 26 de noviembre de 2026)
+
+El diseño aprobado está en el lienzo https://claude.ai/artifact/5Fgr9QjJrsWAwQUQszdSyX y copiado en `herramientas/diseno-reporte/` (`mensual.dc.html` y `semanal.dc.html`). `generar_rrss.py` se ajusta a ese diseño.
+
+- **Mensual, en este orden:** resumen (qué funcionó, qué dio alcance con poca interacción, qué cambiamos) → 4 tarjetas (piezas, impresiones, interacciones, tasa) → del contenido al lead → por plataforma mes contra mes → interacciones por mes (una gráfica por red, barras por mes en naranja) → impresiones por red mes a mes → por formato → Top 3 del mes y «Mucho alcance, poca interacción» (tarjetas con link) → por pieza (totales y link a cada red) → orgánico vs BOFU → para la parrilla del mes siguiente.
+- **Semanal:** 4 tarjetas contra la semana anterior → por red → cada pieza, red por red (formato, barra de interacciones, impresiones, tasa, link y una frase de qué pasó). El desglose por red de cada pieza va en el semanal, no en el mensual.
+- **Comparaciones limpias:** mismos días y mismas redes en los dos lados. Si una red distorsiona (los reels de Facebook), se da también la cifra sin esa red en los dos meses o semanas.
+- **Colores:** verde ▲ si sube más de 5 %, rojo ▼ si baja más de 5 %, gris = si se mantiene; al lado, en letra normal y del mismo color, cuánto cambió («subió 0.7»). Tasa por pieza: verde 3.5 % o más, gris 1.5–3.5 %, rojo menos de 1.5 %.
+- **Colores por red:** LinkedIn azul, Instagram rosa, Facebook verde, TikTok negro. Orden siempre: LinkedIn, Instagram, Facebook, TikTok (tablas, gráficas, viñetas y formatos, con la red primero: «LinkedIn · Carrusel»).
+- **Notas «?»** que se abren: impresiones, interacciones, tasa (con un ejemplo), pieza única, contacto o lead, y por qué bajó algo.
+- **Nunca «no funcionó» sin decir en qué:** se dice «mucho alcance, poca interacción» y se explica la causa.
+- **Piezas:** «únicas + BOFU = total». Cada pieza con su número y el nombre de la hoja de planeación.
+- **Formatos:** salen de la columna Formato de Seguimiento (Estático, Estático + copy, Carrusel, Reel, Evento de LinkedIn). En LinkedIn el carrusel se sube como PDF, pero se anota «Carrusel». Para septiembre y octubre, la pestaña «Formatos octubre (LinkedIn)» de la hoja.
+- **Explicaciones en viñetas,** una por red y en el orden de las redes.
+- Mismo corte para todo el reporte; lo que salió después del corte se dice («entra en el siguiente corte»).
+
 ## Chats de reportes con dos repos
 
 En los chats de reportes se abren dos repos, los dos en su rama `main`:
