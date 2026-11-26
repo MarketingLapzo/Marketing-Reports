@@ -12,6 +12,14 @@ Las historias de Instagram y Facebook todavía no se incluyen (próximamente).
 - **Qué cambiamos en la parrilla del mes siguiente:**
 -->
 
+## Semana del 23 al 26 nov 2026
+
+- **Estáticos con copy en Instagram y Facebook:** la usuaria ve poco éxito en los que dependen del copy (P23 se dejó solo en LinkedIn). Revisar cuáles pueden convertirse en reel. Los estáticos que comunican desde la pieza visual, y no desde el copy, sí se quedan como estáticos.
+- **Ideas para generar interés y reconocimiento de marca:** el post del evento del webinar «Registro de jornada 2027» fue el de mejor resultado de la semana en LinkedIn (595 impresiones, 16 reacciones y 6 compartidos, HubSpot al 26 nov). Formatos a considerar: webinars, sesiones por Zoom y cursos de uno o dos días, entre otros.
+- **Horarios de LinkedIn (dato de referencia, no horario obligatorio):** en los 29 posts de la página desde septiembre (HubSpot, 26 nov), los publicados entre las 12:00 y las 15:00 promediaron 558 impresiones (5 posts); entre las 8:00 y las 10:00, 364 (10); entre las 10:00 y las 12:00, 288 (10), y después de las 15:00, 311 (4). Son pocos posts y también influyen el tema y el formato.
+- **Metricool llegó al límite del plan y dejó de publicar sin avisar:** P21 en Instagram (25 nov, 19:10) y P19 en Facebook (26 nov, 10:25) marcaron «You have reached your Metricool account limit». Se subieron o programaron en Meta Business Suite, y se borró de Metricool lo que seguía ahí para que no saliera duplicado.
+- **Leads desde LinkedIn:** hay personas que publican pidiendo proveedor de algo que hace Lapzo (ej.: reloj checador para el registro de jornada; Abraham Bernal y Karen García). Aplica a cualquier producto o servicio: se responde desde la página con el mensaje que corresponda (hoy hay dos: el del webinar y reloj checador, y el general de Lapzo con +300 empresas y +100,000 colaboradores) y se invita a escribir por mensaje para pedir datos y anotarlos como leads.
+
 ## Planeación de LinkedIn (18 nov 2026)
 
 - **Antes de programar un post en LinkedIn, compararlo con el último que salió.** P8 (cursos terminados que no se aplican) chocaba con P15, publicado el 17 nov (cursos que no se terminan): las dos dudan de los cursos completados como medida, usan el formato de «tres» y el mismo cierre. Como en LinkedIn cada post llega a unas 200–300 personas, es probable que sean las mismas. P8 se movió al martes 24 nov.
