@@ -287,6 +287,20 @@ LEADS_URGENTES = [
 ]
 LEADS_FUENTE = "Registro de leads orgánicos (redes) · pestaña Q4 2026"
 LEADS_LEIDO = "25 de noviembre de 2026"
+# Formato real de cada publicación (26 nov 2026). HubSpot dice «Post» para todo LinkedIn, así que el formato
+# sale de la columna Formato de Seguimiento (noviembre) y de la pestaña «Formatos octubre (LinkedIn)» de la hoja
+# de planeación (septiembre y octubre), llenadas por la usuaria. En LinkedIn el carrusel se sube como PDF pero se
+# anota «Carrusel». Opciones: Estático, Estático + copy, Carrusel, Reel, Evento de LinkedIn.
+FORMATO_REAL = {}
+for temas, red, fmt in [
+    (["S1", "S2", "O13", "O17", "O18", "N1", "N2", "N13"], "LinkedIn", "Estático + copy"),
+    (["O3", "O4", "O5", "O7", "O8", "O10", "O14", "N4", "N5", "N9", "N12", "N16"], "LinkedIn", "Carrusel"),
+    (["O9", "O15", "N8", "N10"], "LinkedIn", "Reel"),
+    (["O17"], "Instagram", "Estático + copy"), (["O17"], "Facebook", "Estático + copy"),
+]:
+    for t in temas: FORMATO_REAL[(t, red)] = fmt
+for p in P: p["formato_real"] = FORMATO_REAL.get((p["tema"], p["red"]))
+
 LEADS = [
  ("2026-10-13", "Facebook", "Mensaje directo", "Mensaje directo (sin anuncio)", "Información general", "Pasado a Ventas", "Julio", True),
  ("2026-11-02", "Facebook", "Anuncio", "Mensaje directo a un anuncio (Facebook)", "AI Course Builder", "Reescalado a Ventas", "Ricardo Garza → Fernando Núñez", True),
