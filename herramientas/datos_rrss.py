@@ -345,9 +345,9 @@ OKR = dict(
     bofu={"2026-10": 5, "2026-11": 5},
     bofu_txt={"2026-10": "anuncios BOFU de AI Course Builder", "2026-11": "anuncios BOFU de TaaS (P24 a P28, solo pagados)"},
     # Conteo manual de piezas orgánicas únicas (hoja de planeación), cuando manda sobre lo que hay en P.
-    # Noviembre, al 25: 19 piezas de noviembre + P1 (31 oct), que la usuaria pidió contar esta vez en noviembre.
+    # Noviembre, al 26: 20 piezas de noviembre (P1 del 31 oct se queda en octubre, decidido por la usuaria el 26 nov).
     kr1_org={"2026-11": 20},
-    kr1_nota={"2026-11": "conteo de la hoja de planeación al 25 nov; incluye P1 (31 oct) y P31 Webinar (también anuncio, cuenta una vez)"},
+    kr1_nota={"2026-11": "conteo de la hoja de planeación al 26 nov; P31 Webinar cuenta una vez aunque también sea anuncio"},
     kr2_base=5, kr2_meta=15,
     kr3_meta_sem=1,
     kr4_inicio="2026-11-10",
