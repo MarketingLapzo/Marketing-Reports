@@ -3,6 +3,7 @@
 import csv, html, os, statistics, sys
 sys.path.insert(0, os.path.dirname(__file__))
 import datos_rrss as d
+import vista_nueva
 # Las historias quedan fuera de estos reportes por ahora (próximamente).
 d.P = [p for p in d.P if p["formato"] != "Historia" and p["url"] not in d.BORRADAS]
 
@@ -699,12 +700,11 @@ section.mes{{margin-bottom:28px}} .nota-sutil{{margin-top:10px;max-width:80ch}} 
 <p class="lead">{e(M["periodo"])} · LinkedIn, Instagram, Facebook y TikTok · datos extraídos el {EXTRAIDO}</p>
 {f'<p class="small">{e(M["nota_periodo"])}</p>' if M["nota_periodo"] else ""}
 
-{kpis_html}
+{vista_nueva.mensual(M, previos, del_mes, CORTE)}
 {atip_kpi}
 
-<h2>Piezas únicas</h2>
-<p class="lead">Cada diseño una sola vez, con las redes donde salió. Las cifras suman todas sus redes.</p>
-{tabla_piezas(ps)}
+<h2 style="margin-top:48px">Más detalle</h2>
+<p class="lead">Lo de abajo es el detalle completo del mes: cada publicación, calendario, videos, evolución y seguidores.</p>
 
 <h2>Cómo le fue a cada publicación</h2>
 <p class="lead">♥ likes · 💬 comentarios · ↗ compartidos. Un guion (—) significa que la red no da ese dato. Cada bloque es una pieza: arriba su total y debajo cómo le fue en cada red donde se publicó. Filtra por red, cambia el orden y haz clic en la red para abrir la publicación.</p>
@@ -944,7 +944,8 @@ def pagina_semana(a, b, pa, pb):
         '<div class="eyebrow">Lapzo · Redes sociales orgánicas · reporte semanal</div>\n'
         f'<h1>{titulo}</h1>\n'
         f'<p class="lead">Lunes {fecha(a)} a domingo {fecha(b)} · comparado con la semana del {fecha(pa)} al {fecha(pb)} · datos extraídos el {EXTRAIDO}</p>\n'
-        f'{kpis}\n'
+        f'{vista_nueva.semanal(a, b, pa, pb, CORTE)}\n'
+        '<h2 style="margin-top:48px">Más detalle</h2>\n'
         '<h2>Resumen de la semana</h2>\n'
         f'<div class="card"><ul class="rs">{"".join(f"<li>{x}</li>" for x in resumen_b)}</ul></div>\n'
         '<h2>Seguidores día por día</h2>\n'

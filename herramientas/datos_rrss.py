@@ -301,6 +301,18 @@ for temas, red, fmt in [
     for t in temas: FORMATO_REAL[(t, red)] = fmt
 for p in P: p["formato_real"] = FORMATO_REAL.get((p["tema"], p["red"]))
 
+# Número y nombre de cada pieza según la hoja de planeación (desde noviembre; antes no había número).
+PIEZA = {
+    "N1": ("P2", "El talento necesita desarrollo, no tiempo"), "N2": ("P4", "Compromiso en cifras"),
+    "N3": ("P3", "Crecer requiere acción"), "N4": ("P10", "¿Tu equipo está preparado para lo que viene?"),
+    "N5": ("P11", "Las seis habilidades que más crecen rumbo a 2030"), "N6": ("P9", "¿Cuál es el número de tu gente?"),
+    "N7": ("P7", "Frankenstein de RH"), "N8": ("P14", "Rotación de talento"),
+    "N9": ("P12", "El impacto del onboarding en el desempeño"), "N10": ("P16", "El mundo Lapzi · Lo que solo tú sabes"),
+    "N11": ("P13", "Conocimiento compartido"), "N12": ("P15", "Que tu equipo no termine los cursos no siempre es falta de interés"),
+    "N13": ("P17", "Tu empresa documenta lo que sabe"), "N14": ("P22", "La mejor encuesta es la que sí mandas"),
+    "N15": ("P18", "El mundo Lapzi · El barco"), "N16": ("P19", "Una capacitación no empieza cuando se produce el primer curso"),
+}
+
 LEADS = [
  ("2026-10-13", "Facebook", "Mensaje directo", "Mensaje directo (sin anuncio)", "Información general", "Pasado a Ventas", "Julio", True),
  ("2026-11-02", "Facebook", "Anuncio", "Mensaje directo a un anuncio (Facebook)", "AI Course Builder", "Reescalado a Ventas", "Ricardo Garza → Fernando Núñez", True),
